@@ -134,7 +134,7 @@ function Settings() {
   return (
     <Box p={4}>
       <Heading size='md' color='whiteAlpha.600' fontWeight='normal'>
-        nGePeT Dimana mana
+        Platter
       </Heading>
       <Heading>Settings</Heading>
       <button

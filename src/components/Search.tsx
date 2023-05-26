@@ -115,7 +115,7 @@ function Search({
 
   // fetch user
   async function fetchUsers() {
-    const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
+    const tokenAPIPlatter = await store.get(STORE_KEY.API_KEY);
     const user: UserOrg | null = await store.get(STORE_KEY.USER);
     if (!user || !user.division) {
       console.error("Error: User or user division is null");
@@ -132,7 +132,7 @@ function Search({
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + tokenAPINgepet,
+          Authorization: "Bearer " + tokenAPIPlatter,
         },
       });
 
@@ -157,7 +157,7 @@ function Search({
   }
   // fetch files
   async function fetchFiles() {
-    const tokenAPINgepet = await store.get(STORE_KEY.API_KEY);
+    const tokenAPIPlatter = await store.get(STORE_KEY.API_KEY);
     const user: UserOrg | null = await store.get(STORE_KEY.USER);
     if (!user || !user.division) {
       console.error("Error: User or user division is null");
@@ -175,7 +175,7 @@ function Search({
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + tokenAPINgepet,
+          Authorization: "Bearer " + tokenAPIPlatter,
         },
       });
 
@@ -195,7 +195,7 @@ function Search({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + tokenAPINgepet,
+            Authorization: "Bearer " + tokenAPIPlatter,
           },
         });
         // Check if the request was successful
@@ -296,7 +296,7 @@ function Search({
   }, []);
 
   return (
-    <Box display="flex" flexDirection="column" {...props}>
+    <Box display='flex' flexDirection='column' {...props}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -305,7 +305,7 @@ function Search({
         }}
       >
         <HStack>
-          <InputGroup size="lg" sx={{ borderColor: "blue" }}>
+          <InputGroup size='lg' sx={{ borderColor: "blue" }}>
             {/* <Input
               ref={inputRef}
               placeholder="Unleash your creativity"
@@ -317,12 +317,12 @@ function Search({
             /> */}
             <MentionsInput
               ref={inputRef}
-              id="mentionInputLights"
+              id='mentionInputLights'
               value={prompt}
               onChange={handleChange}
               style={inputStyle}
               autoFocus
-              placeholder="Type # or @ to show syntax..."
+              placeholder='Type # or @ to show syntax...'
               // onFocus={fetchUsers}
               // onSubmit={(e) => {
               //   e.preventDefault();
@@ -331,7 +331,7 @@ function Search({
               // }}
             >
               <Mention
-                trigger="@"
+                trigger='@'
                 data={searchUsers}
                 markup={"@(__display__[__id__])"}
                 style={mentionStyle}
@@ -356,7 +356,7 @@ function Search({
                 )}
               />
               <Mention
-                trigger="#"
+                trigger='#'
                 data={searchFiles}
                 markup={"#(__display__[__id__])"}
                 style={mentionStyle2}
@@ -384,34 +384,34 @@ function Search({
             <InputRightElement
               children={
                 <DragHandleIcon
-                  cursor="grab"
-                  color="blackAlpha.600"
+                  cursor='grab'
+                  color='blackAlpha.600'
                   data-tauri-drag-region
                 />
               }
             />
           </InputGroup>
-          <Tooltip label="Generate" aria-label="Generate" hasArrow>
+          <Tooltip label='Generate' aria-label='Generate' hasArrow>
             <IconButton
-              size="lg"
+              size='lg'
               // variant="outline"
-              colorScheme="blue"
-              color="white"
-              aria-label="Generate"
+              colorScheme='blue'
+              color='white'
+              aria-label='Generate'
               icon={<BsChatRightFill />}
-              type="submit"
+              type='submit'
               isLoading={isLoading}
               // sx={{ backgroundColor: "white" }}
             />
           </Tooltip>
 
-          <Tooltip label="Options" aria-label="Options" hasArrow>
+          <Tooltip label='Options' aria-label='Options' hasArrow>
             <IconButton
-              size="lg"
+              size='lg'
               // variant="outline"
-              colorScheme="blue"
-              color="white"
-              aria-label="Options"
+              colorScheme='blue'
+              color='white'
+              aria-label='Options'
               icon={showOptions ? <ChevronUpIcon /> : <ChevronDownIcon />}
               onClick={() => setShowOptions(!showOptions)}
             />
@@ -420,7 +420,7 @@ function Search({
       </form>
 
       <Collapse in={showOptions} animateOpacity>
-        <Box p={2} rounded="md" bg="whiteAlpha.800" mt={2}>
+        <Box p={2} rounded='md' bg='whiteAlpha.800' mt={2}>
           <HStack>
             {/* <Icon as={CiTempHigh} />
             <Slider
@@ -452,11 +452,11 @@ function Search({
 
             <Button
               leftIcon={<Icon as={SettingsIcon} />}
-              colorScheme="green"
+              colorScheme='green'
               // color="white"
               // variant="outline"
               onClick={onSettings}
-              size="sm"
+              size='sm'
             >
               Settings
             </Button>
