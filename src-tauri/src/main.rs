@@ -3,7 +3,7 @@
 
 use gpt_anywhere::window::{WindowParams, HELP_WINDOW, MAIN_WINDOW, SETTINGS_WINDOW};
 use tauri::{
-    CustomMenuItem, GlobalShortcutManager, Manager, SystemTray, SystemTrayMenu, SystemTrayMenuItem,
+    CustomMenuItem, GlobalShortcutManager, Manager, SystemTray, SystemTrayMenu, SystemTrayMenuItem
 };
 
 const SHORTCUT_SHOW_HIDE: &str = "CmdOrCtrl+Shift+/";
@@ -86,8 +86,11 @@ fn create_window_if_not_exist(
     }
 }
 
+
+
 fn main() {
     let sys_tray = build_system_tray();
+    tauri_plugin_deep_link::prepare("com.company.platter");
 
     tauri::Builder::default()
         .plugin(tauri_plugin_store::Builder::default().build())
@@ -103,7 +106,21 @@ fn main() {
                 .unwrap();
 
             // setup code here
-            Ok(())
+            // ----------- CODE TO HANDLE URL SCHEME
+            let handle = app.handle();
+            tauri_plugin_deep_link::register(
+                "platter",
+                move |request| {
+                    dbg!(&request);
+                    handle.emit_all("scheme-request-received", request).unwrap();
+                },
+            )
+            .unwrap();
+
+
+
+        
+        Ok(())
         })
         .invoke_handler(tauri::generate_handler![open_settings])
         .on_system_tray_event(|app, event| match event {

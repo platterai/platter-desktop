@@ -49,7 +49,7 @@ export default function SignInForm({}: SignInFormProps) {
   };
 
   // const handleButtonClick = () => {
-  //   window.location.href = "nGePeT Dimana mana://";
+  //   window.location.href = "platter://";
   // };
 
   return (
