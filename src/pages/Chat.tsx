@@ -1,34 +1,45 @@
-import { Box, Button, Center } from "@chakra-ui/react";
-import ResponseBox from "../components/ResponseBox";
+// ---------- REACT/NEXT/TAURI ----------
 import { useContext, useEffect, useState } from "react";
-import { chatComplete } from "../util/openai";
-import { AnimatePresence, motion } from "framer-motion";
+// ---------- STYLE ----------
+import { Box, Button, Center, VStack } from "@chakra-ui/react";
+// ** ICONS **
+import { NotAllowedIcon, RepeatIcon } from "@chakra-ui/icons";
+// ---------- CONTEXT ----------
+import PageContext from "../context/PageContext";
+// ---------- COMPONENTS ----------
+import ResponseBox from "../components/ResponseBox";
 import UnauthorizedErrorBox from "../components/UnauthorizedErrorBox";
 import ErrorBox from "../components/ErrorBox";
 import PromptBox from "../components/PromptBox";
-import useChatLog, { ChatMessage } from "../util/hooks/useChatLog";
-import { NotAllowedIcon, RepeatIcon } from "@chakra-ui/icons";
 import ConfirmationBox from "../components/ConfirmationBox";
-import { setWindowSize } from "../util/helpers";
-import PromptInput from "../components/Prompt/Input";
-import Instruction from "../components/Prompt/Instruction";
-import PageContext from "../context/PageContext";
+import PromptComponent from "../components/Prompt/Component";
+import Welcome from "../components/Prompt/Welcome";
+// ---------- HOOKS ----------
+import useChatLog, { ChatMessage } from "../util/hooks/useChatLog";
+// ---------- HELPERS ----------
 import { isEmpty } from "lodash";
-const CLEAR_TEXT = "";
-// const CLEAR_TEXT = fillerMarkdown;
+import { AnimatePresence, motion } from "framer-motion";
+import { chatComplete } from "../util/openai";
+import { setWindowSize } from "../util/helpers";
 
 export default function ChatPage() {
+  // ---------- VARIABLES/IMPORTS ----------
+  // ** CONTEXT
   const { setPage, token } = useContext(PageContext)!;
+  // ** HOOKS
+  const { chatLog, addPrompt, addResponse, clearChatLog, popChatLog } =
+    useChatLog();
+  // ---------- STATES ----------
+
   const [userData, setUserData] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
   const [tempPrompt, setTempPrompt] = useState<string>("");
   const [tempFiles, setTempFiles] = useState<any>([]);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const [bgClicked, setBgClicked] = useState(false);
-  const { chatLog, addPrompt, addResponse, clearChatLog, popChatLog } =
-    useChatLog();
-  const [error, setError] = useState<Error | null>(null);
 
+  const [error, setError] = useState<Error | null>(null);
+  // ---------- FUNCTIONS ----------
   const handleBgClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target !== e.currentTarget) {
       return;
@@ -39,23 +50,12 @@ export default function ChatPage() {
       setBgClicked(false);
     }, 200);
   };
+
   const handleClearChatLog = () => {
     clearChatLog();
     setError(null);
     setShowConfirmation(false);
   };
-
-  useEffect(() => {
-    setWindowSize(800, 400);
-    const user: any = localStorage.getItem("user");
-    if (!isEmpty(user)) {
-      setUserData(JSON.parse(user));
-      console.log("masuk chat page", { user: JSON.parse(user) });
-    } else {
-      setPage("login");
-    }
-    return () => {};
-  }, []);
 
   const handleGenerate = async (prompt: string, temperature = 1.0) => {
     console.log("prompt", prompt);
@@ -111,26 +111,40 @@ export default function ChatPage() {
       }
     }
   };
+
   const handleCancelConfirmation = async () => {
     setShowConfirmation(false);
     setTempPrompt("");
     setTempFiles([]);
   };
+  // ---------- EFFECTS ----------
+  useEffect(() => {
+    setWindowSize(800, 400);
+    const user: any = localStorage.getItem("user");
+    if (!isEmpty(user)) {
+      setUserData(JSON.parse(user));
+      console.log("masuk chat page", { user: JSON.parse(user) });
+    } else {
+      setPage("login");
+    }
+    return () => {};
+  }, []);
+  // ---------- COMPONENTS ----------
+  // ---------- CUSTOM STYLING ----------
+  // ---------- APIs ----------
+  // ---------- COMPONENT PROPS ----------
 
   return (
     <Box
       display='flex'
       flexDirection='column'
-      // h='100vh'
-      // bg={bgClicked ? "blackAlpha.100" : "none"}
       bg='none'
-      onClick={handleBgClick}
       transition='background-color 0.1s ease'
       rounded='md'
       gap={4}
     >
-      <Instruction />
-      <PromptInput
+      <Welcome />
+      <PromptComponent
         token={token}
         onGenerate={handleConfirmation}
         // onClear={() => {
@@ -140,85 +154,6 @@ export default function ChatPage() {
         isLoading={isLoading}
         mb={2}
       />
-
-      <Box overflowY='auto' maxH='100%'>
-        <AnimatePresence>
-          {error && (
-            <Box
-              key={"error-1"}
-              as={motion.div}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              mb={2}
-              rounded='md'
-              overflow='hidden'
-              background='blackAlpha.800'
-            >
-              {error.message === "Unauthorized" ? (
-                <UnauthorizedErrorBox />
-              ) : (
-                <ErrorBox error={error} />
-              )}
-            </Box>
-          )}
-          {showConfirmation && (
-            <Box
-              key={"confirmation-1"}
-              as={motion.div}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <ConfirmationBox
-                prompt={"asd"}
-                onGenerate={handleGenerate}
-                onCancel={handleCancelConfirmation}
-                tempPrompt={tempPrompt}
-                tempFiles={tempFiles}
-              />
-            </Box>
-          )}
-          {
-            [...chatLog].map((message, i) => (
-              <Box
-                key={i}
-                as={motion.div}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                mt={i === chatLog.length - 1 ? 0 : 2}
-              >
-                {message.type === "prompt" ? (
-                  <PromptBox prompt={message.text} />
-                ) : (
-                  <ResponseBox responseMarkdown={message.text} />
-                )}
-              </Box>
-            ))
-            // .reverse()
-          }
-
-          {chatLog.length > 0 && (
-            <Center
-              as={motion.div}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              mt={2}
-            >
-              <Button
-                size='sm'
-                leftIcon={<NotAllowedIcon />}
-                onClick={handleClearChatLog}
-                colorScheme='red'
-              >
-                Reset Chat
-              </Button>
-            </Center>
-          )}
-        </AnimatePresence>
-      </Box>
     </Box>
   );
 }

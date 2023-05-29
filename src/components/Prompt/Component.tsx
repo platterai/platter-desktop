@@ -1,3 +1,8 @@
+// ---------- REACT/NEXT/TAURI ----------
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { listen } from "@tauri-apps/api/event";
+import { invoke } from "@tauri-apps/api";
+// ---------- STYLE ----------
 import {
   Box,
   BoxProps,
@@ -9,21 +14,19 @@ import {
   Tooltip,
   VStack,
 } from "@chakra-ui/react";
-import { listen } from "@tauri-apps/api/event";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+// ** ICONS **
 import { DragHandleIcon, SettingsIcon } from "@chakra-ui/icons";
-import { invoke } from "@tauri-apps/api";
-
-import store from "../../util/store";
-import { STORE_KEY } from "../../util/consts";
+// ---------- CONTEXT ----------
+import PageContext from "../../context/PageContext";
+// ---------- COMPONENTS ----------
 import MessageComponent from "./MessageComponent";
+// ---------- HELPERS ----------
 import { toast } from "react-hot-toast";
 import { isEmpty, last } from "lodash";
 import { requestGet, requestPost } from "../../services/baseService";
 import moment from "moment";
-import PageContext from "../../context/PageContext";
 
-export default function PromptInput({
+export default function PromptComponent({
   token,
   onGenerate = () => {},
   onClear = () => {},

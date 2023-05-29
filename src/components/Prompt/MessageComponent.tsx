@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ChangeEventHandler } from "react";
 import { Mention, MentionsInput } from "react-mentions";
-// import { documents } from "@/@fakedb/documentList";
-
-import _ from "lodash";
 import { requestGet } from "../../services/baseService";
 import {
   MentionsInputStyle,
   MentionsStyle,
 } from "../../styles/mentionComponent";
-import { toast } from "react-hot-toast";
 
 type MessageComponentProps = {
   value: any;
@@ -87,13 +83,6 @@ const MessageComponent = ({
       }}
       className='mentionWrapper'
     >
-      <button
-        onClick={() => {
-          toast.success("Hello");
-        }}
-      >
-        munculin toast
-      </button>
       <MentionsInput
         value={value}
         placeholder='Type your prompt'
@@ -116,14 +105,6 @@ const MessageComponent = ({
           displayTransform={(id, display) => `${display}`}
           style={MentionsStyle}
         />
-
-        {/* <Mention
-          trigger='@'
-          data={users}
-          className=''
-          displayTransform={(id, display) => `@${display}`}
-          style={MentionsStyle}
-        /> */}
       </MentionsInput>
     </div>
   );

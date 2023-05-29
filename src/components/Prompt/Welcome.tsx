@@ -1,11 +1,11 @@
+import { useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { Box, Tooltip, VStack } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
 
-type InstructionProps = {};
+type WelcomeProps = {};
 
-export default function Instruction({}: InstructionProps) {
+export default function Welcome({}: WelcomeProps) {
   const [visible, setVisible] = useState(true);
 
   return (
