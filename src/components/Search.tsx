@@ -332,7 +332,7 @@ function Search({
             >
               <Mention
                 trigger='@'
-                data={[{ id: 1, display: "adjfkasjdf" }]}
+                data={searchUsers}
                 markup={"@(__display__[__id__])"}
                 style={mentionStyle}
                 displayTransform={(id, display) => `@${display}`}
