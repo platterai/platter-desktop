@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { NEXT_PUBLIC_API_URL } from "../constants/env";
 
 interface requestGetProps<T> {
   withAuth?: boolean;
@@ -7,21 +8,22 @@ interface requestGetProps<T> {
   needLogin?: boolean;
 }
 
-const ENVAPI = "http://54.254.188.38:9001";
-
 export const requestGet = async <T>(
   url: string,
   { withAuth = true, params, token, needLogin = true }: requestGetProps<T>
 ): Promise<T> => {
   try {
-    const response: AxiosResponse<T> = await axios.get(`${ENVAPI}${url}`, {
-      params,
-      headers: {
-        ...(withAuth && {
-          Authorization: `Bearer ${token}`,
-        }),
-      },
-    });
+    const response: AxiosResponse<T> = await axios.get(
+      `${NEXT_PUBLIC_API_URL}${url}`,
+      {
+        params,
+        headers: {
+          ...(withAuth && {
+            Authorization: `Bearer ${token}`,
+          }),
+        },
+      }
+    );
 
     //@ts-ignore
     if (response.statusCode === 401 || token === "") {
@@ -52,13 +54,53 @@ export const requestPost = async <T>(
 ): Promise<T> => {
   try {
     const response: AxiosResponse<T> = await axios.post(
-      `${ENVAPI}${url}`,
+      `${NEXT_PUBLIC_API_URL}${url}`,
       requestBody,
       {
         headers: {
           ...(withAuth && {
             Authorization: `Bearer ${token}`,
           }),
+        },
+      }
+    );
+    console.log("###", { response, token });
+    //@ts-ignore
+    if (response.statusCode === 401 || token === "") {
+    }
+    return response.data;
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+interface requestPatchProps<T> {
+  withAuth?: boolean;
+  data?: T;
+  token?: string;
+  needLogin?: boolean;
+}
+
+export const requestPatch = async <T>(
+  url: string,
+  {
+    withAuth = true,
+    data: requestBody,
+    token,
+    needLogin = true,
+  }: requestPatchProps<T>
+): Promise<T> => {
+  try {
+    const response: AxiosResponse<T> = await axios.patch(
+      `${NEXT_PUBLIC_API_URL}${url}`,
+      requestBody,
+      {
+        headers: {
+          ...(withAuth && {
+            Authorization: `Bearer ${token}`,
+          }),
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
         },
       }
     );

@@ -31,6 +31,7 @@ export const theme = extendTheme({
     primary: {
       1: "#0084FF",
       2: "#3FDD78",
+      3: "#0977de",
     },
     accent: {
       1: "#D84C10",

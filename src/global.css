@@ -365,3 +365,33 @@ textarea:disabled {
 .bottomButtons {
   z-index: 1;
 }
+
+/* ** For Settings Page */
+.settingsWrapper {
+  padding: 12px;
+  width: 100%;
+}
+
+.settingsInnerWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.settingsMenuWrapper {
+  flex-shrink: 0;
+  width: 13.25rem;
+}
+
+.settingsContentWrapper {
+  flex-grow: 1;
+  padding-left: 12px;
+  height: 100vh;
+  overflow-y: scroll;
+  color: var(--n-6);
+}
+
+@media (min-width: 768px) {
+  .settingsContentWrapper {
+    padding-left: 0;
+  }
+}

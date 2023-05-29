@@ -26,6 +26,7 @@ import { isEmpty, last } from "lodash";
 import { requestGet, requestPost } from "../../services/baseService";
 import moment from "moment";
 import Logo from "../Logo";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function PromptComponent({
   token,
@@ -159,79 +160,88 @@ export default function PromptComponent({
   };
 
   return (
-    <Box display='flex' flexDirection='column' {...props}>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          //   onGenerate(prompt.trim(), temperature);
-          setPrompt("");
-        }}
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
       >
-        <VStack align={"start"}>
-          <InputGroup
-            size='lg'
-            sx={{
-              borderColor: "black",
-              backgroundColor: "transparent",
-              zIndex: 100,
+        <Box display='flex' flexDirection='column' {...props}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              //   onGenerate(prompt.trim(), temperature);
+              setPrompt("");
             }}
           >
-            <MessageComponent
-              value={prompt}
-              onChange={(value: any) => setPrompt(value)}
-              onEnter={() => {
-                submitPrompt();
-                setPrompt("");
-              }}
-              token={token}
-              hasMentions={true}
-            />
-            <InputRightElement
-              children={
-                <DragHandleIcon
-                  cursor='grab'
-                  color='blackAlpha.600'
-                  data-tauri-drag-region
-                />
-              }
-            />
-          </InputGroup>
-          <HStack width='100%' justify='space-between'>
-            <HStack className='bottomButtons'>
-              <Tooltip label='Settings' aria-label='Settings' hasArrow>
-                <IconButton
-                  size='sm'
-                  aria-label='Settings'
-                  colorScheme='blue'
-                  color='white'
-                  icon={<SettingsIcon />}
-                  type='button'
-                  onClick={() => {
-                    openSettingsPopup();
-                    setPage("settings");
+            <VStack align={"start"}>
+              <InputGroup
+                size='lg'
+                sx={{
+                  borderColor: "black",
+                  backgroundColor: "transparent",
+                  zIndex: 100,
+                }}
+              >
+                <MessageComponent
+                  value={prompt}
+                  onChange={(value: any) => setPrompt(value)}
+                  onEnter={() => {
+                    submitPrompt();
+                    setPrompt("");
                   }}
+                  token={token}
+                  hasMentions={true}
                 />
-              </Tooltip>
-              <Tooltip label='Profile' aria-label='Profile' hasArrow>
-                <Button
-                  size='sm'
-                  colorScheme='blue'
-                  color='white'
-                  aria-label='Profile'
-                  onClick={() => {
-                    // setShowOptions(!showOptions);
-                    setPage("profile");
-                  }}
-                >
-                  Lintang
-                </Button>
-              </Tooltip>
-            </HStack>
+                <InputRightElement
+                  children={
+                    <DragHandleIcon
+                      cursor='grab'
+                      color='blackAlpha.600'
+                      data-tauri-drag-region
+                    />
+                  }
+                />
+              </InputGroup>
+              <HStack width='100%' justify='space-between'>
+                <HStack className='bottomButtons'>
+                  <Tooltip label='Settings' aria-label='Settings' hasArrow>
+                    <IconButton
+                      size='sm'
+                      aria-label='Settings'
+                      bg='primary.1'
+                      _hover={{ bg: "primary.3" }}
+                      color='white'
+                      icon={<SettingsIcon />}
+                      type='button'
+                      onClick={() => {
+                        // openSettingsPopup();
+                        setPage("settings");
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip label='Profile' aria-label='Profile' hasArrow>
+                    <Button
+                      size='sm'
+                      bg='primary.1'
+                      _hover={{ bg: "primary.3" }}
+                      color='white'
+                      aria-label='Profile'
+                      onClick={() => {
+                        // setShowOptions(!showOptions);
+                        setPage("profile");
+                      }}
+                    >
+                      Lintang
+                    </Button>
+                  </Tooltip>
+                </HStack>
 
-            <Logo width='80px' />
-          </HStack>
-        </VStack>
-      </form>
-    </Box>
+                <Logo width='80px' />
+              </HStack>
+            </VStack>
+          </form>
+        </Box>
+      </motion.div>
+    </AnimatePresence>
   );
 }
