@@ -1,3 +1,5 @@
+import { appWindow, LogicalSize } from "@tauri-apps/api/window";
+
 export const anchorLink = (url: string, newTab: boolean) => {
   const link = document.createElement("a");
   link.href = url;
@@ -21,4 +23,8 @@ export const checkCookie = (cookieName: string) => {
 
   console.log(`${cookieName} cookie not found!`);
   return false;
+};
+
+export const setWindowSize = (w: number, h: number) => {
+  appWindow.setSize(new LogicalSize(w, h));
 };
