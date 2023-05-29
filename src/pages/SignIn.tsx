@@ -1,15 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Divider from "../components/CustomUI/Divider";
 import Flex from "../components/CustomUI/Flex";
-import Icon from "../components/CustomUI/Icon";
 import Logo from "../components/Logo";
 import SignInForm from "../components/SignInForm";
 import PageContext from "../context/PageContext";
 import { requestGet } from "../services/baseService";
 import { btn_stroke_light } from "../styles/custom-components-classes";
-import { anchorLink } from "../util/helpers";
+import { anchorLink, checkCookie, setWindowSize } from "../util/helpers";
 
 export default function SignInPage() {
+  const { setPage } = useContext(PageContext)!;
+  const [loading, setLoading] = useState(true);
   const handleGoogleOauth = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -17,12 +18,6 @@ export default function SignInPage() {
       const responseData = await requestGet<any>("/v1/google/auth", {});
       console.log({ responseData });
       if (responseData?.statusCode === 200) {
-        // const link = document.createElement("a");
-        // link.style.display = "none";
-        // link.target = "_blank";
-        // link.href = responseData?.data?.url;
-        // document.body.appendChild(link);
-        // link.click();
         anchorLink(responseData?.data?.url, true);
       } else {
         alert("Google Authentication Error");
@@ -33,10 +28,21 @@ export default function SignInPage() {
     }
   };
 
+  useEffect(() => {
+    setWindowSize(500, 540);
+    if (checkCookie("token")) {
+      setPage("chat");
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+    return () => {};
+  }, []);
+
   return (
     <div
       className='bg-white w-full py-10 center-col '
-      style={{ borderRadius: "8px" }}
+      style={{ borderRadius: "8px", display: loading ? "none" : "block" }}
     >
       <div className='center-col ' style={{ width: "320px" }}>
         <Logo />

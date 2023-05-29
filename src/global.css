@@ -347,3 +347,21 @@ a:visited {
 .b-n-7 {
   border-color: var(--n-7) !important;
 }
+
+/* ** For Mention Component  */
+.mentionWrapper {
+  padding: 0;
+  width: 100%;
+}
+.mentionWrapper textarea:focus {
+  outline: none !important;
+}
+
+input:disabled,
+textarea:disabled {
+  cursor: no-drop;
+}
+
+.bottomButtons {
+  z-index: 1;
+}

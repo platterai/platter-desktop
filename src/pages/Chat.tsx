@@ -1,7 +1,6 @@
-import Search from "../components/Search";
 import { Box, Button, Center } from "@chakra-ui/react";
 import ResponseBox from "../components/ResponseBox";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { chatComplete } from "../util/openai";
 import { AnimatePresence, motion } from "framer-motion";
 import UnauthorizedErrorBox from "../components/UnauthorizedErrorBox";
@@ -10,11 +9,17 @@ import PromptBox from "../components/PromptBox";
 import useChatLog, { ChatMessage } from "../util/hooks/useChatLog";
 import { NotAllowedIcon, RepeatIcon } from "@chakra-ui/icons";
 import ConfirmationBox from "../components/ConfirmationBox";
-
+import { setWindowSize } from "../util/helpers";
+import PromptInput from "../components/Prompt/Input";
+import Instruction from "../components/Prompt/Instruction";
+import PageContext from "../context/PageContext";
+import { isEmpty } from "lodash";
 const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;
 
 export default function ChatPage() {
+  const { setPage, token } = useContext(PageContext)!;
+  const [userData, setUserData] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
   const [tempPrompt, setTempPrompt] = useState<string>("");
   const [tempFiles, setTempFiles] = useState<any>([]);
@@ -39,6 +44,18 @@ export default function ChatPage() {
     setError(null);
     setShowConfirmation(false);
   };
+
+  useEffect(() => {
+    setWindowSize(800, 400);
+    const user: any = localStorage.getItem("user");
+    if (!isEmpty(user)) {
+      setUserData(JSON.parse(user));
+      console.log("masuk chat page", { user: JSON.parse(user) });
+    } else {
+      setPage("login");
+    }
+    return () => {};
+  }, []);
 
   const handleGenerate = async (prompt: string, temperature = 1.0) => {
     console.log("prompt", prompt);
@@ -104,13 +121,17 @@ export default function ChatPage() {
     <Box
       display='flex'
       flexDirection='column'
-      h='100vh'
-      bg={bgClicked ? "blackAlpha.300" : "none"}
+      // h='100vh'
+      // bg={bgClicked ? "blackAlpha.100" : "none"}
+      bg='none'
       onClick={handleBgClick}
       transition='background-color 0.1s ease'
       rounded='md'
+      gap={4}
     >
-      <Search
+      <Instruction />
+      <PromptInput
+        token={token}
         onGenerate={handleConfirmation}
         // onClear={() => {
         //   handleClearChatLog();

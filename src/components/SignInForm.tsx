@@ -10,10 +10,10 @@ import Flex from "./CustomUI/Flex";
 type SignInFormProps = {};
 
 export default function SignInForm({}: SignInFormProps) {
-  const { setPage } = useContext(PageContext)!;
+  const { setPage, setToken } = useContext(PageContext)!;
 
-  const [name, setName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("pryamm_platter");
+  const [password, setPassword] = useState<string>("pryamm");
 
   const handleSaveToken = (value: string) => {
     const token = value;
@@ -41,6 +41,9 @@ export default function SignInForm({}: SignInFormProps) {
       console.log({ responseData });
       if (responseData?.statusCode === 200) {
         handleSaveToken(responseData?.data?.accessToken);
+        setToken(responseData?.data?.accessToken);
+        const user = JSON.stringify(responseData?.data?.user);
+        localStorage.setItem("user", user);
         setPage("chat");
       } else {
         alert("Sign In Fail");
