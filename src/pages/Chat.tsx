@@ -14,7 +14,7 @@ import ConfirmationBox from "../components/ConfirmationBox";
 const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;
 
-function App() {
+export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [tempPrompt, setTempPrompt] = useState<string>("");
   const [tempFiles, setTempFiles] = useState<any>([]);
@@ -102,13 +102,13 @@ function App() {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      h="100vh"
+      display='flex'
+      flexDirection='column'
+      h='100vh'
       bg={bgClicked ? "blackAlpha.300" : "none"}
       onClick={handleBgClick}
-      transition="background-color 0.1s ease"
-      rounded="md"
+      transition='background-color 0.1s ease'
+      rounded='md'
     >
       <Search
         onGenerate={handleConfirmation}
@@ -120,7 +120,7 @@ function App() {
         mb={2}
       />
 
-      <Box overflowY="auto" maxH="100%">
+      <Box overflowY='auto' maxH='100%'>
         <AnimatePresence>
           {error && (
             <Box
@@ -130,9 +130,9 @@ function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               mb={2}
-              rounded="md"
-              overflow="hidden"
-              background="blackAlpha.800"
+              rounded='md'
+              overflow='hidden'
+              background='blackAlpha.800'
             >
               {error.message === "Unauthorized" ? (
                 <UnauthorizedErrorBox />
@@ -158,8 +158,8 @@ function App() {
               />
             </Box>
           )}
-          {[...chatLog]
-            .map((message, i) => (
+          {
+            [...chatLog].map((message, i) => (
               <Box
                 key={i}
                 as={motion.div}
@@ -176,7 +176,7 @@ function App() {
               </Box>
             ))
             // .reverse()
-            }
+          }
 
           {chatLog.length > 0 && (
             <Center
@@ -187,10 +187,10 @@ function App() {
               mt={2}
             >
               <Button
-                size="sm"
+                size='sm'
                 leftIcon={<NotAllowedIcon />}
                 onClick={handleClearChatLog}
-                colorScheme="red"
+                colorScheme='red'
               >
                 Reset Chat
               </Button>
@@ -201,5 +201,3 @@ function App() {
     </Box>
   );
 }
-
-export default App;

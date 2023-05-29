@@ -27,7 +27,7 @@ import { DEFAULT_MAX_TOKENS, DEFAULT_TIMEOUT, STORE_KEY } from "../util/consts";
 import { anchorLink } from "../util/helpers";
 import store from "../util/store";
 
-function Settings() {
+export default function SettingsPage() {
   const toast = useToast();
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
@@ -290,5 +290,3 @@ function Settings() {
     </Box>
   );
 }
-
-export default Settings;

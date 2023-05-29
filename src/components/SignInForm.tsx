@@ -1,7 +1,8 @@
 import { serialize } from "cookie";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import PageContext from "../context/PageContext";
 import { requestPost } from "../services/baseService";
-import { anchorLink } from "../util/helpers";
+import { anchorLink, checkCookie } from "../util/helpers";
 import Button from "./CustomUI/Button";
 import Field from "./CustomUI/Field";
 import Flex from "./CustomUI/Flex";
@@ -9,6 +10,8 @@ import Flex from "./CustomUI/Flex";
 type SignInFormProps = {};
 
 export default function SignInForm({}: SignInFormProps) {
+  const { setPage } = useContext(PageContext)!;
+
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -38,7 +41,7 @@ export default function SignInForm({}: SignInFormProps) {
       console.log({ responseData });
       if (responseData?.statusCode === 200) {
         handleSaveToken(responseData?.data?.accessToken);
-        anchorLink("/main.html", false);
+        setPage("chat");
       } else {
         alert("Sign In Fail");
       }

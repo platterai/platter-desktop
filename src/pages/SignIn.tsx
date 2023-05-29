@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import Divider from "../components/CustomUI/Divider";
 import Flex from "../components/CustomUI/Flex";
 import Icon from "../components/CustomUI/Icon";
 import Logo from "../components/Logo";
 import SignInForm from "../components/SignInForm";
+import PageContext from "../context/PageContext";
 import { requestGet } from "../services/baseService";
 import { btn_stroke_light } from "../styles/custom-components-classes";
 import { anchorLink } from "../util/helpers";
 
-export default function SignIn() {
+export default function SignInPage() {
   const handleGoogleOauth = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 

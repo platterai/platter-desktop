@@ -10,7 +10,7 @@ const Section = ({
   children: React.ReactNode;
 }) => (
   <Box>
-    <Heading size="md" mt={4}>
+    <Heading size='md' mt={4}>
       {title}
     </Heading>
     <Divider my={2} />
@@ -18,15 +18,15 @@ const Section = ({
   </Box>
 );
 
-function Help() {
+export default function HelpPage() {
   return (
     <Box p={4}>
       <Heading>Help</Heading>
-      <Heading size="md" color="whiteAlpha.600" fontWeight="normal">
+      <Heading size='md' color='whiteAlpha.600' fontWeight='normal'>
         Getting Started with GPT Anywhere
       </Heading>
       <Stack spacing={4} mt={4}>
-        <Section title="Open/Close GPT Anywhere">
+        <Section title='Open/Close GPT Anywhere'>
           <Text>
             To open GPT Anywhere, use the keyboard shortcut{" "}
             <Code>Ctrl + Shift + /</Code> or <Code>Cmd + Shift + /</Code> on
@@ -38,7 +38,7 @@ function Help() {
           </Text>
         </Section>
 
-        <Section title="Configure GPT Anywhere">
+        <Section title='Configure GPT Anywhere'>
           <Text>
             To configure GPT Anywhere, click the tray icon and select
             "Settings". In the settings window, you can configure your API key,
@@ -46,7 +46,7 @@ function Help() {
           </Text>
         </Section>
 
-        <Section title="Using GPT Anywhere">
+        <Section title='Using GPT Anywhere'>
           <Text>
             To use GPT Anywhere, type your prompt into the main window and press
             enter. GPT Anywhere will then send your prompt to the OpenAI API and
@@ -57,5 +57,3 @@ function Help() {
     </Box>
   );
 }
-
-export default Help;
