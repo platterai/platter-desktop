@@ -25,6 +25,7 @@ import { toast } from "react-hot-toast";
 import { isEmpty, last } from "lodash";
 import { requestGet, requestPost } from "../../services/baseService";
 import moment from "moment";
+import Logo from "../Logo";
 
 export default function PromptComponent({
   token,
@@ -195,35 +196,39 @@ export default function PromptComponent({
               }
             />
           </InputGroup>
-          <HStack className='bottomButtons'>
-            <Tooltip label='Settings' aria-label='Settings' hasArrow>
-              <IconButton
-                size='sm'
-                aria-label='Settings'
-                colorScheme='blue'
-                color='white'
-                icon={<SettingsIcon />}
-                type='button'
-                onClick={() => {
-                  openSettingsPopup();
-                  setPage("settings");
-                }}
-              />
-            </Tooltip>
-            <Tooltip label='Profile' aria-label='Profile' hasArrow>
-              <Button
-                size='sm'
-                colorScheme='blue'
-                color='white'
-                aria-label='Profile'
-                onClick={() => {
-                  // setShowOptions(!showOptions);
-                  setPage("profile");
-                }}
-              >
-                Lintang
-              </Button>
-            </Tooltip>
+          <HStack width='100%' justify='space-between'>
+            <HStack className='bottomButtons'>
+              <Tooltip label='Settings' aria-label='Settings' hasArrow>
+                <IconButton
+                  size='sm'
+                  aria-label='Settings'
+                  colorScheme='blue'
+                  color='white'
+                  icon={<SettingsIcon />}
+                  type='button'
+                  onClick={() => {
+                    openSettingsPopup();
+                    setPage("settings");
+                  }}
+                />
+              </Tooltip>
+              <Tooltip label='Profile' aria-label='Profile' hasArrow>
+                <Button
+                  size='sm'
+                  colorScheme='blue'
+                  color='white'
+                  aria-label='Profile'
+                  onClick={() => {
+                    // setShowOptions(!showOptions);
+                    setPage("profile");
+                  }}
+                >
+                  Lintang
+                </Button>
+              </Tooltip>
+            </HStack>
+
+            <Logo width='80px' />
           </HStack>
         </VStack>
       </form>
