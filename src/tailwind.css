@@ -3768,37 +3768,148 @@
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+  transition-duration: 300ms;
 }
 .transition {
   transition-property: color, background-color, border-color,
     text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+  transition-duration: 300ms;
 }
 .transition-colors {
   transition-property: color, background-color, border-color,
     text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+  transition-duration: 300ms;
 }
 .transition-opacity {
   transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+  transition-duration: 3000ms;
 }
 .transition-shadow {
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+  transition-duration: 300ms;
 }
 .transition-transform {
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+  transition-duration: 300ms;
 }
 
 /* ======================= TRANSITION END  */
+
+/* ======================= OPACITY START  */
+.opacity-0 {
+  opacity: 0 !important;
+}
+.opacity-5 {
+  opacity: 0.05 !important;
+}
+.opacity-10 {
+  opacity: 0.1 !important;
+}
+.opacity-20 {
+  opacity: 0.2 !important;
+}
+.opacity-25 {
+  opacity: 0.25 !important;
+}
+.opacity-30 {
+  opacity: 0.3 !important;
+}
+.opacity-40 {
+  opacity: 0.4 !important;
+}
+.opacity-50 {
+  opacity: 0.5 !important;
+}
+.opacity-60 {
+  opacity: 0.6 !important;
+}
+.opacity-70 {
+  opacity: 0.7 !important;
+}
+.opacity-75 {
+  opacity: 0.75 !important;
+}
+.opacity-80 {
+  opacity: 0.8 !important;
+}
+.opacity-90 {
+  opacity: 0.9 !important;
+}
+.opacity-95 {
+  opacity: 0.95 !important;
+}
+.opacity-100 {
+  opacity: 1 !important;
+}
+
+/* ** ON HOVER */
+.opacity-0_hover:hover {
+  transition: all 300ms;
+  opacity: 0 !important;
+}
+.opacity-5_hover:hover {
+  transition: all 300ms;
+  opacity: 0.05 !important;
+}
+.opacity-10_hover:hover {
+  transition: all 300ms;
+  opacity: 0.1 !important;
+}
+.opacity-20_hover:hover {
+  transition: all 300ms;
+  opacity: 0.2 !important;
+}
+.opacity-25_hover:hover {
+  transition: all 300ms;
+  opacity: 0.25 !important;
+}
+.opacity-30_hover:hover {
+  transition: all 300ms;
+  opacity: 0.3 !important;
+}
+.opacity-40_hover:hover {
+  transition: all 300ms;
+  opacity: 0.4 !important;
+}
+.opacity-50_hover:hover {
+  transition: all 300ms;
+  opacity: 0.5 !important;
+}
+.opacity-60_hover:hover {
+  transition: all 300ms;
+  opacity: 0.6 !important;
+}
+.opacity-70_hover:hover {
+  transition: all 300ms;
+  opacity: 0.7 !important;
+}
+.opacity-75_hover:hover {
+  transition: all 300ms;
+  opacity: 0.75 !important;
+}
+.opacity-80_hover:hover {
+  transition: all 300ms;
+  opacity: 0.8 !important;
+}
+.opacity-90_hover:hover {
+  transition: all 300ms;
+  opacity: 0.9 !important;
+}
+.opacity-95_hover:hover {
+  transition: all 300ms;
+  opacity: 0.95 !important;
+}
+.opacity-100_hover:hover {
+  transition: all 300ms;
+  opacity: 1 !important;
+}
+/* ======================= OPACITY END  */
+
 /* ======================= OUTLINE START  */
 
 .outline-none {
@@ -3866,5 +3977,3 @@
   overflow-y: scroll !important;
 }
 /* ======================= OVERFLOW END  */
-
-
