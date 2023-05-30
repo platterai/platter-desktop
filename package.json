@@ -14,6 +14,7 @@
     "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@fontsource/inter": "^5.0.1",
     "@fontsource/manrope": "^4.5.13",
     "@headlessui/react": "^1.7.14",
     "@microsoft/fetch-event-source": "^2.0.1",
