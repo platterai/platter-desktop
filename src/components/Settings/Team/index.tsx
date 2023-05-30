@@ -5,8 +5,8 @@ type TeamProps = {};
 
 const Team = ({}: TeamProps) => (
   <>
-    <div className='flex items-center mb-8 md:mb-6'>
-      <div className='mr-auto h4'>Members</div>
+    <div className='flex items-center justify-between mb-8 gap-4'>
+      <div className='h5'>Members</div>
       <button className='btn-blue'>Invite</button>
     </div>
     <div className='py-3 base2 text-n-4'>42 members</div>

@@ -1,3 +1,4 @@
+import { ArrowBackIcon } from "@chakra-ui/icons";
 import React, { useContext, useEffect, useState } from "react";
 import Divider from "../components/CustomUI/Divider";
 import Flex from "../components/CustomUI/Flex";
@@ -31,7 +32,7 @@ export default function SettingsPage() {
   };
 
   useEffect(() => {
-    setWindowSize(1000, 800);
+    setWindowSize(790, 600);
     return () => {};
   }, []);
 
@@ -40,7 +41,16 @@ export default function SettingsPage() {
       className='bg-white w-full py-10 px-12 flex flex-col'
       style={{ borderRadius: "8px", display: loading ? "none" : "block" }}
     >
-      <p className='text-2xl font-bold mb-4'>Settings</p>
+      <p className='text-2xl font-bold mb-4 ml-3'>
+        <ArrowBackIcon
+          className='mr-3 cursor-pointer'
+          sx={{ transform: "translateY(-2px)" }}
+          onClick={() => {
+            setPage("chat");
+          }}
+        />
+        Settings
+      </p>
       <Settings items={settings} />
     </div>
   );

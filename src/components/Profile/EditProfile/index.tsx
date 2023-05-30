@@ -15,6 +15,7 @@ import Field from "../../CustomUI/Field";
 import { requestPatch, requestPost } from "../../../services/baseService";
 import UserContext from "../../../context/UserContext";
 import { NEXT_PUBLIC_API_URL } from "../../../constants/env";
+import { Button } from "@chakra-ui/react";
 // ---------- TYPES ----------
 type EditProfileProps = { setVisibleProfile?: (x: any) => void };
 
@@ -137,134 +138,110 @@ const EditProfile = ({ setVisibleProfile }: EditProfileProps) => {
   }, [contextValue]);
 
   return (
-    <>
-      <form
-        action=''
-        onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-          e.preventDefault();
-          const formData = new FormData(e.target as HTMLFormElement);
-          const profileData = {
-            name: formData.get("name"),
-            username: formData.get("username"),
-            phone: formData.get("phone"),
-            email: mail,
-            avatarId: avatarId,
-          };
-          submitEditProfile({ data: profileData });
+    <form
+      action=''
+      onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.target as HTMLFormElement);
+        const profileData = {
+          name: formData.get("name"),
+          username: formData.get("username"),
+          phone: formData.get("phone"),
+          email: mail,
+          avatarId: avatarId,
+        };
+        submitEditProfile({ data: profileData });
+      }}
+    >
+      <div className='mb-3 base2 font-semibold text-n-6'>Avatar</div>
+      <div className='flex items-center mb-6'>
+        <div className='relative flex justify-center items-center shrink-0 w-28 h-28 mr-4 rounded-full overflow-hidden bg-n-2'>
+          {objectURL !== null ? (
+            <img
+              className='object-cover rounded-full'
+              src={avatarPath}
+              alt='Avatar'
+            />
+          ) : (
+            <Icon className='w-8 h-8' name='profile' />
+          )}
+        </div>
+        <div className='grow'>
+          <div className='relative inline-flex mb-4'>
+            <input
+              className='absolute inset-0 opacity-0 cursor-pointer bg-n-3_hover border-transparent_hover '
+              type='file'
+              onChange={handleUpload}
+            />
+            <button className='btn-stroke-light bg-n-3_hover border-transparent_hover'>
+              Upload new image
+            </button>
+          </div>
+          <div className='caption1 text-n-4'>
+            <p>At least 800x800 px recommended.</p>
+            <p>JPG or PNG is allowed</p>
+          </div>
+        </div>
+      </div>
+      <button
+        className='my-4 btn-stroke-light b-primary-1 bg-primary-1_hover border-transparent_hover text-white_hover w-full transition-opacity'
+        onClick={() => {
+          if (setVisibleProfile) {
+            setVisibleProfile(false);
+            // router.push("/pricing");
+          }
         }}
       >
-        <div className='mb-8 h4 md:mb-6'>Edit profile</div>
-        <div className='mb-3 base2 font-semibold text-n-6 dark:text-n-1'>
-          Avatar
-        </div>
-        <div className='flex items-center mb-6'>
-          <div className='relative flex justify-center items-center shrink-0 w-28 h-28 mr-4 rounded-full overflow-hidden bg-n-2 dark:bg-n-6'>
-            {objectURL !== null ? (
-              <img
-                className='object-cover rounded-full'
-                src={avatarPath}
-                alt='Avatar'
-              />
-            ) : (
-              <Icon className='w-8 h-8 dark:fill-n-1' name='profile' />
-            )}
-          </div>
-          <div className='grow'>
-            <div className='relative inline-flex mb-4'>
-              <input
-                className='peer absolute inset-0 opacity-0 cursor-pointer'
-                type='file'
-                onChange={handleUpload}
-              />
-              <button className='btn-stroke-light peer-hover:bg-n-3 dark:peer-hover:bg-n-5'>
-                Upload new image
-              </button>
-            </div>
-            <div className='caption1 text-n-4'>
-              <p>At least 800x800 px recommended.</p>
-              <p>JPG or PNG is allowed</p>
-            </div>
-          </div>
-        </div>
-        <button
-          className='my-4 btn-stroke-light !border-primary-1/50  hover:!bg-primary-1 hover:!border-transparent hover:!text-white w-full'
-          onClick={() => {
-            if (setVisibleProfile) {
-              setVisibleProfile(false);
-              // router.push("/pricing");
-            }
-          }}
-        >
-          Upgrade to Pro
-        </button>
-        <Field
-          name='name'
-          className='mb-6'
-          label='Name'
-          placeholder='Name'
-          icon='profile-1'
-          value={name}
-          onChange={(e: any) => setName(e.target.value)}
-          required
-        />
-        <Field
-          name='username'
-          className='mb-6'
-          label='Username'
-          placeholder='Username'
-          icon='profile-1'
-          value={username}
-          onChange={(e: any) => setUsername(e.target.value)}
-          required
-        />
-        <Field
-          name='email'
-          className='mb-6'
-          label='Email'
-          placeholder='Email'
-          icon='email'
-          value={mail}
-          onChange={(e: any) => setMail(e.target.value)}
-          disabled
-        />
+        Upgrade to Pro
+      </button>
+      <Field
+        name='name'
+        className='mb-6'
+        label='Name'
+        placeholder='Name'
+        icon='profile-1'
+        value={name}
+        onChange={(e: any) => setName(e.target.value)}
+        required
+      />
+      <Field
+        name='username'
+        className='mb-6'
+        label='Username'
+        placeholder='Username'
+        icon='profile-1'
+        value={username}
+        onChange={(e: any) => setUsername(e.target.value)}
+        required
+      />
+      <Field
+        name='email'
+        className='mb-6'
+        label='Email'
+        placeholder='Email'
+        icon='email'
+        value={mail}
+        onChange={(e: any) => setMail(e.target.value)}
+        disabled
+      />
 
-        <Field
-          name='phone'
-          className='mb-6'
-          label='Phone'
-          placeholder='Phone'
-          icon='phone'
-          value={phone}
-          onChange={(e: any) => {
-            handlePhoneNumberChange(e?.target?.value);
-          }}
-          error={isEmpty(phoneError) ? false : phoneError}
-          required
-        />
-        {/* <Field
+      <Field
+        name='phone'
         className='mb-6'
-        label='Location'
-        placeholder='Location'
-        icon='marker'
-        value={location}
-        onChange={(e: any) => setLocation(e.target.value)}
+        label='Phone'
+        placeholder='Phone'
+        icon='phone'
+        value={phone}
+        onChange={(e: any) => {
+          handlePhoneNumberChange(e?.target?.value);
+        }}
+        error={isEmpty(phoneError) ? false : phoneError}
         required
-      /> */}
-        {/* <Field
-        className='mb-6'
-        label='Bio'
-        placeholder='Short bio'
-        icon='user-check'
-        value={bio}
-        onChange={(e: any) => setBio(e.target.value)}
-        textarea
-        required
-      /> */}
-        <button type='submit' className='btn-blue w-full'>
-          Save changes
-        </button>
-      </form>
-    </>
+      />
+      <button type='submit' className='btn-blue w-full m-0'>
+        Save changes
+      </button>
+    </form>
   );
 };
 

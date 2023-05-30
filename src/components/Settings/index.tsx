@@ -26,7 +26,7 @@ export default function Settings({ items, activeItem }: SettingsProps) {
         <div className='settingsMenuWrapper'>
           <Menu value={active} setValue={setActive} buttons={items} />
         </div>
-        <div className='settingsContentWrapper'>
+        <div className='settingsContentWrapper no-scrollbar'>
           {active.id === "edit-profile" && <EditProfile />}
           {active.id === "password" && <Password />}
           {active.id === "team" && <Team />}

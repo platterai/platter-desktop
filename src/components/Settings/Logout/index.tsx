@@ -14,9 +14,9 @@ const Logout = ({}: LogoutProps) => {
 
   return (
     <div>
-      <div className='mb-8 h4'>Are you sure you want to logout?</div>
+      <div className='mb-8 h5'>Are you sure you want to logout?</div>
       <button
-        className='btn-red w-full'
+        className='btn-red w-full m-0'
         onClick={() => {
           handleLogout();
           // router.replace("/sign-in");

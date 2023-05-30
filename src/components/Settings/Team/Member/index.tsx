@@ -9,7 +9,7 @@ type MemberProps = {
 const Member = ({ item, style }: MemberProps) => {
   return (
     <div
-      className='group relative flex items-center py-6 border-t border-n-3 cursor-pointer xl:cursor-default dark:border-n-6'
+      className='group relative flex items-center py-6 border-t border-n-3 cursor-pointer xl:cursor-default'
       style={style}
     >
       <div className='relative w-12 h-12 shrink-0'>

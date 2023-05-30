@@ -48,7 +48,7 @@ const Password = ({}: PasswordProps) => {
         submitChangePassword({ data: passwordData });
       }}
     >
-      <div className='mb-8 h4 md:mb-6'>Change Password</div>
+      <div className='mb-8 h5'>Change Password</div>
       <Field
         name='oldPassword'
         className='mb-6'
