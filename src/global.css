@@ -376,6 +376,64 @@ a:visited {
 .bg-n-7 {
   background-color: var(--n-7) !important;
 }
+/* === BACKGROUND ON HOVER */
+.bg-white_hover:hover {
+  background-color: white !important;
+}
+.bg-black_hover:hover {
+  background-color: black !important;
+}
+.bg-red_hover:hover {
+  background-color: indianred !important;
+}
+.bg-blue_hover:hover {
+  background-color: cornflowerblue !important;
+}
+.bg-green_hover:hover {
+  background-color: darkseagreen !important;
+}
+.bg-primary-1_hover:hover {
+  background-color: var(--primary-1) !important;
+}
+.bg-primary-2_hover:hover {
+  background-color: var(--primary-2) !important;
+}
+.bg-accent-1_hover:hover {
+  background-color: var(--accent-1) !important;
+}
+.bg-accent-2_hover:hover {
+  background-color: var(--accent-2) !important;
+}
+.bg-accent-3_hover:hover {
+  background-color: var(--accent-3) !important;
+}
+.bg-accent-4_hover:hover {
+  background-color: var(--accent-4) !important;
+}
+.bg-accent-5_hover:hover {
+  background-color: var(--accent-5) !important;
+}
+.bg-n-1_hover:hover {
+  background-color: var(--n-1) !important;
+}
+.bg-n-2_hover:hover {
+  background-color: var(--n-2) !important;
+}
+.bg-n-3_hover:hover {
+  background-color: var(--n-3) !important;
+}
+.bg-n-4_hover:hover {
+  background-color: var(--n-4) !important;
+}
+.bg-n-5_hover:hover {
+  background-color: var(--n-5) !important;
+}
+.bg-n-6_hover:hover {
+  background-color: var(--n-6) !important;
+}
+.bg-n-7_hover:hover {
+  background-color: var(--n-7) !important;
+}
 /* === BORDER */
 .b-white {
   border-color: white !important;
@@ -432,6 +490,181 @@ a:visited {
   border-color: var(--n-6) !important;
 }
 .b-n-7 {
+  border-color: var(--n-7) !important;
+}
+/* other syntax */
+.border-white {
+  border-color: white !important;
+}
+.border-black {
+  border-color: black !important;
+}
+.border-red {
+  border-color: indianred !important;
+}
+.border-blue {
+  border-color: cornflowerblue !important;
+}
+.border-green {
+  border-color: darkseagreen !important;
+}
+.border-primary-1 {
+  border-color: var(--primary-1) !important;
+}
+.border-primary-2 {
+  border-color: var(--primary-2) !important;
+}
+.border-accent-1 {
+  border-color: var(--accent-1) !important;
+}
+.border-accent-2 {
+  border-color: var(--accent-2) !important;
+}
+.border-accent-3 {
+  border-color: var(--accent-3) !important;
+}
+.border-accent-4 {
+  border-color: var(--accent-4) !important;
+}
+.border-accent-5 {
+  border-color: var(--accent-5) !important;
+}
+.border-n-1 {
+  border-color: var(--n-1) !important;
+}
+.border-n-2 {
+  border-color: var(--n-2) !important;
+}
+.border-n-3 {
+  border-color: var(--n-3) !important;
+}
+.border-n-4 {
+  border-color: var(--n-4) !important;
+}
+.border-n-5 {
+  border-color: var(--n-5) !important;
+}
+.border-n-6 {
+  border-color: var(--n-6) !important;
+}
+.border-n-7 {
+  border-color: var(--n-7) !important;
+}
+
+/* === BORDER ON HOVER */
+.b-white_hover:hover {
+  border-color: white !important;
+}
+.b-black_hover:hover {
+  border-color: black !important;
+}
+.b-red_hover:hover {
+  border-color: indianred !important;
+}
+.b-blue_hover:hover {
+  border-color: cornflowerblue !important;
+}
+.b-green_hover:hover {
+  border-color: darkseagreen !important;
+}
+.b-primary-1_hover:hover {
+  border-color: var(--primary-1) !important;
+}
+.b-primary-2_hover:hover {
+  border-color: var(--primary-2) !important;
+}
+.b-accent-1_hover:hover {
+  border-color: var(--accent-1) !important;
+}
+.b-accent-2_hover:hover {
+  border-color: var(--accent-2) !important;
+}
+.b-accent-3_hover:hover {
+  border-color: var(--accent-3) !important;
+}
+.b-accent-4_hover:hover {
+  border-color: var(--accent-4) !important;
+}
+.b-accent-5_hover:hover {
+  border-color: var(--accent-5) !important;
+}
+.b-n-1_hover:hover {
+  border-color: var(--n-1) !important;
+}
+.b-n-2_hover:hover {
+  border-color: var(--n-2) !important;
+}
+.b-n-3_hover:hover {
+  border-color: var(--n-3) !important;
+}
+.b-n-4_hover:hover {
+  border-color: var(--n-4) !important;
+}
+.b-n-5_hover:hover {
+  border-color: var(--n-5) !important;
+}
+.b-n-6_hover:hover {
+  border-color: var(--n-6) !important;
+}
+.b-n-7_hover:hover {
+  border-color: var(--n-7) !important;
+}
+/* other syntax */
+.border-white_hover:hover {
+  border-color: white !important;
+}
+.border-black_hover:hover {
+  border-color: black !important;
+}
+.border-red_hover:hover {
+  border-color: indianred !important;
+}
+.border-blue_hover:hover {
+  border-color: cornflowerblue !important;
+}
+.border-green_hover:hover {
+  border-color: darkseagreen !important;
+}
+.border-primary-1_hover:hover {
+  border-color: var(--primary-1) !important;
+}
+.border-primary-2_hover:hover {
+  border-color: var(--primary-2) !important;
+}
+.border-accent-1_hover:hover {
+  border-color: var(--accent-1) !important;
+}
+.border-accent-2_hover:hover {
+  border-color: var(--accent-2) !important;
+}
+.border-accent-3_hover:hover {
+  border-color: var(--accent-3) !important;
+}
+.border-accent-4_hover:hover {
+  border-color: var(--accent-4) !important;
+}
+.border-accent-5_hover:hover {
+  border-color: var(--accent-5) !important;
+}
+.border-n-1_hover:hover {
+  border-color: var(--n-1) !important;
+}
+.border-n-2_hover:hover {
+  border-color: var(--n-2) !important;
+}
+.border-n-3_hover:hover {
+  border-color: var(--n-3) !important;
+}
+.border-n-4_hover:hover {
+  border-color: var(--n-4) !important;
+}
+.border-n-5_hover:hover {
+  border-color: var(--n-5) !important;
+}
+.border-n-6_hover:hover {
+  border-color: var(--n-6) !important;
+}
+.border-n-7_hover:hover {
   border-color: var(--n-7) !important;
 }
 
