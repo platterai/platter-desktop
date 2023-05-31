@@ -1,15 +1,21 @@
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useContext } from "react";
+import { toast } from "react-hot-toast";
+import PageContext from "../../../context/PageContext";
+import UserContext from "../../../context/UserContext";
 
 type LogoutProps = {};
 
 const Logout = ({}: LogoutProps) => {
+  const { setPage } = useContext(PageContext)!;
+  const { setUser } = useContext(UserContext)!;
   const handleLogout = async () => {
-    try {
-      await axios.post("/api/logout");
-      localStorage.removeItem("selectedAvatarPath");
-    } catch (error) {
-      console.error("Logout error", { error });
-    }
+    Cookies.remove("token");
+    localStorage.removeItem("selectedAvatarPath");
+    localStorage.removeItem("user");
+    setUser({});
+    toast.success("Logout success, redirecting...");
   };
 
   return (
@@ -19,7 +25,9 @@ const Logout = ({}: LogoutProps) => {
         className='btn-red w-full m-0'
         onClick={() => {
           handleLogout();
-          // router.replace("/sign-in");
+          setTimeout(() => {
+            setPage("login");
+          }, 2000);
         }}
       >
         Logout

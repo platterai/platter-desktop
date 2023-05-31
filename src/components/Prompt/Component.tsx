@@ -27,6 +27,7 @@ import { requestGet, requestPost } from "../../services/baseService";
 import moment from "moment";
 import Logo from "../Logo";
 import { AnimatePresence, motion } from "framer-motion";
+import UserContext from "../../context/UserContext";
 
 export default function PromptComponent({
   token,
@@ -40,8 +41,9 @@ export default function PromptComponent({
   token: string;
   isLoading?: boolean;
 } & BoxProps) {
+  // ** CONTEXT
   const { setPage } = useContext(PageContext)!;
-
+  const contextValue = useContext(UserContext) as any;
   const [prompt, setPrompt] = useState("");
   const [showOptions, setShowOptions] = useState(false);
   const [listUsers, setListUsers] = useState<User[]>([]);
@@ -219,7 +221,13 @@ export default function PromptComponent({
                       }}
                     />
                   </Tooltip>
-                  <Tooltip label='Profile' aria-label='Profile' hasArrow>
+                  <Tooltip
+                    label={`Open profile ${contextValue?.user?.name ?? "??"}`}
+                    aria-label={`Open profile ${
+                      contextValue?.user?.name ?? "??"
+                    }`}
+                    hasArrow
+                  >
                     <Button
                       size='sm'
                       bg='primary.1'
@@ -231,7 +239,7 @@ export default function PromptComponent({
                         setPage("profile");
                       }}
                     >
-                      Lintang
+                      {contextValue?.user?.name ?? "-"}
                     </Button>
                   </Tooltip>
                 </HStack>

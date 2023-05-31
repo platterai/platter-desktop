@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
 import EditProfile from "./EditProfile";
 
 type ProfilePopUpType = {

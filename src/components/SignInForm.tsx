@@ -1,6 +1,7 @@
 import { serialize } from "cookie";
 import React, { useContext, useEffect, useState } from "react";
 import PageContext from "../context/PageContext";
+import UserContext from "../context/UserContext";
 import { requestPost } from "../services/baseService";
 import { anchorLink, checkCookie } from "../util/helpers";
 import Button from "./CustomUI/Button";
@@ -11,6 +12,7 @@ type SignInFormProps = {};
 
 export default function SignInForm({}: SignInFormProps) {
   const { setPage, setToken } = useContext(PageContext)!;
+  const { setUser } = useContext(UserContext)!;
 
   const [name, setName] = useState<string>("pryamm_platter");
   const [password, setPassword] = useState<string>("pryamm");
@@ -43,6 +45,7 @@ export default function SignInForm({}: SignInFormProps) {
         handleSaveToken(responseData?.data?.accessToken);
         setToken(responseData?.data?.accessToken);
         const user = JSON.stringify(responseData?.data?.user);
+        setUser(responseData?.data?.user);
         localStorage.setItem("user", user);
         setPage("chat");
       } else {

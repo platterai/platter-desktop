@@ -43,7 +43,7 @@ export default function StartPage() {
       token={token}
       setToken={setToken}
     >
-      <UserProvider user={user} token={token}>
+      <UserProvider user={user} token={token} setUser={setUser}>
         {page === "empty" && <></>}
         {page === "login" && <SignInPage />}
         {page === "chat" && <ChatPage />}
