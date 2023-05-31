@@ -1,8 +1,10 @@
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
+import { Provider } from "react-redux";
 import { PageProvider, Pages } from "../context/PageContext";
 import { UserProvider } from "../context/UserContext";
+import { store } from "../store/store";
 import { checkCookie } from "../util/helpers";
 import AppRadit from "./AppRadit";
 import ChatPage from "./Chat";
@@ -37,22 +39,24 @@ export default function StartPage() {
   }, []);
 
   return (
-    <PageProvider
-      page={page}
-      setPage={setPage}
-      token={token}
-      setToken={setToken}
-    >
-      <UserProvider user={user} token={token} setUser={setUser}>
-        {page === "empty" && <></>}
-        {page === "login" && <SignInPage />}
-        {page === "chat" && <ChatPage />}
-        {/* {page === "chat" && <AppRadit />} */}
-        {page === "help" && <HelpPage />}
-        {page === "profile" && <ProfilePage />}
-        {page === "settings" && <SettingsPage />}
-        <Toaster position='top-center' />
-      </UserProvider>
-    </PageProvider>
+    <Provider store={store}>
+      <PageProvider
+        page={page}
+        setPage={setPage}
+        token={token}
+        setToken={setToken}
+      >
+        <UserProvider user={user} token={token} setUser={setUser}>
+          {page === "empty" && <></>}
+          {page === "login" && <SignInPage />}
+          {page === "chat" && <ChatPage />}
+          {/* {page === "chat" && <AppRadit />} */}
+          {page === "help" && <HelpPage />}
+          {page === "profile" && <ProfilePage />}
+          {page === "settings" && <SettingsPage />}
+          <Toaster position='top-center' />
+        </UserProvider>
+      </PageProvider>
+    </Provider>
   );
 }

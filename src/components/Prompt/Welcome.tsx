@@ -2,10 +2,13 @@ import { useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { Box, Tooltip, VStack } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { setShowWelcome } from "../../slices/showWelcomeSlice";
 
 type WelcomeProps = {};
 
 export default function Welcome({}: WelcomeProps) {
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(true);
 
   return (
@@ -43,6 +46,7 @@ export default function Welcome({}: WelcomeProps) {
                   }}
                   onClick={() => {
                     setVisible(false);
+                    dispatch(setShowWelcome(false));
                   }}
                 />
               </Tooltip>

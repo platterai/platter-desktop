@@ -1,27 +1,24 @@
 // ---------- REACT/NEXT ----------
 import { useContext, useEffect, useState } from "react";
 // ---------- COMPONENTS ----------
-
-// ---------- CONTEXT ----------
-
-// ---------- HOOKS ----------
-// ---------- HELPERS ----------
-import axios from "axios";
-
-import { isEmpty } from "lodash";
-import { toast } from "react-hot-toast";
 import Icon from "../../CustomUI/Icon";
 import Field from "../../CustomUI/Field";
-import { requestPatch, requestPost } from "../../../services/baseService";
+// ---------- CONTEXT ----------
 import UserContext from "../../../context/UserContext";
+// ---------- HOOKS ----------
+// ---------- LIBRARIES ----------
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { isEmpty } from "lodash";
+// ---------- HELPERS ----------
+import { requestPatch, requestPost } from "../../../services/baseService";
 import { NEXT_PUBLIC_API_URL } from "../../../constants/env";
-import { Button } from "@chakra-ui/react";
+
 // ---------- TYPES ----------
 type EditProfileProps = { setVisibleProfile?: (x: any) => void };
 
 const EditProfile = ({ setVisibleProfile }: EditProfileProps) => {
   // ---------- VARIABLES/IMPORTS ----------
-  // ** ROUTER
   // ** CONTEXT
   const contextValue = useContext(UserContext) as any;
   // ---------- STATES ----------

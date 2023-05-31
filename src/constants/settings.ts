@@ -15,6 +15,11 @@ export const settings = [
     icon: "users-plus",
   },
   {
+    id: "preferences",
+    title: "Preferences",
+    icon: "settings",
+  },
+  {
     id: "logout",
     title: "Logout",
     icon: "logout",

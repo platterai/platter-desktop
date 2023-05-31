@@ -40,7 +40,6 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-
   background-color: transparent;
 }
 
@@ -54,6 +53,20 @@ h6,
 span,
 a {
   color: var(--n-6);
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
 }
 
 * {

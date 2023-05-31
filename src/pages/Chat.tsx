@@ -21,9 +21,15 @@ import { isEmpty } from "lodash";
 import { AnimatePresence, motion } from "framer-motion";
 import { chatComplete } from "../util/openai";
 import { setWindowSize } from "../util/helpers";
+import { useSelector } from "react-redux";
 
 export default function ChatPage() {
   // ---------- VARIABLES/IMPORTS ----------
+  // ** CONTEXT
+  const showWelcome = useSelector(
+    (state: any) => state.showWelcome.showWelcome
+  );
+  console.log({ showWelcome });
   // ** CONTEXT
   const { setPage, token } = useContext(PageContext)!;
   // ** HOOKS
@@ -143,7 +149,8 @@ export default function ChatPage() {
       rounded='md'
       gap={4}
     >
-      <Welcome />
+      {showWelcome ? <Welcome /> : <></>}
+
       <PromptComponent
         token={token}
         onGenerate={handleConfirmation}

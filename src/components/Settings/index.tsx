@@ -5,6 +5,7 @@ import Team from "./Team";
 import DeleteAccount from "./DeleteAccount";
 import Logout from "./Logout";
 import EditProfile from "../Profile/EditProfile";
+import Preferences from "./Preferences";
 
 type SettingsType = {
   id: string;
@@ -30,6 +31,7 @@ export default function Settings({ items, activeItem }: SettingsProps) {
           {active.id === "edit-profile" && <EditProfile />}
           {active.id === "password" && <Password />}
           {active.id === "team" && <Team />}
+          {active.id === "preferences" && <Preferences />}
           {active.id === "logout" && <Logout />}
         </div>
       </div>

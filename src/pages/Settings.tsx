@@ -41,16 +41,15 @@ export default function SettingsPage() {
       className='bg-white w-full py-10 px-12 flex flex-col'
       style={{ borderRadius: "8px", display: loading ? "none" : "block" }}
     >
-      <p className='text-2xl font-bold mb-4 ml-3'>
+      <div className='flex flex-row items-center gap-3 mb-4 ml-3 text-2xl font-bold text-n-6'>
         <ArrowBackIcon
-          className='mr-3 cursor-pointer'
-          sx={{ transform: "translateY(-2px)" }}
+          className='cursor-pointer'
           onClick={() => {
             setPage("chat");
           }}
         />
-        Settings
-      </p>
+        <p className=''>Settings</p>
+      </div>
       <Settings items={settings} />
     </div>
   );
