@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use gpt_anywhere::window::{WindowParams, HELP_WINDOW, MAIN_WINDOW, SETTINGS_WINDOW};
+use platter::window::{WindowParams, HELP_WINDOW, MAIN_WINDOW, SETTINGS_WINDOW};
 use tauri::{
     CustomMenuItem, GlobalShortcutManager, Manager, SystemTray, SystemTrayMenu, SystemTrayMenuItem
 };
