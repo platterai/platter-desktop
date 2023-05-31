@@ -29,7 +29,7 @@ export default function Welcome({}: WelcomeProps) {
               }}
             >
               <VStack align={"start"} gap={4}>
-                <p className='text-3xl font-semibold'>Welcome to Platter AI</p>
+                <p className='h5 font-bold'>Welcome to Platter AI</p>
                 <p>
                   Use the bar below to interact with Platter. This window can be
                   toggled at any time using the shortcut Ctrl+Shift+/ or

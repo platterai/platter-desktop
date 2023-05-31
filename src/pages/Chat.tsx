@@ -125,7 +125,7 @@ export default function ChatPage() {
   };
   // ---------- EFFECTS ----------
   useEffect(() => {
-    setWindowSize(800, 400);
+    setWindowSize(800, 280);
     const user: any = localStorage.getItem("user");
     if (!isEmpty(user)) {
       setUserData(JSON.parse(user));
@@ -151,16 +151,7 @@ export default function ChatPage() {
     >
       {showWelcome ? <Welcome /> : <></>}
 
-      <PromptComponent
-        token={token}
-        onGenerate={handleConfirmation}
-        // onClear={() => {
-        //   handleClearChatLog();
-        //   setShowConfirmation(false);
-        // }}
-        isLoading={isLoading}
-        mb={2}
-      />
+      <PromptComponent token={token} />
     </Box>
   );
 }

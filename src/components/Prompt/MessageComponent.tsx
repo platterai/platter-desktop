@@ -24,7 +24,6 @@ const MessageComponent = ({
 }: MessageComponentProps) => {
   const [documents, setDocuments] = useState<Array<any>>([]);
   const [mention, setMention] = useState<string>("");
-  console.log("MessageComponent's TOKEN", { token, documents });
   const onChangeMention = (e: any, f: any) => {
     if (f !== "\n") {
       onChange(f);
@@ -71,7 +70,6 @@ const MessageComponent = ({
   }, []);
 
   useEffect(() => {
-    console.log("MENTION CHANGE", { mention });
     getDocuments(mention);
     return () => {};
   }, [mention]);

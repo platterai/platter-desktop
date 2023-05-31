@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  conversationId: true,
+  conversationId: "",
+  conversations: [],
 };
 
 const conversationIdSlice = createSlice({
@@ -12,7 +13,12 @@ const conversationIdSlice = createSlice({
       ...state,
       conversationId: action.payload,
     }),
+    setConversations: (state, action) => ({
+      ...state,
+      conversations: action.payload,
+    }),
   },
 });
-export const { setConversationId } = conversationIdSlice.actions;
+export const { setConversationId, setConversations } =
+  conversationIdSlice.actions;
 export default conversationIdSlice.reducer;

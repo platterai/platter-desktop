@@ -1,11 +1,9 @@
 // ---------- REACT/NEXT/TAURI ----------
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { listen } from "@tauri-apps/api/event";
-import { invoke } from "@tauri-apps/api";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 // ---------- STYLE ----------
 import {
   Box,
-  BoxProps,
   Button,
   HStack,
   IconButton,
@@ -15,87 +13,60 @@ import {
   VStack,
 } from "@chakra-ui/react";
 // ** ICONS **
-import { DragHandleIcon, SettingsIcon } from "@chakra-ui/icons";
+import {
+  DragHandleIcon,
+  PlusSquareIcon,
+  QuestionOutlineIcon,
+  RepeatClockIcon,
+  SettingsIcon,
+} from "@chakra-ui/icons";
 // ---------- CONTEXT ----------
 import PageContext from "../../context/PageContext";
+import UserContext from "../../context/UserContext";
 // ---------- COMPONENTS ----------
 import MessageComponent from "./MessageComponent";
-// ---------- HELPERS ----------
-import { toast } from "react-hot-toast";
-import { isEmpty, last } from "lodash";
-import { requestGet, requestPost } from "../../services/baseService";
-import moment from "moment";
 import Logo from "../Logo";
+// ---------- LIBRARIES ----------
+import moment from "moment";
+import { isEmpty, last } from "lodash";
 import { AnimatePresence, motion } from "framer-motion";
-import UserContext from "../../context/UserContext";
+import io from "socket.io-client";
+// ---------- HELPERS ----------
+import { requestGet, requestPost } from "../../services/baseService";
+import {
+  setConversationId,
+  setConversations,
+} from "../../slices/conversationIDSlice";
+import { setWindowSize } from "../../util/helpers";
+import ChatItem from "../CustomUI/ChatItem";
 
-export default function PromptComponent({
-  token,
-  onGenerate = () => {},
-  onClear = () => {},
-  isLoading = false,
-  ...props
-}: {
-  onGenerate?: (prompt: string, temperature: number) => void;
-  onClear?: () => void;
+type PromptComponentProps = {
   token: string;
-  isLoading?: boolean;
-} & BoxProps) {
+};
+
+export default function PromptComponent({ token }: PromptComponentProps) {
+  // ---------- VARIABLES/IMPORTS ----------
+  const socket = io("http://54.254.188.38:9002");
+  const currentDate = moment().format("YYYY-MM-DD HH:mm:ss");
+  // ** REDUX
+  const dispatch = useDispatch();
+  const conversationId = useSelector(
+    (state: any) => state.conversationId.conversationId
+  );
+  const conversations = useSelector(
+    (state: any) => state.conversationId.conversations
+  );
+  console.log({ conversationId, conversations });
   // ** CONTEXT
   const { setPage } = useContext(PageContext)!;
   const contextValue = useContext(UserContext) as any;
-  const [prompt, setPrompt] = useState("");
-  const [showOptions, setShowOptions] = useState(false);
-  const [listUsers, setListUsers] = useState<User[]>([]);
-  const [listFiles, setListFiles] = useState<File[]>([]);
-
-  const inputRef = useRef<any>(null);
-
-  interface UserOrg {
-    division?: {
-      organizationId?: string;
-    };
-  }
-
-  const [valueInput, setValueInput] = useState<string>();
-  interface User {
-    id: string | number;
-    display: string;
-    [key: string]: any;
-  }
-  interface File {
-    id: string | number;
-    display: string;
-    [key: string]: any;
-  }
-
-  useEffect(() => {
-    const unlisten = listen("show", (e) => {
-      inputRef.current?.focus();
-    });
-
-    return () => {
-      unlisten.then((unlisten) => unlisten());
-    };
-  }, []);
-
-  const openSettingsPopup = () => {
-    invoke("open_settings");
-  };
-
-  const inputRef2 = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    if (inputRef2.current) {
-      inputRef2.current.style.setProperty("height", "auto", "important");
-    }
-  }, []);
-  const currentDate = moment().format("YYYY-MM-DD HH:mm:ss");
-  const conversationId = localStorage.getItem("conversationId");
-
+  // ** REDUX
+  // ---------- STATES ----------
+  const [prompt, setPrompt] = useState<string>("");
+  const [showHistory, setShowHistory] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<any[]>([]);
-
+  // ---------- FUNCTIONS ----------
   const fetchMessages = useCallback(async () => {
     const params = {
       limit: 100,
@@ -111,6 +82,9 @@ export default function PromptComponent({
       // setMessages((prevMessages) => [...prevMessages, responseData]);
       console.log("fetchMessages()", { responseData });
       setMessages(responseData?.data);
+      if (responseData?.data?.length > 0) {
+        setWindowSize(800, 600);
+      }
     } catch (error) {
       console.error("fetchMessages()", { error });
     }
@@ -120,16 +94,6 @@ export default function PromptComponent({
     setTimeout(() => {
       setLoading(true);
     }, 1500);
-    setTimeout(() => {
-      setLoading(false);
-      if (!isEmpty(last(messages)?.userId)) {
-        toast.error("Request Timeout");
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { userId: null, message: "Request Timeout" },
-        ]);
-      }
-    }, 60000);
     const newData = {
       name: currentDate,
       message: prompt,
@@ -140,11 +104,6 @@ export default function PromptComponent({
       message: prompt,
     };
 
-    console.log("submitPrompt", {
-      data: isEmpty(conversationId) ? newData : data,
-      token,
-    });
-
     try {
       const responseData = await requestPost<any>("/v1/messages", {
         data: isEmpty(conversationId) ? newData : data,
@@ -152,14 +111,81 @@ export default function PromptComponent({
       });
 
       if (isEmpty(conversationId)) {
-        // router.replace(`/chat?id=${responseData.data.conversationId}`);
+        localStorage.setItem(
+          "local_conversationId",
+          responseData.data.conversationId
+        );
+        localStorage.setItem(
+          "local_conversations",
+          JSON.stringify([
+            ...conversations,
+            {
+              conversationId: responseData.data.conversationId,
+              createdAt: responseData.data.createdAt,
+            },
+          ])
+        );
+        dispatch(setConversationId(responseData.data.conversationId));
+        dispatch(
+          setConversations([
+            ...conversations,
+            {
+              conversationId: responseData.data.conversationId,
+              createdAt: responseData.data.createdAt,
+            },
+          ])
+        );
       }
       fetchMessages();
-      console.log("submitPrompt()", { responseData });
+      console.log({ responseData });
     } catch (error) {
-      console.error("submitPrompt()", { error });
+      console.error({ error });
     }
   };
+
+  const socketInit = useCallback(() => {
+    console.log("Socket.io is initializing");
+    socket.on(conversationId, async () => {
+      console.log("Socket.io is triggered");
+      setLoading(false);
+      fetchMessages();
+    });
+  }, [fetchMessages, conversationId]);
+  // ---------- EFFECTS ----------
+  useEffect(() => {
+    socketInit();
+    return () => {};
+  }, [socketInit]);
+
+  useEffect(() => {
+    if (conversationId === "") {
+      const local_conversationId = localStorage.getItem("local_conversationId");
+      const local_conversations = localStorage.getItem("local_conversations");
+      if (local_conversationId) {
+        dispatch(setConversationId(local_conversationId));
+      }
+      if (local_conversations) {
+        dispatch(setConversations(JSON.parse(local_conversations)));
+      }
+    }
+
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    console.log("messages state changes:", {
+      conversationId,
+      conversations,
+      messages,
+    });
+    if (conversationId) {
+      fetchMessages();
+    } else {
+      setMessages([]);
+    }
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversationId, conversations]);
 
   return (
     <AnimatePresence>
@@ -167,15 +193,31 @@ export default function PromptComponent({
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <Box display='flex' flexDirection='column' {...props}>
+        <Box display='flex' flexDirection='column'>
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              //   onGenerate(prompt.trim(), temperature);
               setPrompt("");
             }}
           >
             <VStack align={"start"}>
+              <div
+                style={{ maxHeight: "300px", overflowY: "scroll" }}
+                className='no-scrollbar'
+              >
+                {messages
+                  ?.sort((a, b) =>
+                    moment(a.createdAt)?.diff(moment(b.createdAt))
+                  )
+                  ?.map((item: any, index: any) => {
+                    return (
+                      <ChatItem isUser={!isEmpty(item?.userId)} key={index}>
+                        {item.message}
+                      </ChatItem>
+                    );
+                  })}
+              </div>
+
               <InputGroup
                 size='lg'
                 sx={{
@@ -221,6 +263,75 @@ export default function PromptComponent({
                       }}
                     />
                   </Tooltip>
+                  <Tooltip label='New Chat' aria-label='New Chat' hasArrow>
+                    <IconButton
+                      size='sm'
+                      aria-label='New Chat'
+                      bg='accent.6'
+                      _hover={{ bg: "accent.7" }}
+                      color='white'
+                      icon={<PlusSquareIcon fontSize={16} color='n.6' />}
+                      type='button'
+                      onClick={() => {
+                        localStorage.removeItem("local_conversationId");
+                        dispatch(setConversationId(""));
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    label='Reset History'
+                    aria-label='Reset History'
+                    hasArrow
+                  >
+                    <IconButton
+                      size='sm'
+                      aria-label='Reset History'
+                      bg='accent.1'
+                      _hover={{ bg: "accent.8" }}
+                      color='white'
+                      icon={<QuestionOutlineIcon />}
+                      type='button'
+                      onClick={() => {
+                        localStorage.removeItem("local_conversationId");
+                        localStorage.removeItem("local_conversations");
+                        dispatch(setConversationId(""));
+                        dispatch(setConversations([]));
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    label='Chat History'
+                    aria-label='Chat History'
+                    hasArrow
+                  >
+                    <IconButton
+                      size='sm'
+                      aria-label='Chat History'
+                      bg='primary.1'
+                      _hover={{ bg: "primary.3" }}
+                      color='white'
+                      icon={<RepeatClockIcon />}
+                      type='button'
+                      onClick={() => {
+                        if (showHistory === true) {
+                          setShowHistory(false);
+                          if (messages?.length < 1) {
+                            setWindowSize(800, 280);
+                          } else {
+                            setWindowSize(800, 640);
+                          }
+                        } else if (showHistory === false) {
+                          setShowHistory(true);
+
+                          if (messages?.length < 1) {
+                            setWindowSize(800, 640);
+                          } else {
+                            setWindowSize(800, 840);
+                          }
+                        }
+                      }}
+                    />
+                  </Tooltip>
                   <Tooltip
                     label={`Open profile ${contextValue?.user?.name ?? "??"}`}
                     aria-label={`Open profile ${
@@ -246,6 +357,47 @@ export default function PromptComponent({
 
                 <Logo width='80px' />
               </HStack>
+
+              {showHistory ? (
+                <Box
+                  sx={{
+                    bgColor: "white",
+                    color: "var(--n-6)",
+                    borderRadius: "8px",
+                    padding: "24px 32px",
+                    width: "100%",
+                    height: "360px",
+                    maxHeight: "360px",
+                  }}
+                >
+                  <p className='h6 font-bold mb-4'>Chat History</p>
+                  <VStack alignItems='start'>
+                    {conversations?.length > 0 ? (
+                      conversations?.map((item: any, index: any) => {
+                        const time = moment(item?.createdAt).format(
+                          "ddd : DD MMM YYYY, HH:mm"
+                        );
+                        return (
+                          <button
+                            onClick={() => {
+                              console.log("click history");
+                              dispatch(setConversationId(item?.conversationId));
+                            }}
+                            style={{ cursor: "pointer" }}
+                            key={index}
+                          >
+                            {time}
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <p>No history</p>
+                    )}
+                  </VStack>
+                </Box>
+              ) : (
+                <></>
+              )}
             </VStack>
           </form>
         </Box>
