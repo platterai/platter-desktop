@@ -12,8 +12,8 @@ export default function ChatItem({ isUser, children }: ChatItemProps) {
         className='w-10 rounded-lg'
         src={
           isUser
-            ? "/public/images/avatars/avatar13.png"
-            : "/public/images/logo/platter-logo-inverted-large.png"
+            ? "/images/avatars/avatar13.png"
+            : "/images/logo/platter-logo-inverted-large.png"
         }
         alt='avatar'
       />{" "}

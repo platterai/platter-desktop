@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import showWelcomeReducer from "../slices/showWelcomeSlice";
-import conversationIdReducer from "../slices/conversationIDSlice";
+import conversationIdReducer from "../slices/conversationIdSlice";
 
 export function makeStore() {
   return configureStore({

@@ -14,9 +14,9 @@ import {
 } from "@chakra-ui/react";
 // ** ICONS **
 import {
+  DeleteIcon,
   DragHandleIcon,
   PlusSquareIcon,
-  QuestionOutlineIcon,
   RepeatClockIcon,
   SettingsIcon,
 } from "@chakra-ui/icons";
@@ -28,17 +28,18 @@ import MessageComponent from "./MessageComponent";
 import Logo from "../Logo";
 // ---------- LIBRARIES ----------
 import moment from "moment";
-import { isEmpty, last } from "lodash";
+import { isEmpty } from "lodash";
 import { AnimatePresence, motion } from "framer-motion";
 import io from "socket.io-client";
 // ---------- HELPERS ----------
 import { requestGet, requestPost } from "../../services/baseService";
+
+import { setWindowSize } from "../../util/helpers";
+import ChatItem from "../CustomUI/ChatItem";
 import {
   setConversationId,
   setConversations,
-} from "../../slices/conversationIDSlice";
-import { setWindowSize } from "../../util/helpers";
-import ChatItem from "../CustomUI/ChatItem";
+} from "../../slices/conversationIdSlice";
 
 type PromptComponentProps = {
   token: string;
@@ -289,7 +290,7 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                       bg='accent.1'
                       _hover={{ bg: "accent.8" }}
                       color='white'
-                      icon={<QuestionOutlineIcon />}
+                      icon={<DeleteIcon />}
                       type='button'
                       onClick={() => {
                         localStorage.removeItem("local_conversationId");
