@@ -20,12 +20,18 @@ import {
   RepeatClockIcon,
   SettingsIcon,
 } from "@chakra-ui/icons";
+// ---------- REDUX ----------
+import {
+  setConversationId,
+  setConversations,
+} from "../../slices/conversationIdSlice";
 // ---------- CONTEXT ----------
 import PageContext from "../../context/PageContext";
 import UserContext from "../../context/UserContext";
 // ---------- COMPONENTS ----------
-import MessageComponent from "./MessageComponent";
 import Logo from "../Logo";
+import MessageComponent from "./MessageComponent";
+import ChatItem from "../CustomUI/ChatItem";
 // ---------- LIBRARIES ----------
 import moment from "moment";
 import { isEmpty } from "lodash";
@@ -33,13 +39,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import io from "socket.io-client";
 // ---------- HELPERS ----------
 import { requestGet, requestPost } from "../../services/baseService";
-
 import { setWindowSize } from "../../util/helpers";
-import ChatItem from "../CustomUI/ChatItem";
-import {
-  setConversationId,
-  setConversations,
-} from "../../slices/conversationIdSlice";
+import BarChart from "../CustomUI/chartjs/BarChart";
+import PlotlyComponent from "../CustomUI/plotlyjs/Ploty";
 
 type PromptComponentProps = {
   token: string;
@@ -84,7 +86,7 @@ export default function PromptComponent({ token }: PromptComponentProps) {
       console.log("fetchMessages()", { responseData });
       setMessages(responseData?.data);
       if (responseData?.data?.length > 0) {
-        setWindowSize(800, 600);
+        setWindowSize(800, 720);
       }
     } catch (error) {
       console.error("fetchMessages()", { error });
@@ -188,6 +190,10 @@ export default function PromptComponent({ token }: PromptComponentProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId, conversations]);
 
+  // <--------------------- RENDER COMPONENT --------------------->
+  // <--------------------- RENDER COMPONENT --------------------->
+  // <--------------------- RENDER COMPONENT --------------------->
+
   return (
     <AnimatePresence>
       <motion.div
@@ -202,8 +208,9 @@ export default function PromptComponent({ token }: PromptComponentProps) {
             }}
           >
             <VStack align={"start"}>
+              {/* ================== SECTION CHAT CONVERSATION*/}
               <div
-                style={{ maxHeight: "300px", overflowY: "scroll" }}
+                style={{ maxHeight: "420px", overflowY: "scroll" }}
                 className='no-scrollbar'
               >
                 {messages
@@ -217,8 +224,12 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                       </ChatItem>
                     );
                   })}
+                <ChatItem isUser={false}>
+                  <BarChart />
+                  <PlotlyComponent />
+                </ChatItem>
               </div>
-
+              {/* ================== SECTION CHAT INPUT*/}
               <InputGroup
                 size='lg'
                 sx={{
@@ -247,6 +258,7 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                   }
                 />
               </InputGroup>
+              {/* ================== SECTION ICONS BELOW INPUT*/}
               <HStack width='100%' justify='space-between'>
                 <HStack className='bottomButtons'>
                   <Tooltip label='Settings' aria-label='Settings' hasArrow>
@@ -319,13 +331,13 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                           if (messages?.length < 1) {
                             setWindowSize(800, 280);
                           } else {
-                            setWindowSize(800, 640);
+                            setWindowSize(800, 720);
                           }
                         } else if (showHistory === false) {
                           setShowHistory(true);
 
                           if (messages?.length < 1) {
-                            setWindowSize(800, 640);
+                            setWindowSize(800, 720);
                           } else {
                             setWindowSize(800, 840);
                           }
@@ -333,32 +345,32 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                       }}
                     />
                   </Tooltip>
-                  <Tooltip
+                  {/* <Tooltip
                     label={`Open profile ${contextValue?.user?.name ?? "??"}`}
                     aria-label={`Open profile ${
                       contextValue?.user?.name ?? "??"
                     }`}
                     hasArrow
+                  > */}
+                  <Button
+                    size='sm'
+                    bg='primary.1'
+                    _hover={{ bg: "primary.3" }}
+                    color='white'
+                    aria-label='Profile'
+                    onClick={() => {
+                      // setShowOptions(!showOptions);
+                      // setPage("profile");
+                    }}
                   >
-                    <Button
-                      size='sm'
-                      bg='primary.1'
-                      _hover={{ bg: "primary.3" }}
-                      color='white'
-                      aria-label='Profile'
-                      onClick={() => {
-                        // setShowOptions(!showOptions);
-                        setPage("profile");
-                      }}
-                    >
-                      {contextValue?.user?.name ?? "-"}
-                    </Button>
-                  </Tooltip>
+                    {contextValue?.user?.name ?? "-"}
+                  </Button>
+                  {/* </Tooltip> */}
                 </HStack>
 
                 <Logo width='80px' />
               </HStack>
-
+              {/* ================== SECTION CHAT HISTORY*/}
               {showHistory ? (
                 <Box
                   sx={{
