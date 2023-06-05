@@ -9,7 +9,7 @@ export default function ChatItem({ isUser, children }: ChatItemProps) {
   return (
     <div className='flex flex-row gap-4 text-n-6 px-4 py-2 items-start'>
       <img
-        className='w-10 rounded-lg'
+        className='w-10 rounded-lg bg-primary-1'
         src={
           isUser
             ? "/images/avatars/avatar13.png"
