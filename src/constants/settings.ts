@@ -20,6 +20,11 @@ export const settings = [
     icon: "settings",
   },
   {
+    id: "integrations",
+    title: "Integrations",
+    icon: "dataflow",
+  },
+  {
     id: "logout",
     title: "Logout",
     icon: "logout",
