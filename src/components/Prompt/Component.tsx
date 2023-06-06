@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   Box,
   Button,
+  Grid,
+  GridItem,
   HStack,
   IconButton,
   InputGroup,
@@ -85,7 +87,11 @@ export default function PromptComponent({ token }: PromptComponentProps) {
       console.log("fetchMessages()", { responseData });
       setMessages(responseData?.data);
       if (responseData?.data?.length > 0) {
-        setWindowSize(800, 840);
+        if (showHistory) {
+          setWindowSize(980, 840);
+        } else {
+          setWindowSize(800, 840);
+        }
       }
       if (responseData?.statusCode === 401) {
         setPage("login");
@@ -202,220 +208,251 @@ export default function PromptComponent({ token }: PromptComponentProps) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <Box display='flex' flexDirection='column' justifyContent={`end`}>
-          {/* ================== SECTION CHAT CONVERSATION*/}
-          <div
-            style={{
-              maxHeight: "420px",
-              width: "100%",
-              overflowY: "scroll",
-              paddingBottom: "100px",
-            }}
-            className='flex flex-col gap-8 no-scrollbar'
-          >
-            {messages
-              ?.sort((a, b) => moment(a.createdAt)?.diff(moment(b.createdAt)))
-              ?.map((item: any, index: any) => {
-                return (
-                  <ChatItem isUser={!isEmpty(item?.userId)} key={index}>
-                    {item.message}
+        <Grid
+          className='w-full'
+          templateColumns={showHistory ? "repeat(4, 1fr)" : "repeat(3, 1fr)"}
+          gap={6}
+        >
+          <GridItem colSpan={3}>
+            <Box
+              width={`100%`}
+              display='flex'
+              flexDirection='column'
+              justifyContent={`end`}
+            >
+              {/* ================== SECTION CHAT CONVERSATION*/}
+              <div
+                style={{
+                  maxHeight: "420px",
+                  width: "100%",
+                  overflowY: "scroll",
+                  paddingBottom: "100px",
+                }}
+                className='flex flex-col gap-8 no-scrollbar'
+              >
+                {messages
+                  ?.sort((a, b) =>
+                    moment(a.createdAt)?.diff(moment(b.createdAt))
+                  )
+                  ?.map((item: any, index: any) => {
+                    return (
+                      <ChatItem isUser={!isEmpty(item?.userId)} key={index}>
+                        {item.message ?? "No response found"}
+                      </ChatItem>
+                    );
+                  })}
+                {loading ? (
+                  <ChatItem isUser={false}>
+                    <ThreeDotsBlink />
                   </ChatItem>
-                );
-              })}
-            {loading ? (
-              <ChatItem isUser={false}>
-                <ThreeDotsBlink />
-              </ChatItem>
-            ) : (
-              <></>
-            )}
-            {/* <ChatItem isUser={false}>
+                ) : (
+                  <></>
+                )}
+                {/* <ChatItem isUser={false}>
                   <BarChart />
                   <PlotlyComponent />
                 </ChatItem> */}
-          </div>
-          {/* ================== SECTION CHAT INPUT*/}
-          <InputGroup
-            size='lg'
-            sx={{ backgroundColor: "transparent", zIndex: 100 }}
-          >
-            <MessageComponent
-              value={prompt}
-              onChange={(value: any) => setPrompt(value)}
-              onEnter={() => {
-                submitPrompt();
-                setPrompt("");
-              }}
-              token={token}
-              hasMentions={true}
-            />
-            <Tooltip
-              label='Drag Window'
-              aria-label='Drag Window'
-              placement='top'
-            >
-              <InputRightElement
-                children={
-                  <DragHandleIcon
-                    sx={{ position: "relative", top: 1, right: 1 }}
-                    cursor='grab'
-                    color='blackAlpha.600'
-                    data-tauri-drag-region
-                  />
-                }
-              />
-            </Tooltip>
-          </InputGroup>
-          {/* ================== SECTION ICONS BELOW INPUT*/}
-          <HStack width='100%' justify='space-between' className='pt-2 pr-2'>
-            <HStack className='bottomButtons'>
-              <Tooltip label='Settings' aria-label='Settings' hasArrow>
-                <IconButton
-                  size='sm'
-                  aria-label='Settings'
-                  bg='primary.1'
-                  _hover={{ bg: "primary.3" }}
-                  color='white'
-                  icon={<SettingsIcon />}
-                  type='button'
-                  onClick={() => {
-                    // openSettingsPopup();
-                    setPage("settings");
-                  }}
-                />
-              </Tooltip>
-              <Tooltip label='New Chat' aria-label='New Chat' hasArrow>
-                <IconButton
-                  size='sm'
-                  aria-label='New Chat'
-                  bg='accent.6'
-                  _hover={{ bg: "accent.7" }}
-                  color='white'
-                  icon={<PlusSquareIcon fontSize={16} color='n.6' />}
-                  type='button'
-                  onClick={() => {
-                    localStorage.removeItem("local_conversationId");
-                    dispatch(setConversationId(""));
-                  }}
-                />
-              </Tooltip>
-              <Tooltip
-                label='Reset History'
-                aria-label='Reset History'
-                hasArrow
+              </div>
+              {/* ================== SECTION CHAT INPUT*/}
+              <InputGroup
+                size='lg'
+                sx={{ backgroundColor: "transparent", zIndex: 100 }}
               >
-                <IconButton
-                  size='sm'
-                  aria-label='Reset History'
-                  bg='accent.1'
-                  _hover={{ bg: "accent.8" }}
-                  color='white'
-                  icon={<DeleteIcon />}
-                  type='button'
-                  onClick={() => {
-                    localStorage.removeItem("local_conversationId");
-                    localStorage.removeItem("local_conversations");
-                    dispatch(setConversationId(""));
-                    dispatch(setConversations([]));
+                <MessageComponent
+                  value={prompt}
+                  onChange={(value: any) => setPrompt(value)}
+                  onEnter={() => {
+                    submitPrompt();
+                    setPrompt("");
                   }}
+                  token={token}
+                  hasMentions={true}
                 />
-              </Tooltip>
-              <Tooltip label='Chat History' aria-label='Chat History' hasArrow>
-                <IconButton
-                  size='sm'
-                  aria-label='Chat History'
-                  bg='primary.1'
-                  _hover={{ bg: "primary.3" }}
-                  color='white'
-                  icon={<RepeatClockIcon />}
-                  type='button'
-                  onClick={() => {
-                    if (showHistory === true) {
-                      setShowHistory(false);
-                      if (messages?.length < 1) {
-                        setWindowSize(800, 840);
-                      } else {
-                        setWindowSize(800, 840);
-                      }
-                    } else if (showHistory === false) {
-                      setShowHistory(true);
-
-                      if (messages?.length < 1) {
-                        setWindowSize(800, 840);
-                      } else {
-                        setWindowSize(800, 840);
-                      }
+                <Tooltip
+                  label='Drag Window'
+                  aria-label='Drag Window'
+                  placement='top'
+                >
+                  <InputRightElement
+                    children={
+                      <DragHandleIcon
+                        sx={{ position: "relative", top: 1, right: 1 }}
+                        cursor='grab'
+                        color='blackAlpha.600'
+                        data-tauri-drag-region
+                      />
                     }
-                  }}
-                />
-              </Tooltip>
-              {/* <Tooltip
+                  />
+                </Tooltip>
+              </InputGroup>
+              {/* ================== SECTION ICONS BELOW INPUT*/}
+              <HStack
+                width='100%'
+                justify='space-between'
+                className='pt-2 pr-2'
+              >
+                <HStack className='bottomButtons'>
+                  <Tooltip label='Settings' aria-label='Settings' hasArrow>
+                    <IconButton
+                      size='sm'
+                      aria-label='Settings'
+                      bg='primary.1'
+                      _hover={{ bg: "primary.3" }}
+                      color='white'
+                      icon={<SettingsIcon />}
+                      type='button'
+                      onClick={() => {
+                        // openSettingsPopup();
+                        setPage("settings");
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip label='New Chat' aria-label='New Chat' hasArrow>
+                    <IconButton
+                      size='sm'
+                      aria-label='New Chat'
+                      bg='accent.6'
+                      _hover={{ bg: "accent.7" }}
+                      color='white'
+                      icon={<PlusSquareIcon fontSize={16} color='n.6' />}
+                      type='button'
+                      onClick={() => {
+                        localStorage.removeItem("local_conversationId");
+                        dispatch(setConversationId(""));
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    label='Reset History'
+                    aria-label='Reset History'
+                    hasArrow
+                  >
+                    <IconButton
+                      size='sm'
+                      aria-label='Reset History'
+                      bg='accent.1'
+                      _hover={{ bg: "accent.8" }}
+                      color='white'
+                      icon={<DeleteIcon />}
+                      type='button'
+                      onClick={() => {
+                        localStorage.removeItem("local_conversationId");
+                        localStorage.removeItem("local_conversations");
+                        dispatch(setConversationId(""));
+                        dispatch(setConversations([]));
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    label='Chat History'
+                    aria-label='Chat History'
+                    hasArrow
+                  >
+                    <IconButton
+                      size='sm'
+                      aria-label='Chat History'
+                      bg='primary.1'
+                      _hover={{ bg: "primary.3" }}
+                      color='white'
+                      icon={<RepeatClockIcon />}
+                      type='button'
+                      onClick={() => {
+                        if (showHistory === true) {
+                          setShowHistory(false);
+                          if (messages?.length < 1) {
+                            setWindowSize(800, 840);
+                          } else {
+                            setWindowSize(800, 840);
+                          }
+                        } else if (showHistory === false) {
+                          setShowHistory(true);
+
+                          if (messages?.length < 1) {
+                            setWindowSize(980, 840);
+                          } else {
+                            setWindowSize(980, 840);
+                          }
+                        }
+                      }}
+                    />
+                  </Tooltip>
+                  {/* <Tooltip
                     label={`Open profile ${contextValue?.user?.name ?? "??"}`}
                     aria-label={`Open profile ${
                       contextValue?.user?.name ?? "??"
                     }`}
                     hasArrow
                   > */}
-              <Button
-                size='sm'
-                bg='primary.1'
-                _hover={{ bg: "primary.3" }}
-                color='white'
-                aria-label='Profile'
-                onClick={() => {
-                  // setShowOptions(!showOptions);
-                  // setPage("profile");
-                }}
-              >
-                {contextValue?.user?.name ?? "-"}
-              </Button>
-              {/* </Tooltip> */}
-            </HStack>
+                  <Button
+                    size='sm'
+                    bg='primary.1'
+                    _hover={{ bg: "primary.3" }}
+                    color='white'
+                    aria-label='Profile'
+                    onClick={() => {
+                      // setShowOptions(!showOptions);
+                      // setPage("profile");
+                    }}
+                  >
+                    {contextValue?.user?.name ?? "-"}
+                  </Button>
+                  {/* </Tooltip> */}
+                </HStack>
 
-            <Logo width='80px' />
-          </HStack>
-          {/* ================== SECTION CHAT HISTORY*/}
-          {showHistory ? (
-            <Box
-              sx={{
-                bgColor: "white",
-                color: "var(--n-6)",
-                borderRadius: "8px",
-                padding: "24px 32px",
-                width: "100%",
-                height: "360px",
-                maxHeight: "360px",
-              }}
-            >
-              <p className='h6 font-bold mb-4'>Chat History</p>
-              <VStack alignItems='start'>
-                {conversations?.length > 0 ? (
-                  conversations?.map((item: any, index: any) => {
-                    const time = moment(item?.createdAt).format(
-                      "ddd : DD MMM YYYY, HH:mm"
-                    );
-                    return (
-                      <button
-                        onClick={() => {
-                          console.log("click history");
-                          dispatch(setConversationId(item?.conversationId));
-                        }}
-                        style={{ cursor: "pointer" }}
-                        key={index}
-                      >
-                        {time}
-                      </button>
-                    );
-                  })
-                ) : (
-                  <p>No history</p>
-                )}
-              </VStack>
+                <Logo width='80px' />
+              </HStack>
+              {/* ================== SECTION CHAT HISTORY*/}
             </Box>
+          </GridItem>
+          {showHistory ? (
+            <GridItem colSpan={1} className='w-full h-full'>
+              <motion.div
+                className='w-full h-full'
+                initial={{ opacity: 0, x: -60 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -60 }}
+              >
+                <Box
+                  sx={{
+                    bgColor: "white",
+                    color: "var(--n-6)",
+                    borderRadius: "12px",
+                    padding: "20px",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <p className='text-xl font-bold mb-4'>Chat History</p>
+                  <VStack alignItems={`start`}>
+                    {conversations?.length > 0 ? (
+                      conversations?.map((item: any, index: any) => {
+                        const time = moment(item?.createdAt).format(
+                          "DD MMM'YY, HH:mm"
+                        );
+                        return (
+                          <button
+                            onClick={() => {
+                              console.log("click history");
+                              dispatch(setConversationId(item?.conversationId));
+                            }}
+                            style={{ cursor: "pointer" }}
+                            key={index}
+                          >
+                            {time}
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <p>No history</p>
+                    )}
+                  </VStack>
+                </Box>
+              </motion.div>
+            </GridItem>
           ) : (
             <></>
           )}
-        </Box>
+        </Grid>
       </motion.div>
     </AnimatePresence>
   );
