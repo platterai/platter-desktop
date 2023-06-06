@@ -79,9 +79,10 @@ const MessageComponent = ({
       ref={(el) => {
         container = el;
       }}
-      className='mentionWrapper'
+      className='mentionWrapper '
     >
       <MentionsInput
+        singleLine={false}
         value={value}
         placeholder='Type your prompt'
         onChange={onChangeMention}

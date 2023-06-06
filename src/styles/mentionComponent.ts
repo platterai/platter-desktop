@@ -1,26 +1,25 @@
 export const MentionsInputStyle = {
   control: {
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     fontSize: 18,
     fontWeight: "normal",
     color: "#151718",
     borderRadius: "8px",
-    height: 48,
   },
 
   "&multiLine": {
-    control: {
-      minHeight: 48,
-    },
+    control: {},
     highlighter: {
       padding: 16,
       border: "1px solid transparent",
     },
     input: {
-      padding: "8px 16px",
+      padding: "16px 32px 16px 24px",
       color: "#232627",
       border: "2px solid #fff",
       borderRadius: "8px",
+      maxHeight: "100px",
+      overflowY: "scroll",
     },
   },
 
