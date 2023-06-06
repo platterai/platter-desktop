@@ -125,7 +125,7 @@ export default function ChatPage() {
   };
   // ---------- EFFECTS ----------
   useEffect(() => {
-    setWindowSize(800, 280);
+    setWindowSize(800, 840);
     const user: any = localStorage.getItem("user");
     if (!isEmpty(user)) {
       setUserData(JSON.parse(user));

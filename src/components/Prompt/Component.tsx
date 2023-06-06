@@ -40,6 +40,7 @@ import io from "socket.io-client";
 // ---------- HELPERS ----------
 import { requestGet, requestPost } from "../../services/baseService";
 import { setWindowSize } from "../../util/helpers";
+import ThreeDotsBlink from "../CustomUI/loaders/ThreeDotsBlink";
 
 type PromptComponentProps = {
   token: string;
@@ -84,7 +85,10 @@ export default function PromptComponent({ token }: PromptComponentProps) {
       console.log("fetchMessages()", { responseData });
       setMessages(responseData?.data);
       if (responseData?.data?.length > 0) {
-        setWindowSize(800, 720);
+        setWindowSize(800, 840);
+      }
+      if (responseData?.statusCode === 401) {
+        setPage("login");
       }
     } catch (error) {
       console.error("fetchMessages()", { error });
@@ -218,6 +222,13 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                   </ChatItem>
                 );
               })}
+            {loading ? (
+              <ChatItem isUser={false}>
+                <ThreeDotsBlink />
+              </ChatItem>
+            ) : (
+              <></>
+            )}
             {/* <ChatItem isUser={false}>
                   <BarChart />
                   <PlotlyComponent />
@@ -322,15 +333,15 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                     if (showHistory === true) {
                       setShowHistory(false);
                       if (messages?.length < 1) {
-                        setWindowSize(800, 280);
+                        setWindowSize(800, 840);
                       } else {
-                        setWindowSize(800, 720);
+                        setWindowSize(800, 840);
                       }
                     } else if (showHistory === false) {
                       setShowHistory(true);
 
                       if (messages?.length < 1) {
-                        setWindowSize(800, 720);
+                        setWindowSize(800, 840);
                       } else {
                         setWindowSize(800, 840);
                       }
