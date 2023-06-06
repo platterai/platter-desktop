@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "paths": {
+      "stream": ["./node_modules/readable-stream"]
+    },
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],

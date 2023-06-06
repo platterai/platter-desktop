@@ -18,6 +18,10 @@ import Root from "./Root";
 // }, []);
 // ========= PRODUCTION ENV ONLY =========
 
+if (typeof global === "undefined") {
+  window.global = window;
+}
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Root>
