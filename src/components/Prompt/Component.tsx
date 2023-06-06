@@ -40,8 +40,6 @@ import io from "socket.io-client";
 // ---------- HELPERS ----------
 import { requestGet, requestPost } from "../../services/baseService";
 import { setWindowSize } from "../../util/helpers";
-import BarChart from "../CustomUI/chartjs/BarChart";
-import PlotlyComponent from "../CustomUI/plotlyjs/Ploty";
 
 type PromptComponentProps = {
   token: string;
@@ -210,8 +208,13 @@ export default function PromptComponent({ token }: PromptComponentProps) {
             <VStack align={"start"}>
               {/* ================== SECTION CHAT CONVERSATION*/}
               <div
-                style={{ maxHeight: "420px", overflowY: "scroll" }}
-                className='no-scrollbar'
+                style={{
+                  maxHeight: "420px",
+                  width: "100%",
+                  overflowY: "scroll",
+                  paddingBottom: "100px",
+                }}
+                className='flex flex-col gap-8 no-scrollbar'
               >
                 {messages
                   ?.sort((a, b) =>
@@ -224,10 +227,10 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                       </ChatItem>
                     );
                   })}
-                <ChatItem isUser={false}>
+                {/* <ChatItem isUser={false}>
                   <BarChart />
                   <PlotlyComponent />
-                </ChatItem>
+                </ChatItem> */}
               </div>
               {/* ================== SECTION CHAT INPUT*/}
               <InputGroup
