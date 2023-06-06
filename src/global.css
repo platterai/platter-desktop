@@ -17,6 +17,8 @@
   --n-6: #232627;
   --n-7: #141718;
 
+  --g-1: #f3f5f7;
+
   --primary-1-rgb: 0, 132, 255;
   --primary-1-lighter-rgb: 36, 149, 255;
   --primary-2-rgb: 63, 221, 120;
@@ -466,6 +468,9 @@ a:visited {
 .bg-n-1 {
   background-color: var(--n-1) !important;
 }
+.bg-g-1 {
+  background-color: var(--g-1) !important;
+}
 .bg-n-2 {
   background-color: var(--n-2) !important;
 }
@@ -604,6 +609,9 @@ a:visited {
 .b-n-1 {
   border-color: var(--n-1) !important;
 }
+.b-g-1 {
+  border-color: var(--g-1) !important;
+}
 .b-n-2 {
   border-color: var(--n-2) !important;
 }
@@ -664,6 +672,9 @@ a:visited {
 }
 .border-n-1 {
   border-color: var(--n-1) !important;
+}
+.border-g-1 {
+  border-color: var(--g-1) !important;
 }
 .border-n-2 {
   border-color: var(--n-2) !important;

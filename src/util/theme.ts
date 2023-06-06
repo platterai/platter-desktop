@@ -52,6 +52,9 @@ export const theme = extendTheme({
       6: "#232627",
       7: "#141718",
     },
+    g: {
+      1: "#F3F5F7",
+    },
   },
 });
 
