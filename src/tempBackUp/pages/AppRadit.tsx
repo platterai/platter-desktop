@@ -1,15 +1,15 @@
-import Search from "../components/Search";
+import Search from "../../components/Search";
 import { Box, Button, Center } from "@chakra-ui/react";
-import ResponseBox from "../components/ResponseBox";
+import ResponseBox from "../../components/ResponseBox";
 import { useState } from "react";
-import { chatComplete } from "../util/openai";
+import { chatComplete } from "../../util/openai";
 import { AnimatePresence, motion } from "framer-motion";
-import UnauthorizedErrorBox from "../components/UnauthorizedErrorBox";
-import ErrorBox from "../components/ErrorBox";
-import PromptBox from "../components/PromptBox";
-import useChatLog, { ChatMessage } from "../util/hooks/useChatLog";
+import UnauthorizedErrorBox from "../../components/UnauthorizedErrorBox";
+import ErrorBox from "../../components/ErrorBox";
+import PromptBox from "../../components/PromptBox";
+import useChatLog, { ChatMessage } from "../../util/hooks/useChatLog";
 import { NotAllowedIcon, RepeatIcon } from "@chakra-ui/icons";
-import ConfirmationBox from "../components/ConfirmationBox";
+import ConfirmationBox from "../../components/ConfirmationBox";
 
 const CLEAR_TEXT = "";
 // const CLEAR_TEXT = fillerMarkdown;
