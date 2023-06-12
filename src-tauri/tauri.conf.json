@@ -92,7 +92,7 @@
         "width": 500,
         "height": 540,
         "decorations": true,
-        "transparent": true
+        "transparent": false
       }
     ],
     "macOSPrivateApi": true
