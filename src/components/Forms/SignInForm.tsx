@@ -1,12 +1,12 @@
 import { serialize } from "cookie";
 import React, { useContext, useEffect, useState } from "react";
-import PageContext from "../context/PageContext";
-import UserContext from "../context/UserContext";
-import { requestPost } from "../services/baseService";
-import { anchorLink, checkCookie } from "../util/helpers";
-import Button from "./CustomUI/Button";
-import Field from "./CustomUI/Field";
-import Flex from "./CustomUI/Flex";
+import PageContext from "../../context/PageContext";
+import UserContext from "../../context/UserContext";
+import { requestPost } from "../../services/baseService";
+import { anchorLink, checkCookie } from "../../util/helpers";
+import Button from "../CustomUI/Button";
+import Field from "../CustomUI/Field";
+import Flex from "../CustomUI/Flex";
 
 type SignInFormProps = {};
 

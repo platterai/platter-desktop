@@ -4,7 +4,7 @@ import Divider from "../components/CustomUI/Divider";
 import Flex from "../components/CustomUI/Flex";
 import Logo from "../components/Logo";
 import Settings from "../components/Settings";
-import SignInForm from "../components/SignInForm";
+import SignInForm from "../components/Forms/SignInForm";
 import { settings } from "../constants/settings";
 import PageContext from "../context/PageContext";
 import { requestGet } from "../services/baseService";

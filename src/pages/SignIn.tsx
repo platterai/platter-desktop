@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 // ---------- COMPONENTS ----------
 import Logo from "../components/Logo";
-import SignInForm from "../components/SignInForm";
+import SignInForm from "../components/Forms/SignInForm";
 import TextDivider from "../components/CustomUI/TextDivider";
 import GoogleButton from "../components/CustomUI/AuthLoginButton/GoogleButton";
 // ---------- HELPERS ----------
