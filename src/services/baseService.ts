@@ -1,34 +1,38 @@
 import axios, { AxiosResponse } from "axios";
+import { NEXT_PUBLIC_API_URL } from "../constants/env";
+import { getCookieByName } from "../util/helpers";
+
+import { refreshToken } from "./refreshToken";
 
 interface requestGetProps<T> {
   withAuth?: boolean;
   params?: Record<string, unknown>;
   token?: string;
-  needLogin?: boolean;
 }
-
-const ENVAPI = "http://54.254.188.38:9001";
 
 export const requestGet = async <T>(
   url: string,
-  { withAuth = true, params, token, needLogin = true }: requestGetProps<T>
+  { withAuth = true, params, token }: requestGetProps<T>
 ): Promise<T> => {
-  try {
-    const response: AxiosResponse<T> = await axios.get(`${ENVAPI}${url}`, {
+  const _token = await getCookieByName("token");
+  const GET_response = async (bT: string): Promise<AxiosResponse<T>> =>
+    axios.get(`${NEXT_PUBLIC_API_URL}${url}`, {
       params,
       headers: {
         ...(withAuth && {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${bT}`,
         }),
       },
     });
-
-    //@ts-ignore
-    if (response.statusCode === 401 || token === "") {
-    }
-    return response.data;
+  let response;
+  try {
+    response = await GET_response((_token as string) ?? (token as string));
+    return response?.data;
   } catch (error: any) {
-    if (error.response.status === 401) {
+    if (error?.response?.data?.statusCode === 401) {
+      let newToken = await refreshToken();
+      response = await GET_response(newToken as string);
+      return response?.data;
     }
     throw error;
   }
@@ -38,79 +42,68 @@ interface requestPostProps<T> {
   withAuth?: boolean;
   data?: T;
   token?: string;
-  needLogin?: boolean;
 }
 
 export const requestPost = async <T>(
   url: string,
-  {
-    withAuth = true,
-    data: requestBody,
-    token,
-    needLogin = true,
-  }: requestPostProps<T>
+  { withAuth = true, data, token }: requestPostProps<T>
 ): Promise<T> => {
+  const _token = await getCookieByName("token");
+  const POST_response = async (bT: string): Promise<AxiosResponse<T>> =>
+    axios.post(`${NEXT_PUBLIC_API_URL}${url}`, data, {
+      headers: {
+        ...(withAuth && {
+          Authorization: `Bearer ${bT}`,
+        }),
+      },
+    });
+
+  let response;
   try {
-    const response: AxiosResponse<T> = await axios.post(
-      `${ENVAPI}${url}`,
-      requestBody,
-      {
-        headers: {
-          ...(withAuth && {
-            Authorization: `Bearer ${token}`,
-          }),
-        },
-      }
-    );
-    console.log("###", { response, token });
-    //@ts-ignore
-    if (response.statusCode === 401 || token === "") {
-    }
-    return response.data;
+    response = await POST_response((_token as string) ?? (token as string));
+    return response?.data;
   } catch (error: any) {
+    if (error?.response?.data?.statusCode === 401) {
+      let newToken = await refreshToken();
+      response = await POST_response(newToken as string);
+      return response?.data;
+    }
     throw error;
   }
 };
 
-export const requestLogout = async (message?: string) => {};
+interface requestPatchProps<T> {
+  withAuth?: boolean;
+  data?: T;
+  token?: string;
+}
 
-// export const requestGet = async (url, { withAuth = true, params, needLogin = true, getErrorMessage }) => {
-//     try {
-//       const token = window.localStorage.getItem('authToken')
-//       const { data } = await axios.get(url, {
-//         params,
-//         headers: {
-//           ...(withAuth && {
-//             Authorization: `Bearer ${token}`
-//           })
-//         }
-//       })
-//       return data
-//     } catch (e) {
-//       const err = {
-//         status: e?.response?.status,
-//         statusText: e?.response?.data?.message
-//       }
-//       return err
-//     }
-//   }
+export const requestPatch = async <T>(
+  url: string,
+  { withAuth = true, data, token }: requestPatchProps<T>
+): Promise<T> => {
+  const _token = await getCookieByName("token");
+  const PATCH_response = async (bT: string): Promise<AxiosResponse<T>> =>
+    axios.patch(`${NEXT_PUBLIC_API_URL}${url}`, data, {
+      headers: {
+        ...(withAuth && {
+          Authorization: `Bearer ${bT}`,
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        }),
+      },
+    });
 
-// export const requestPost = async (url, { withAuth = true, data: requestBody, needLogin = true, getErrorMessage }) => {
-//     try {
-//       const token = window.localStorage.getItem('authToken')
-//       const { data } = await axios.post(url, requestBody, {
-//         headers: {
-//           ...(withAuth && {
-//             Authorization: `Bearer ${token}`
-//           })
-//         }
-//       })
-//       return data
-//     } catch (e) {
-//       const err = {
-//         status: e?.response?.status,
-//         statusText: e?.response?.data?.message
-//       }
-//       return err
-//     }
-//   }
+  let response;
+  try {
+    response = await PATCH_response((_token as string) ?? (token as string));
+    return response?.data;
+  } catch (error: any) {
+    if (error?.response?.data?.statusCode === 401) {
+      let newToken = await refreshToken();
+      response = await PATCH_response(newToken as string);
+      return response?.data;
+    }
+    throw error;
+  }
+};

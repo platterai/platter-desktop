@@ -14,6 +14,7 @@ type FieldProps = {
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean;
   icon?: string;
 };
 
@@ -31,6 +32,7 @@ const Field = ({
   onKeyDown,
   placeholder,
   required,
+  disabled,
   icon,
 }: FieldProps) => {
   const handleKeyDown = (event: any) => {
@@ -64,6 +66,7 @@ const Field = ({
               onKeyDown={handleKeyDown}
               placeholder={placeholder}
               required={required}
+              disabled={disabled}
             ></textarea>
           ) : (
             <input
@@ -77,6 +80,7 @@ const Field = ({
               onKeyDown={onKeyDown}
               placeholder={placeholder}
               required={required}
+              disabled={disabled}
             />
           )}
           <Icon

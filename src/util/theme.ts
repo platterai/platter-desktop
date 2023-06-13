@@ -1,16 +1,13 @@
 import { extendTheme, type ThemeConfig } from "@chakra-ui/react";
+import { buttonTheme } from "./chakratheme/button";
+import { modalTheme } from "./chakratheme/modal";
 
 const config: ThemeConfig = {
-  initialColorMode: "dark",
+  initialColorMode: "light",
   useSystemColorMode: false,
 };
-// const config: ThemeConfig = {
-//   initialColorMode: "system",
-//   useSystemColorMode: true,
-// };
 
-export const theme = extendTheme({
-  config,
+export const Theme: ITheme = {
   fonts: {
     heading: `'Manrope', sans-serif`,
     body: `'Manrope', sans-serif`,
@@ -18,7 +15,8 @@ export const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: "#17192300",
+        bg: "none",
+        // bg: "#141718",
       },
     },
   },
@@ -31,6 +29,7 @@ export const theme = extendTheme({
     primary: {
       1: "#0084FF",
       2: "#3FDD78",
+      3: "#0977de",
     },
     accent: {
       1: "#D84C10",
@@ -38,6 +37,9 @@ export const theme = extendTheme({
       3: "#8E55EA",
       4: "#8C6584",
       5: "#DDA73F",
+      6: "#5bc782",
+      7: "#44ab69",
+      8: "#bf430d",
     },
     n: {
       1: "#FEFEFE",
@@ -48,7 +50,16 @@ export const theme = extendTheme({
       6: "#232627",
       7: "#141718",
     },
+    g: {
+      1: "#F3F5F7",
+    },
   },
+  components: { Modal: modalTheme, Button: buttonTheme },
+};
+
+export const theme = extendTheme({
+  config,
+  ...Theme,
 });
 
 export default theme;

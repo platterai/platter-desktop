@@ -65,7 +65,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.jinay.gpt-anywhere",
+      "identifier": "platter",
       "targets": "all",
       "macOS": {
         "minimumSystemVersion": "10.13",
@@ -88,6 +88,7 @@
         "hiddenTitle": false,
         "alwaysOnTop": false,
         "center": true,
+        "minHeight": 80,
         "width": 500,
         "height": 540,
         "decorations": true,
