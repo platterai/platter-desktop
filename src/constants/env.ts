@@ -1,1 +1,3 @@
-export const NEXT_PUBLIC_API_URL = "http://54.254.188.38:9001";
+export const NEXT_PUBLIC_API_URL = "https://api.platter.id";
+export const NEXT_PUBLIC_API_SOCKET = "https://socket.platter.id";
+export const NEXT_PUBLIC_API_SOCKET2 = "wss://socket.platter.id";

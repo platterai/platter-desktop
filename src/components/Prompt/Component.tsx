@@ -43,6 +43,7 @@ import io from "socket.io-client";
 import { requestGet, requestPost } from "../../services/baseService";
 import { setWindowSize } from "../../util/helpers";
 import ThreeDotsBlink from "../CustomUI/loaders/ThreeDotsBlink";
+import { NEXT_PUBLIC_API_SOCKET } from "../../constants/env";
 
 type PromptComponentProps = {
   token: string;
@@ -50,7 +51,7 @@ type PromptComponentProps = {
 
 export default function PromptComponent({ token }: PromptComponentProps) {
   // ---------- VARIABLES/IMPORTS ----------
-  const socket = io("http://54.254.188.38:9002");
+  const socket = io(NEXT_PUBLIC_API_SOCKET);
   const currentDate = moment().format("YYYY-MM-DD HH:mm:ss");
   // ** REDUX
   const dispatch = useDispatch();
