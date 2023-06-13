@@ -2,6 +2,7 @@
   --primary-1: #0084ff;
   --primary-1-lighter: #2495ff;
   --primary-2: #3fdd78;
+  --primary-6: #d9f8e4;
 
   --accent-1: #d84c10;
   --accent-2: #3e90f0;
@@ -449,6 +450,9 @@ a:visited {
 }
 .bg-primary-2 {
   background-color: var(--primary-2) !important;
+}
+.bg-primary-6 {
+  background-color: var(--primary-6) !important;
 }
 .bg-accent-1 {
   background-color: var(--accent-1) !important;

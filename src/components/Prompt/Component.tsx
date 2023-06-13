@@ -49,6 +49,7 @@ import { toast } from "react-hot-toast";
 import ModalInfo from "../Modal/ModalInfo";
 import { text300 } from "../../@data/texts";
 import ChatWrapper from "./ChatWrapper";
+import DataTable from "../Table/DataTable";
 
 type PromptComponentProps = {};
 
@@ -100,7 +101,13 @@ export default function PromptComponent({}: PromptComponentProps) {
       if (responseData?.statusCode === 401) {
         setPage("login");
       }
-      if (last(responseData?.data)?.role === "ai") {
+      if (
+        last(
+          responseData?.data?.sort((a, b) =>
+            moment(a.createdAt)?.diff(moment(b.createdAt))
+          )
+        )?.role === "ai"
+      ) {
         setLoading(false);
       }
     } catch (error) {
@@ -230,28 +237,105 @@ export default function PromptComponent({}: PromptComponentProps) {
           {/* ================== SECTION CHAT CONVERSATION*/}
           {messages?.length > 0 && (
             <ChatWrapper {...{ messages, loading }}>
-              {messages
-                ?.sort((a, b) => moment(a.createdAt)?.diff(moment(b.createdAt)))
-                ?.map((item: any, index: any) => {
-                  return (
-                    <ChatItem
-                      item={item}
-                      isUser={!isEmpty(item?.userId)}
-                      key={index}
-                    >
-                      {isEmpty(item?.userId) && isEmpty(item?.message) ? (
-                        <p>
-                          Unable to retrieve information, please try a different
-                          prompt.
-                        </p>
-                      ) : isEmpty(item?.userId) ? (
-                        item.message
-                      ) : (
-                        extractFilename(item.message)
-                      )}
-                    </ChatItem>
-                  );
-                })}
+              {!isEmpty(messages) ? (
+                messages
+                  ?.sort((a, b) =>
+                    moment(a.createdAt)?.diff(moment(b.createdAt))
+                  )
+                  ?.map((item, index) => {
+                    const currentTime = moment();
+                    const givenTime = moment(item?.createdAt);
+                    const timeDiff = currentTime.diff(givenTime, "minutes");
+                    const time =
+                      timeDiff < 3
+                        ? "Just now"
+                        : givenTime.format("DD MMM YYYY, HH:mm:ss");
+
+                    if (item?.role === "ai") {
+                      // >>>>>>>> IF THE MESSAGE IS FROM PLATTER
+                      if (
+                        isEmpty(item?.message) ||
+                        ["error", "failed"].includes(item?.status as string)
+                      ) {
+                        // >>>>>>>> IF THE MESSAGE IS EMPTY OR STATUS FAILED
+                        return (
+                          <ChatItem
+                            isUser={false}
+                            item={item}
+                            key={index}
+                            time={time}
+                          >
+                            <p>
+                              Unable to retrieve information, please try a
+                              different prompt.
+                            </p>
+                          </ChatItem>
+                        );
+                      } else {
+                        // >>>>>>>> IF THE MESSAGE EXISTS
+                        let tableColumn = Object.keys(
+                          item?.metadata?.table_json ?? {}
+                        );
+                        let firstColumnValue =
+                          tableColumn.length > 0
+                            ? item?.metadata?.table_json?.[
+                                `${tableColumn?.[0]}`
+                              ]
+                            : null;
+
+                        return (
+                          <ChatItem
+                            isUser={false}
+                            item={item}
+                            key={index}
+                            time={time}
+                          >
+                            {(item?.message || item?.text) &&
+                            isEmpty(item.metadata.chart_json) ? (
+                              <p>{item?.text ?? item.message}</p>
+                            ) : (
+                              <></>
+                            )}
+                            {/* >>>>>>>> IF THE METADATA EXISTS */}
+                            {!isEmpty(item?.metadata) && (
+                              <>
+                                {/* >>>>>>>> IF THE TABLE EXISTS */}
+                                {isEmpty(item.metadata.table_json) ? (
+                                  <></>
+                                ) : tableColumn.length < 2 &&
+                                  firstColumnValue.length < 2 ? (
+                                  <></>
+                                ) : (
+                                  <DataTable
+                                    data={item.metadata.table_json}
+                                    title={item.metadata?.title ?? ""}
+                                  />
+                                )}
+                                {/* >>>>>>>> IF THE CHART EXISTS */}
+                                {/* {!isEmpty(item.metadata.chart_json) && (
+                                  <Plotly
+                                    plotlyProps={cleanChartData(
+                                      item.metadata.chart_json as IBarchart
+                                    )}
+                                  />
+                                )} */}
+                              </>
+                            )}
+                          </ChatItem>
+                        );
+                      }
+                    } else if (item?.role === "user") {
+                      // >>>>>>>> IF THE MESSAGE IS FROM USER
+                      return (
+                        <ChatItem key={index} isUser={true} time={time}>
+                          <p>{extractFilename(item?.message)}</p>
+                        </ChatItem>
+                      );
+                    }
+                  })
+              ) : (
+                <></>
+              )}
 
               {loading ? (
                 <ChatItem isUser={false}>

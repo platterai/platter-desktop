@@ -34,6 +34,7 @@
     "has-hover": "^1.0.1",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.244.0",
     "moment": "^2.29.4",
     "openai": "^3.2.1",
     "plotly.js": "^2.23.2",

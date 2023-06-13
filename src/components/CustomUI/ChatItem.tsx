@@ -5,10 +5,16 @@ import SourceFile from "./SourceFile";
 type ChatItemProps = {
   isUser?: boolean;
   item?: IMessage;
+  time?: string;
   children: React.ReactNode;
 };
 
-export default function ChatItem({ isUser, item, children }: ChatItemProps) {
+export default function ChatItem({
+  isUser,
+  item,
+  time,
+  children,
+}: ChatItemProps) {
   const docsList = item?.metadata?.docs;
   console.log(`item di ChatItem`, { docsList });
   const messageWrapper = (bg: string) => {
