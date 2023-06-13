@@ -1,12 +1,13 @@
 import { extendTheme, type ThemeConfig } from "@chakra-ui/react";
+import { buttonTheme } from "./chakratheme/button";
+import { modalTheme } from "./chakratheme/modal";
 
 const config: ThemeConfig = {
   initialColorMode: "light",
   useSystemColorMode: false,
 };
 
-export const theme = extendTheme({
-  config,
+export const Theme: ITheme = {
   fonts: {
     heading: `'Manrope', sans-serif`,
     body: `'Manrope', sans-serif`,
@@ -53,6 +54,12 @@ export const theme = extendTheme({
       1: "#F3F5F7",
     },
   },
+  components: { Modal: modalTheme, Button: buttonTheme },
+};
+
+export const theme = extendTheme({
+  config,
+  ...Theme,
 });
 
 export default theme;
