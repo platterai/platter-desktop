@@ -12,7 +12,7 @@ const Logout = ({}: LogoutProps) => {
   const { setUser } = useContext(UserContext)!;
   const handleLogout = async () => {
     Cookies.remove("token");
-    localStorage.removeItem("selectedAvatarPath");
+    Cookies.remove("refreshToken");
     localStorage.removeItem("user");
     setUser({});
     toast.success("Logout success, redirecting...");

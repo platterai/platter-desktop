@@ -10,5 +10,5 @@ export const chatWindowExpand = {
 
 export const chatWindowCollapse = {
   w: 800,
-  h: 200,
+  h: 140,
 };

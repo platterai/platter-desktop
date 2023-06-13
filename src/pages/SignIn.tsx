@@ -7,11 +7,12 @@ import TextDivider from "../components/CustomUI/TextDivider";
 import GoogleButton from "../components/CustomUI/AuthLoginButton/GoogleButton";
 // ---------- HELPERS ----------
 import { signInWindow } from "../constants/windowSizes";
-import { setWindowSize } from "../util/helpers";
+import { setWindowCenter, setWindowSize } from "../util/helpers";
 
 export default function SignInPage() {
   useEffect(() => {
     setWindowSize(signInWindow.w, signInWindow.h);
+    setWindowCenter();
     return () => {};
   }, []);
 

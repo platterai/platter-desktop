@@ -34,6 +34,7 @@ export function getCookieByName(name: string) {
   for (let i = 0; i < cookies.length; i++) {
     const cookie = cookies[i].trim();
     if (cookie.startsWith(name + "=")) {
+      console.log(`${name} cookie fetched!`);
       return cookie.substring(name.length + 1);
     }
   }
@@ -45,12 +46,21 @@ export function setCookie(name: string, value: string, maxAge: number = 86400) {
   const _maxAge = `max-age=${maxAge}`;
   const cookieString = `${name}=${value}; ${_maxAge}`;
   document.cookie = cookieString;
+  console.log(`${name} cookie set!`);
 }
 
 export const setWindowSize = (w: number, h: number) => {
   appWindow.setSize(new LogicalSize(w, h));
   appWindow.setMaxSize(new LogicalSize(w + 200, h + 200));
   appWindow.setMinSize(new LogicalSize(w - 200, h - 200));
+};
+
+export const setWindowCenter = () => {
+  appWindow.center();
+};
+
+export const saveConversationID = () => {
+  appWindow.center();
 };
 
 export const cleanChartData = (_data: IBarchart) => {

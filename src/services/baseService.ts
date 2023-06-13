@@ -46,11 +46,11 @@ interface requestPostProps<T> {
 
 export const requestPost = async <T>(
   url: string,
-  { withAuth = true, data: requestBody, token }: requestPostProps<T>
+  { withAuth = true, data, token }: requestPostProps<T>
 ): Promise<T> => {
   const _token = await getCookieByName("token");
   const POST_response = async (bT: string): Promise<AxiosResponse<T>> =>
-    axios.post(`${NEXT_PUBLIC_API_URL}${url}`, requestBody, {
+    axios.post(`${NEXT_PUBLIC_API_URL}${url}`, data, {
       headers: {
         ...(withAuth && {
           Authorization: `Bearer ${bT}`,
@@ -80,11 +80,11 @@ interface requestPatchProps<T> {
 
 export const requestPatch = async <T>(
   url: string,
-  { withAuth = true, data: requestBody, token }: requestPatchProps<T>
+  { withAuth = true, data, token }: requestPatchProps<T>
 ): Promise<T> => {
   const _token = await getCookieByName("token");
   const PATCH_response = async (bT: string): Promise<AxiosResponse<T>> =>
-    axios.patch(`${NEXT_PUBLIC_API_URL}${url}`, requestBody, {
+    axios.patch(`${NEXT_PUBLIC_API_URL}${url}`, data, {
       headers: {
         ...(withAuth && {
           Authorization: `Bearer ${bT}`,

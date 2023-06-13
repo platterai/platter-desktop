@@ -9,7 +9,6 @@ import {
 
 type MessageComponentProps = {
   value: any;
-  token: any;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onEnter?: () => void;
   hasMentions?: boolean;
@@ -17,7 +16,6 @@ type MessageComponentProps = {
 
 const MessageComponent = ({
   value,
-  token,
   onChange,
   onEnter,
   hasMentions = true,
@@ -48,7 +46,6 @@ const MessageComponent = ({
       };
       const responseData = await requestGet<any>("/v1/documents", {
         params,
-        token,
       });
       if (responseData?.statusCode === 200) {
         setDocuments(

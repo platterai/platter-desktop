@@ -12,21 +12,11 @@ import {
   InputGroup,
   InputRightElement,
   Tooltip,
-  VStack,
 } from "@chakra-ui/react";
 // ** ICONS **
-import {
-  DeleteIcon,
-  DragHandleIcon,
-  PlusSquareIcon,
-  RepeatClockIcon,
-  SettingsIcon,
-} from "@chakra-ui/icons";
+import { DragHandleIcon, PlusSquareIcon, SettingsIcon } from "@chakra-ui/icons";
 // ---------- REDUX ----------
-import {
-  setConversationId,
-  setConversations,
-} from "../../redux/slices/conversationIdSlice";
+import { setConversationId } from "../../redux/slices/conversationIdSlice";
 // ---------- CONTEXT ----------
 import PageContext from "../../context/PageContext";
 import UserContext from "../../context/UserContext";
@@ -34,22 +24,31 @@ import UserContext from "../../context/UserContext";
 import Logo from "../Logo";
 import MessageComponent from "./MessageComponent";
 import ChatItem from "../CustomUI/ChatItem";
+import ThreeDotsBlink from "../CustomUI/loaders/ThreeDotsBlink";
 // ---------- LIBRARIES ----------
 import moment from "moment";
-import { isEmpty } from "lodash";
+import { isEmpty, last } from "lodash";
 import { AnimatePresence, motion } from "framer-motion";
 import io from "socket.io-client";
 // ---------- HELPERS ----------
 import { requestGet, requestPost } from "../../services/baseService";
 import { setWindowSize } from "../../util/helpers";
-import ThreeDotsBlink from "../CustomUI/loaders/ThreeDotsBlink";
 import { NEXT_PUBLIC_API_SOCKET } from "../../constants/env";
+import {
+  chatWindowCollapse,
+  chatWindowExpand,
+} from "../../constants/windowSizes";
+import { IMessage } from "../../types/app";
+import { toast } from "react-hot-toast";
 
-type PromptComponentProps = {
-  token: string;
+type PromptComponentProps = {};
+
+type IResponseData = {
+  statusCode: number;
+  data: IMessage[];
 };
 
-export default function PromptComponent({ token }: PromptComponentProps) {
+export default function PromptComponent({}: PromptComponentProps) {
   // ---------- VARIABLES/IMPORTS ----------
   const socket = io(NEXT_PUBLIC_API_SOCKET);
   const currentDate = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -58,99 +57,73 @@ export default function PromptComponent({ token }: PromptComponentProps) {
   const conversationId = useSelector(
     (state: any) => state.conversationId.conversationId
   );
-  const conversations = useSelector(
-    (state: any) => state.conversationId.conversations
-  );
   // ** CONTEXT
   const { setPage } = useContext(PageContext)!;
   const contextValue = useContext(UserContext) as any;
   // ** REDUX
   // ---------- STATES ----------
   const [prompt, setPrompt] = useState<string>("");
-  const [showHistory, setShowHistory] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<any[]>([]);
+  const [fetchCount, setFetchCount] = useState<number>(1000);
   // ---------- FUNCTIONS ----------
   const fetchMessages = useCallback(async () => {
+    if (isEmpty(conversationId)) return;
     const params = {
       limit: 100,
       page: 1,
+      createdAt: "desc",
       conversationId,
     };
     try {
-      const responseData = await requestGet<any>("/v1/messages", {
+      const responseData = await requestGet<IResponseData>("/v1/messages", {
         params,
-        token,
       });
-      // nanti set messagesnya disini:
-      // setMessages((prevMessages) => [...prevMessages, responseData]);
-      console.log("fetchMessages()", { responseData });
       setMessages(responseData?.data);
       if (responseData?.data?.length > 0) {
-        if (showHistory) {
-          setWindowSize(980, 840);
-        } else {
-          setWindowSize(800, 840);
-        }
+        setWindowSize(chatWindowExpand.w, chatWindowExpand.h);
       }
       if (responseData?.statusCode === 401) {
         setPage("login");
       }
+      if (last(responseData?.data)?.role === "ai") {
+        setLoading(false);
+      }
     } catch (error) {
-      console.error("fetchMessages()", { error });
+      console.error("fetchMessages ====>", { error });
+      setLoading(false);
     }
-  }, [conversationId, token]);
+  }, [conversationId]);
 
   const submitPrompt = async () => {
     setTimeout(() => {
       setLoading(true);
     }, 1500);
+
     const newData = {
       name: currentDate,
-      message: prompt,
+      message: prompt.replaceAll("^&&", "[").replaceAll("&&^", "]"),
     };
 
     const data = {
       conversationId,
-      message: prompt,
+      message: prompt.replaceAll("^&&", "[").replaceAll("&&^", "]"),
     };
 
     try {
       const responseData = await requestPost<any>("/v1/messages", {
         data: isEmpty(conversationId) ? newData : data,
-        token,
       });
 
       if (isEmpty(conversationId)) {
-        localStorage.setItem(
-          "local_conversationId",
-          responseData.data.conversationId
-        );
-        localStorage.setItem(
-          "local_conversations",
-          JSON.stringify([
-            ...conversations,
-            {
-              conversationId: responseData.data.conversationId,
-              createdAt: responseData.data.createdAt,
-            },
-          ])
-        );
-        dispatch(setConversationId(responseData.data.conversationId));
-        dispatch(
-          setConversations([
-            ...conversations,
-            {
-              conversationId: responseData.data.conversationId,
-              createdAt: responseData.data.createdAt,
-            },
-          ])
-        );
+        const newConversationId = responseData.data.conversationId;
+        localStorage.setItem("local_conversationId", newConversationId);
+        dispatch(setConversationId(newConversationId));
       }
+      setFetchCount(0);
       fetchMessages();
-      console.log({ responseData });
     } catch (error) {
-      console.error({ error });
+      console.error("submitPrompt ====>", { error });
     }
   };
 
@@ -158,7 +131,6 @@ export default function PromptComponent({ token }: PromptComponentProps) {
     console.log("Socket.io is initializing");
     socket.on(conversationId, async () => {
       console.log("Socket.io is triggered");
-      setLoading(false);
       fetchMessages();
     });
   }, [fetchMessages, conversationId]);
@@ -171,27 +143,53 @@ export default function PromptComponent({ token }: PromptComponentProps) {
   useEffect(() => {
     if (conversationId === "") {
       const local_conversationId = localStorage.getItem("local_conversationId");
-      const local_conversations = localStorage.getItem("local_conversations");
       if (local_conversationId) {
         dispatch(setConversationId(local_conversationId));
       }
-      if (local_conversations) {
-        dispatch(setConversations(JSON.parse(local_conversations)));
-      }
     }
-
     return () => {};
   }, []);
 
   useEffect(() => {
     if (conversationId) {
       fetchMessages();
-    } else {
-      setMessages([]);
     }
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversationId, conversations]);
+  }, [conversationId]);
+
+  useEffect(() => {
+    if (messages?.length === 0) {
+      setWindowSize(chatWindowCollapse.w, chatWindowCollapse.h);
+    }
+    return () => {};
+  }, [messages]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (fetchCount < 6) {
+      interval = setInterval(() => {
+        console.log(`Manual fetch every 10 seconds`, {
+          fetchCount,
+          role: last(messages)?.role,
+        });
+        if (last(messages)?.role === "user") {
+          setFetchCount((prevFetchCount) => prevFetchCount + 1);
+          fetchMessages();
+        } else {
+          setFetchCount(999);
+        }
+      }, 10000);
+    } else {
+      if (last(messages)?.role === "user") {
+        toast.error("Please try again, or refresh the page.");
+      }
+      setFetchCount(999);
+    }
+
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchCount, messages]);
 
   // <--------------------- RENDER COMPONENT --------------------->
   // <--------------------- RENDER COMPONENT --------------------->
@@ -203,11 +201,7 @@ export default function PromptComponent({ token }: PromptComponentProps) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <Grid
-          className='w-full'
-          templateColumns={showHistory ? "repeat(4, 1fr)" : "repeat(3, 1fr)"}
-          gap={6}
-        >
+        <Grid className='w-full' templateColumns='repeat(3, 1fr)' gap={6}>
           <GridItem colSpan={3}>
             <Box
               width={`100%`}
@@ -216,38 +210,40 @@ export default function PromptComponent({ token }: PromptComponentProps) {
               justifyContent={`end`}
             >
               {/* ================== SECTION CHAT CONVERSATION*/}
-              <div
-                style={{
-                  maxHeight: "420px",
-                  width: "100%",
-                  overflowY: "scroll",
-                  paddingBottom: "100px",
-                }}
-                className='flex flex-col gap-8 no-scrollbar'
-              >
-                {messages
-                  ?.sort((a, b) =>
-                    moment(a.createdAt)?.diff(moment(b.createdAt))
-                  )
-                  ?.map((item: any, index: any) => {
-                    return (
-                      <ChatItem isUser={!isEmpty(item?.userId)} key={index}>
-                        {item.message ?? "No response found"}
-                      </ChatItem>
-                    );
-                  })}
-                {loading ? (
-                  <ChatItem isUser={false}>
-                    <ThreeDotsBlink />
-                  </ChatItem>
-                ) : (
-                  <></>
-                )}
-                {/* <ChatItem isUser={false}>
+              {messages?.length > 0 && (
+                <div
+                  style={{
+                    maxHeight: "420px",
+                    width: "100%",
+                    overflowY: "scroll",
+                    paddingBottom: "100px",
+                  }}
+                  className='flex flex-col gap-8 no-scrollbar'
+                >
+                  {messages
+                    ?.sort((a, b) =>
+                      moment(a.createdAt)?.diff(moment(b.createdAt))
+                    )
+                    ?.map((item: any, index: any) => {
+                      return (
+                        <ChatItem isUser={!isEmpty(item?.userId)} key={index}>
+                          {item.message ?? "No response found"}
+                        </ChatItem>
+                      );
+                    })}
+                  {loading ? (
+                    <ChatItem isUser={false}>
+                      <ThreeDotsBlink />
+                    </ChatItem>
+                  ) : (
+                    <></>
+                  )}
+                  {/* <ChatItem isUser={false}>
                   <BarChart />
                   <PlotlyComponent />
                 </ChatItem> */}
-              </div>
+                </div>
+              )}
               {/* ================== SECTION CHAT INPUT*/}
               <InputGroup
                 size='lg'
@@ -260,7 +256,6 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                     submitPrompt();
                     setPrompt("");
                   }}
-                  token={token}
                   hasMentions={true}
                 />
                 <Tooltip
@@ -287,7 +282,12 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                 className='pt-2 pr-2'
               >
                 <HStack className='bottomButtons'>
-                  <Tooltip label='Settings' aria-label='Settings' hasArrow>
+                  <Tooltip
+                    placement='top'
+                    label='Settings'
+                    aria-label='Settings'
+                    hasArrow
+                  >
                     <IconButton
                       size='sm'
                       aria-label='Settings'
@@ -297,97 +297,36 @@ export default function PromptComponent({ token }: PromptComponentProps) {
                       icon={<SettingsIcon />}
                       type='button'
                       onClick={() => {
-                        // openSettingsPopup();
                         setPage("settings");
                       }}
                     />
                   </Tooltip>
-                  <Tooltip label='New Chat' aria-label='New Chat' hasArrow>
+                  <Tooltip
+                    placement='top'
+                    label='New Chat'
+                    aria-label='New Chat'
+                    hasArrow
+                  >
                     <IconButton
                       size='sm'
                       aria-label='New Chat'
-                      bg='accent.6'
-                      _hover={{ bg: "accent.7" }}
-                      color='white'
-                      icon={<PlusSquareIcon fontSize={16} color='n.6' />}
-                      type='button'
-                      onClick={() => {
-                        localStorage.removeItem("local_conversationId");
-                        dispatch(setConversationId(""));
-                      }}
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    label='Reset History'
-                    aria-label='Reset History'
-                    hasArrow
-                  >
-                    <IconButton
-                      size='sm'
-                      aria-label='Reset History'
-                      bg='accent.1'
-                      _hover={{ bg: "accent.8" }}
-                      color='white'
-                      icon={<DeleteIcon />}
-                      type='button'
-                      onClick={() => {
-                        localStorage.removeItem("local_conversationId");
-                        localStorage.removeItem("local_conversations");
-                        dispatch(setConversationId(""));
-                        dispatch(setConversations([]));
-                      }}
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    label='Chat History'
-                    aria-label='Chat History'
-                    hasArrow
-                  >
-                    <IconButton
-                      size='sm'
-                      aria-label='Chat History'
                       bg='primary.1'
                       _hover={{ bg: "primary.3" }}
                       color='white'
-                      icon={<RepeatClockIcon />}
+                      icon={<PlusSquareIcon fontSize={18} />}
                       type='button'
                       onClick={() => {
-                        if (showHistory === true) {
-                          setShowHistory(false);
-                          if (messages?.length < 1) {
-                            setWindowSize(800, 840);
-                          } else {
-                            setWindowSize(800, 840);
-                          }
-                        } else if (showHistory === false) {
-                          setShowHistory(true);
-
-                          if (messages?.length < 1) {
-                            setWindowSize(980, 840);
-                          } else {
-                            setWindowSize(980, 840);
-                          }
-                        }
+                        localStorage.removeItem("local_conversationId");
+                        dispatch(setConversationId(""));
                       }}
                     />
                   </Tooltip>
-                  {/* <Tooltip
-                    label={`Open profile ${contextValue?.user?.name ?? "??"}`}
-                    aria-label={`Open profile ${
-                      contextValue?.user?.name ?? "??"
-                    }`}
-                    hasArrow
-                  > */}
                   <Button
                     size='sm'
                     bg='primary.1'
                     _hover={{ bg: "primary.3" }}
                     color='white'
                     aria-label='Profile'
-                    onClick={() => {
-                      // setShowOptions(!showOptions);
-                      // setPage("profile");
-                    }}
                   >
                     {contextValue?.user?.name ?? "-"}
                   </Button>
@@ -399,54 +338,6 @@ export default function PromptComponent({ token }: PromptComponentProps) {
               {/* ================== SECTION CHAT HISTORY*/}
             </Box>
           </GridItem>
-          {showHistory ? (
-            <GridItem colSpan={1} className='w-full h-full'>
-              <motion.div
-                className='w-full h-full'
-                initial={{ opacity: 0, x: -60 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -60 }}
-              >
-                <Box
-                  sx={{
-                    bgColor: "white",
-                    color: "var(--n-6)",
-                    borderRadius: "12px",
-                    padding: "20px",
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
-                  <p className='text-xl font-bold mb-4'>Chat History</p>
-                  <VStack alignItems={`start`}>
-                    {conversations?.length > 0 ? (
-                      conversations?.map((item: any, index: any) => {
-                        const time = moment(item?.createdAt).format(
-                          "DD MMM'YY, HH:mm"
-                        );
-                        return (
-                          <button
-                            onClick={() => {
-                              console.log("click history");
-                              dispatch(setConversationId(item?.conversationId));
-                            }}
-                            style={{ cursor: "pointer" }}
-                            key={index}
-                          >
-                            {time}
-                          </button>
-                        );
-                      })
-                    ) : (
-                      <p>No history</p>
-                    )}
-                  </VStack>
-                </Box>
-              </motion.div>
-            </GridItem>
-          ) : (
-            <></>
-          )}
         </Grid>
       </motion.div>
     </AnimatePresence>

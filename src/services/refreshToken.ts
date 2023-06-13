@@ -26,6 +26,5 @@ export const refreshToken = async () => {
 
 export const exit = async () => {
   Cookies.remove("token");
-  localStorage.removeItem("selectedAvatarPath");
   localStorage.removeItem("user");
 };
