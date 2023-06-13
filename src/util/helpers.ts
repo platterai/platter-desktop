@@ -104,3 +104,19 @@ export const extractFilename = (input: string | null) => {
 
   return modifiedString.replaceAll(/\[[^\]]+\]/g, "").replaceAll("%%%", "");
 };
+
+export function truncateFileName(fileName: string, maxLength: number = 20) {
+  if (fileName.length <= maxLength) {
+    return fileName;
+  }
+
+  const extension = fileName.split(".").pop();
+  if (extension) {
+    const truncatedName =
+      fileName.substring(0, maxLength - extension.length - 1) + "…" + extension;
+    return truncatedName;
+  } else {
+    return fileName;
+  }
+  // return fileName;
+}

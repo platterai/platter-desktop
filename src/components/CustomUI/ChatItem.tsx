@@ -1,15 +1,37 @@
 import React from "react";
+import { IMessage } from "../../types/app";
+import SourceFile from "./SourceFile";
 
 type ChatItemProps = {
   isUser?: boolean;
+  item?: IMessage;
   children: React.ReactNode;
 };
 
-export default function ChatItem({ isUser, children }: ChatItemProps) {
+export default function ChatItem({ isUser, item, children }: ChatItemProps) {
+  const docsList = item?.metadata?.docs;
+  console.log(`item di ChatItem`, { docsList });
   const messageWrapper = (bg: string) => {
     return (
       <div className={`${bg} rounded-2xl px-6 py-6 w-full`}>
         <p className='text-n-6'>{children}</p>
+        <p className='text-sm mt-4 mb-2'>Sources: </p>
+        <div className='flex flex-row gap-3 flex-wrap'>
+          {docsList?.length && docsList?.length > 0 ? (
+            docsList?.map((doc, index) => {
+              return (
+                <SourceFile
+                  key={index}
+                  type={doc?.location}
+                  fileName={doc?.fileName}
+                  url={doc?.url}
+                />
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     );
   };

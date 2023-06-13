@@ -76,7 +76,7 @@ export default function PromptComponent({}: PromptComponentProps) {
     onOpen: onOpenInfo,
     onClose: onCloseInfo,
   } = useDisclosure();
-  const [prompt, setPrompt] = useState<string>(text300);
+  const [prompt, setPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<any[]>([]);
   const [fetchCount, setFetchCount] = useState<number>(1000);
@@ -234,7 +234,11 @@ export default function PromptComponent({}: PromptComponentProps) {
                 ?.sort((a, b) => moment(a.createdAt)?.diff(moment(b.createdAt)))
                 ?.map((item: any, index: any) => {
                   return (
-                    <ChatItem isUser={!isEmpty(item?.userId)} key={index}>
+                    <ChatItem
+                      item={item}
+                      isUser={!isEmpty(item?.userId)}
+                      key={index}
+                    >
                       {isEmpty(item?.userId)
                         ? item.message
                         : extractFilename(item.message) ?? "No response found"}
@@ -289,7 +293,7 @@ export default function PromptComponent({}: PromptComponentProps) {
             </Tooltip>
           </InputGroup>
           {/* ================== SECTION ICONS BELOW INPUT*/}
-          <HStack width='100%' justify='space-between' className='pt-2 pr-2'>
+          <HStack width='100%' justify='space-between' className='pr-2'>
             <HStack className='bottomButtons'>
               <Tooltip
                 placement='top'
