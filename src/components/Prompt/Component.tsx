@@ -14,7 +14,12 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 // ** ICONS **
-import { DragHandleIcon, PlusSquareIcon, SettingsIcon } from "@chakra-ui/icons";
+import {
+  DragHandleIcon,
+  InfoIcon,
+  PlusSquareIcon,
+  SettingsIcon,
+} from "@chakra-ui/icons";
 // ---------- REDUX ----------
 import { setConversationId } from "../../redux/slices/conversationIdSlice";
 // ---------- CONTEXT ----------
@@ -299,6 +304,24 @@ export default function PromptComponent({}: PromptComponentProps) {
                       onClick={() => {
                         setPage("settings");
                       }}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    placement='top'
+                    label={`To interact with Platter, use the input bar above. You can access it by pressing Ctrl+Shift+/ (Windows) or Cmd+Shift+/ (Mac). `}
+                    aria-label='Info'
+                    hasArrow
+                    width='800px'
+                  >
+                    <IconButton
+                      size='sm'
+                      aria-label='Info'
+                      bg='primary.1'
+                      _hover={{ bg: "primary.3" }}
+                      color='white'
+                      icon={<InfoIcon />}
+                      type='button'
+                      onClick={() => {}}
                     />
                   </Tooltip>
                   <Tooltip
