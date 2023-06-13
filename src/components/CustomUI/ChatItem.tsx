@@ -15,7 +15,11 @@ export default function ChatItem({ isUser, item, children }: ChatItemProps) {
     return (
       <div className={`${bg} rounded-2xl px-6 py-6 w-full`}>
         <p className='text-n-6'>{children}</p>
-        <p className='text-sm mt-4 mb-2'>Sources: </p>
+
+        {docsList?.length && docsList?.length > 0 && (
+          <p className='text-sm mt-4 mb-2'>Sources: </p>
+        )}
+
         <div className='flex flex-row gap-3 flex-wrap'>
           {docsList?.length && docsList?.length > 0 ? (
             docsList?.map((doc, index) => {
