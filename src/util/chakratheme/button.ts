@@ -17,6 +17,15 @@ const solid = defineStyle({
   },
 });
 
+const solid2 = defineStyle({
+  bg: colors.primary[`4`],
+  color: "black",
+  _hover: {
+    bg: colors.primary[`1`],
+    color: "white",
+  },
+});
+
 const outline = defineStyle({
   border: "2px solid",
   borderColor: colors.primary[`1`],
@@ -41,5 +50,5 @@ const link = defineStyle({
 });
 
 export const buttonTheme = defineStyleConfig({
-  variants: { solid, outline, ghost, link },
+  variants: { solid, solid2, outline, ghost, link },
 });

@@ -12,6 +12,7 @@ import {
   InputGroup,
   InputRightElement,
   Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
 // ** ICONS **
 import {
@@ -45,6 +46,7 @@ import {
 } from "../../constants/windowSizes";
 import { IMessage } from "../../types/app";
 import { toast } from "react-hot-toast";
+import ModalInfo from "../Modal/ModalInfo";
 
 type PromptComponentProps = {};
 
@@ -67,6 +69,11 @@ export default function PromptComponent({}: PromptComponentProps) {
   const contextValue = useContext(UserContext) as any;
   // ** REDUX
   // ---------- STATES ----------
+  const {
+    isOpen: isOpenInfo,
+    onOpen: onOpenInfo,
+    onClose: onCloseInfo,
+  } = useDisclosure();
   const [prompt, setPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<any[]>([]);
@@ -206,6 +213,9 @@ export default function PromptComponent({}: PromptComponentProps) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
+        <ModalInfo
+          {...{ isOpen: isOpenInfo, onOpen: onOpenInfo, onClose: onCloseInfo }}
+        />
         <Grid className='w-full' templateColumns='repeat(3, 1fr)' gap={6}>
           <GridItem colSpan={3}>
             <Box
@@ -308,10 +318,9 @@ export default function PromptComponent({}: PromptComponentProps) {
                   </Tooltip>
                   <Tooltip
                     placement='top'
-                    label={`To interact with Platter, use the input bar above. You can access it by pressing Ctrl+Shift+/ (Windows) or Cmd+Shift+/ (Mac). `}
+                    label={`Info`}
                     aria-label='Info'
                     hasArrow
-                    width='800px'
                   >
                     <IconButton
                       size='sm'
@@ -321,7 +330,9 @@ export default function PromptComponent({}: PromptComponentProps) {
                       color='white'
                       icon={<InfoIcon />}
                       type='button'
-                      onClick={() => {}}
+                      onClick={() => {
+                        onOpenInfo();
+                      }}
                     />
                   </Tooltip>
                   <Tooltip
