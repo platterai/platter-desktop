@@ -47,6 +47,7 @@ import {
 import { IMessage } from "../../types/app";
 import { toast } from "react-hot-toast";
 import ModalInfo from "../Modal/ModalInfo";
+import { text300 } from "../../@data/texts";
 
 type PromptComponentProps = {};
 
@@ -74,7 +75,7 @@ export default function PromptComponent({}: PromptComponentProps) {
     onOpen: onOpenInfo,
     onClose: onCloseInfo,
   } = useDisclosure();
-  const [prompt, setPrompt] = useState<string>("");
+  const [prompt, setPrompt] = useState<string>(text300);
   const [loading, setLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<any[]>([]);
   const [fetchCount, setFetchCount] = useState<number>(1000);
@@ -260,18 +261,19 @@ export default function PromptComponent({}: PromptComponentProps) {
                 </div>
               )}
               {/* ================== SECTION CHAT INPUT*/}
+
               <InputGroup
                 size='lg'
                 sx={{ backgroundColor: "transparent", zIndex: 100 }}
               >
                 <MessageComponent
+                  hasMentions={true}
                   value={prompt}
                   onChange={(value: any) => setPrompt(value)}
                   onEnter={() => {
                     submitPrompt();
                     setPrompt("");
                   }}
-                  hasMentions={true}
                 />
                 <Tooltip
                   label='Drag Window'
@@ -281,7 +283,7 @@ export default function PromptComponent({}: PromptComponentProps) {
                   <InputRightElement
                     children={
                       <DragHandleIcon
-                        sx={{ position: "relative", top: 1, right: 1 }}
+                        sx={{ position: "relative", top: 2.5, right: 2 }}
                         cursor='grab'
                         color='blackAlpha.600'
                         data-tauri-drag-region
@@ -369,7 +371,6 @@ export default function PromptComponent({}: PromptComponentProps) {
 
                 <Logo width='80px' />
               </HStack>
-              {/* ================== SECTION CHAT HISTORY*/}
             </Box>
           </GridItem>
         </Grid>

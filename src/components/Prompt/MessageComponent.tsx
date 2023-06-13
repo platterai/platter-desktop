@@ -1,7 +1,10 @@
+import { merge } from "lodash";
 import { useEffect, useState } from "react";
 import { ChangeEventHandler } from "react";
 import { Mention, MentionsInput } from "react-mentions";
 import { requestGet } from "../../services/baseService";
+import defaultMentionStyle from "../../styles/defaultMentionStyle";
+import defaultStyle from "../../styles/defaultStyle";
 import {
   MentionsInputStyle,
   MentionsStyle,
@@ -20,8 +23,23 @@ const MessageComponent = ({
   onEnter,
   hasMentions = true,
 }: MessageComponentProps) => {
+  let container;
   const [documents, setDocuments] = useState<Array<any>>([]);
   const [mention, setMention] = useState<string>("");
+
+  let style = merge({}, defaultStyle, {
+    input: {
+      color: "black",
+      overflow: "auto",
+      height: 70,
+    },
+    highlighter: {
+      boxSizing: "border-box",
+      overflow: "hidden",
+      height: 70,
+    },
+  });
+
   const onChangeMention = (e: any, f: any) => {
     if (f !== "\n") {
       onChange(f);
@@ -35,7 +53,6 @@ const MessageComponent = ({
       }
     }
   };
-  let container;
 
   const getDocuments = async (search: string) => {
     try {
@@ -77,7 +94,7 @@ const MessageComponent = ({
       }}
       className='mentionWrapper '
     >
-      <MentionsInput
+      {/* <MentionsInput
         singleLine={false}
         value={value}
         placeholder='Type your prompt'
@@ -99,6 +116,24 @@ const MessageComponent = ({
           data={documents}
           displayTransform={(id, display) => `${display}`}
           style={MentionsStyle}
+        />
+      </MentionsInput> */}
+
+      <MentionsInput
+        value={value}
+        onChange={onChangeMention}
+        style={style}
+        placeholder='Type your prompt'
+        a11ySuggestionsListLabel={"Suggested mentions"}
+      >
+        <Mention
+          markup='#(__display__[__id__])'
+          trigger='//'
+          data={documents}
+          renderSuggestion={(suggestion, search, highlightedDisplay) => (
+            <div className='user'>{highlightedDisplay}</div>
+          )}
+          style={defaultMentionStyle}
         />
       </MentionsInput>
     </div>
