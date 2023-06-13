@@ -19,7 +19,7 @@ import "./tailwind.css";
 const Root = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <ColorModeScript initialColorMode='light' />
       <ChakraProvider theme={theme}>{children}</ChakraProvider>
     </>
   );
