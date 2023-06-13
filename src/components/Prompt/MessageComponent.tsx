@@ -57,9 +57,8 @@ const MessageComponent = ({
           })
         );
       }
-      console.log({ responseData });
     } catch (error) {
-      console.error({ error });
+      console.error("getDocuments --->", { error });
     }
   };
 

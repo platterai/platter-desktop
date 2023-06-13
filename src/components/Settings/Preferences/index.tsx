@@ -1,17 +1,12 @@
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Grid, GridItem } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/select";
-import { Switch } from "@chakra-ui/switch";
-import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import UserContext from "../../../context/UserContext";
-import { setShowWelcome } from "../../../slices/showWelcomeSlice";
+import { setShowWelcome } from "../../../redux/slices/showWelcomeSlice";
 
 type PreferencesProps = {};
 
 const Preferences = ({}: PreferencesProps) => {
-  const contextValue = useContext(UserContext);
   const dispatch = useDispatch();
   const showWelcome = useSelector(
     (state: any) => state.showWelcome.showWelcome

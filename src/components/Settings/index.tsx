@@ -1,10 +1,6 @@
 import { useState } from "react";
 import Menu from "./Menu";
-import Password from "./Password";
-import Team from "./Team";
-import DeleteAccount from "./DeleteAccount";
 import Logout from "./Logout";
-import EditProfile from "../Profile/EditProfile";
 import Preferences from "./Preferences";
 
 type SettingsType = {
@@ -28,9 +24,6 @@ export default function Settings({ items, activeItem }: SettingsProps) {
           <Menu value={active} setValue={setActive} buttons={items} />
         </div>
         <div className='settingsContentWrapper no-scrollbar'>
-          {active.id === "edit-profile" && <EditProfile />}
-          {active.id === "password" && <Password />}
-          {active.id === "team" && <Team />}
           {active.id === "preferences" && <Preferences />}
           {active.id === "logout" && <Logout />}
         </div>

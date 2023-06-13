@@ -26,7 +26,7 @@ import {
 import {
   setConversationId,
   setConversations,
-} from "../../slices/conversationIdSlice";
+} from "../../redux/slices/conversationIdSlice";
 // ---------- CONTEXT ----------
 import PageContext from "../../context/PageContext";
 import UserContext from "../../context/UserContext";
@@ -60,7 +60,6 @@ export default function PromptComponent({ token }: PromptComponentProps) {
   const conversations = useSelector(
     (state: any) => state.conversationId.conversations
   );
-  console.log({ conversationId, conversations });
   // ** CONTEXT
   const { setPage } = useContext(PageContext)!;
   const contextValue = useContext(UserContext) as any;
@@ -184,11 +183,6 @@ export default function PromptComponent({ token }: PromptComponentProps) {
   }, []);
 
   useEffect(() => {
-    console.log("messages state changes:", {
-      conversationId,
-      conversations,
-      messages,
-    });
     if (conversationId) {
       fetchMessages();
     } else {

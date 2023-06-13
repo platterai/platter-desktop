@@ -4,10 +4,6 @@ const config: ThemeConfig = {
   initialColorMode: "light",
   useSystemColorMode: false,
 };
-// const config: ThemeConfig = {
-//   initialColorMode: "system",
-//   useSystemColorMode: true,
-// };
 
 export const theme = extendTheme({
   config,
@@ -18,8 +14,8 @@ export const theme = extendTheme({
   styles: {
     global: {
       body: {
-        // bg: "#17192300",
         bg: "none",
+        // bg: "#141718",
       },
     },
   },

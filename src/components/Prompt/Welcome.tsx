@@ -3,7 +3,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { Box, Tooltip, VStack } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { setShowWelcome } from "../../slices/showWelcomeSlice";
+import { setShowWelcome } from "../../redux/slices/showWelcomeSlice";
 
 type WelcomeProps = {};
 

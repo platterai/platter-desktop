@@ -27,6 +27,26 @@ export const checkCookie = (cookieName: string) => {
   return false;
 };
 
+export function getCookieByName(name: string) {
+  const cookieString = document.cookie;
+  const cookies = cookieString.split(";");
+
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(name + "=")) {
+      return cookie.substring(name.length + 1);
+    }
+  }
+
+  return null;
+}
+
+export function setCookie(name: string, value: string, maxAge: number = 86400) {
+  const _maxAge = `max-age=${maxAge}`;
+  const cookieString = `${name}=${value}; ${_maxAge}`;
+  document.cookie = cookieString;
+}
+
 export const setWindowSize = (w: number, h: number) => {
   appWindow.setSize(new LogicalSize(w, h));
   appWindow.setMaxSize(new LogicalSize(w + 200, h + 200));

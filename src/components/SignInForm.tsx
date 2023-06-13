@@ -11,15 +11,19 @@ import Flex from "./CustomUI/Flex";
 type SignInFormProps = {};
 
 export default function SignInForm({}: SignInFormProps) {
-  const { setPage, setToken } = useContext(PageContext)!;
+  const { setPage } = useContext(PageContext)!;
   const { setUser } = useContext(UserContext)!;
 
-  const [name, setName] = useState<string>("pryamm_platter");
-  const [password, setPassword] = useState<string>("pryamm");
+  const [name, setName] = useState<string>("nijikoms");
+  const [password, setPassword] = useState<string>("nijiko");
 
-  const handleSaveToken = (value: string) => {
-    const token = value;
-    document.cookie = serialize("token", token);
+  const handleSaveToken = (value: any) => {
+    const token = value?.accessToken;
+    const refreshToken = value?.refreshToken;
+    const _1day = "; max-age=86400";
+    const _3days = "; max-age=259200";
+    document.cookie = serialize("token", token) + _1day;
+    document.cookie = serialize("refreshToken", refreshToken) + _3days;
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,13 +32,8 @@ export default function SignInForm({}: SignInFormProps) {
     const formData = new FormData(e.target as HTMLFormElement);
     const username = formData.get("username");
     const password = formData.get("password");
+    const data = { username, password };
 
-    const data = {
-      username,
-      password,
-    };
-
-    console.log({ data });
     try {
       const responseData = await requestPost<any>("/v1/auth/login", {
         data,
@@ -42,8 +41,7 @@ export default function SignInForm({}: SignInFormProps) {
       });
       console.log({ responseData });
       if (responseData?.statusCode === 200) {
-        handleSaveToken(responseData?.data?.accessToken);
-        setToken(responseData?.data?.accessToken);
+        handleSaveToken(responseData?.data);
         const user = JSON.stringify(responseData?.data?.user);
         setUser(responseData?.data?.user);
         localStorage.setItem("user", user);

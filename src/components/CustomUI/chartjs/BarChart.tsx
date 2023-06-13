@@ -10,7 +10,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { Box } from "@chakra-ui/react";
-import { barchart } from "../../../@fakedb/charts";
+import { barchart } from "../../../@data/chartSamples";
 
 ChartJS.register(
   CategoryScale,
