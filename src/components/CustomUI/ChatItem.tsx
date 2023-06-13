@@ -24,7 +24,7 @@ export default function ChatItem({
         <p className='text-n-6'>{children}</p>
 
         {docsList?.length && docsList?.length > 0 && (
-          <p className='text-sm mt-4 mb-2'>Sources: </p>
+          <p className='text-xs mt-5 mb-2 text-n-5'>Sources: </p>
         )}
 
         <div className='flex flex-row gap-3 flex-wrap'>
