@@ -1,5 +1,6 @@
 import React from "react";
 import { IMessage } from "../../types/app";
+import ChatActions from "./ChatActions";
 import SourceFile from "./SourceFile";
 
 type ChatItemProps = {
@@ -58,20 +59,23 @@ export default function ChatItem({
 
   const platterChat = () => {
     return (
-      <div className='relative mr-44'>
+      <div className='relative mr-44 my-2'>
         {imgComponent(
           "/images/logo/platter-logo-inverted-large.png",
           "neg-bottom-6 left-4",
           "border-g-1"
         )}
         {messageWrapper("bg-g-1")}
+        <div className='absolute w-full mt-1 flex flex-row justify-end'>
+          <ChatActions item={item} />
+        </div>
       </div>
     );
   };
 
   const userChat = () => {
     return (
-      <div className='relative ml-44'>
+      <div className='relative ml-44 my-2'>
         {messageWrapper("border-2 border-solid border-n-3")}
         {imgComponent(
           "/images/avatars/avatar13.png",

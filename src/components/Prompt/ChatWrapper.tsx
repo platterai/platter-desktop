@@ -37,7 +37,7 @@ export default function ChatWrapper({
           height: "100%",
           width: "100%",
           overflowY: "scroll",
-          padding: "20px 0px",
+          paddingBottom: "60px",
         }}
         className='flex flex-col gap-8 no-scrollbar'
         ref={chatContainerRef}
