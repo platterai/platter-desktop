@@ -6,7 +6,7 @@ type ChatProps = {};
 
 export default function Chat({}: ChatProps) {
   return (
-    <Box>
+    <Box className='h-full'>
       <PromptComponent />
     </Box>
   );

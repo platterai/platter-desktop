@@ -5,10 +5,10 @@ export const signInWindow = {
 
 export const chatWindowExpand = {
   w: 800,
-  h: 800,
+  h: 600,
 };
 
 export const chatWindowCollapse = {
   w: 800,
-  h: 140,
+  h: 130,
 };

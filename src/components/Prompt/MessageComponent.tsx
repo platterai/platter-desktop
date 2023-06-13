@@ -124,15 +124,25 @@ const MessageComponent = ({
         onChange={onChangeMention}
         style={style}
         placeholder='Type your prompt'
-        a11ySuggestionsListLabel={"Suggested mentions"}
+        forceSuggestionsAboveCursor={true}
+        suggestionsPortalHost={container}
+        a11ySuggestionsListLabel={"Document List"}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            if (onEnter) {
+              onEnter();
+            }
+          }
+        }}
       >
         <Mention
-          markup='#(__display__[__id__])'
+          markup='#(__display__^&&__id__&&^)'
           trigger='//'
           data={documents}
           renderSuggestion={(suggestion, search, highlightedDisplay) => (
             <div className='user'>{highlightedDisplay}</div>
           )}
+          displayTransform={(id, display) => `${display}`}
           style={defaultMentionStyle}
         />
       </MentionsInput>

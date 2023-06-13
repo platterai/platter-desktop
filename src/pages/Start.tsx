@@ -36,12 +36,14 @@ export default function StartPage() {
     <Provider store={store}>
       <PageProvider page={page} setPage={setPage}>
         <UserProvider user={user} setUser={setUser}>
-          {page === "" && <></>}
-          {page === "login" && <SignInPage />}
-          {page === "chat" && <ChatPage />}
-          {page === "help" && <HelpPage />}
-          {page === "settings" && <SettingsPage />}
-          <Toaster position='top-center' />
+          <div style={{ height: "100vh" }}>
+            {page === "" && <></>}
+            {page === "login" && <SignInPage />}
+            {page === "chat" && <ChatPage />}
+            {page === "help" && <HelpPage />}
+            {page === "settings" && <SettingsPage />}
+            <Toaster position='top-center' />
+          </div>
         </UserProvider>
       </PageProvider>
     </Provider>

@@ -38,7 +38,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import io from "socket.io-client";
 // ---------- HELPERS ----------
 import { requestGet, requestPost } from "../../services/baseService";
-import { setWindowSize } from "../../util/helpers";
+import { extractFilename, setWindowSize } from "../../util/helpers";
 import { NEXT_PUBLIC_API_SOCKET } from "../../constants/env";
 import {
   chatWindowCollapse,
@@ -48,6 +48,7 @@ import { IMessage } from "../../types/app";
 import { toast } from "react-hot-toast";
 import ModalInfo from "../Modal/ModalInfo";
 import { text300 } from "../../@data/texts";
+import ChatWrapper from "./ChatWrapper";
 
 type PromptComponentProps = {};
 
@@ -211,169 +212,160 @@ export default function PromptComponent({}: PromptComponentProps) {
   return (
     <AnimatePresence>
       <motion.div
+        className='h-full'
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
         <ModalInfo
           {...{ isOpen: isOpenInfo, onOpen: onOpenInfo, onClose: onCloseInfo }}
         />
-        <Grid className='w-full' templateColumns='repeat(3, 1fr)' gap={6}>
-          <GridItem colSpan={3}>
-            <Box
-              width={`100%`}
-              display='flex'
-              flexDirection='column'
-              justifyContent={`end`}
-            >
-              {/* ================== SECTION CHAT CONVERSATION*/}
-              {messages?.length > 0 && (
-                <div
-                  style={{
-                    maxHeight: "420px",
-                    width: "100%",
-                    overflowY: "scroll",
-                    paddingBottom: "100px",
-                  }}
-                  className='flex flex-col gap-8 no-scrollbar'
-                >
-                  {messages
-                    ?.sort((a, b) =>
-                      moment(a.createdAt)?.diff(moment(b.createdAt))
-                    )
-                    ?.map((item: any, index: any) => {
-                      return (
-                        <ChatItem isUser={!isEmpty(item?.userId)} key={index}>
-                          {item.message ?? "No response found"}
-                        </ChatItem>
-                      );
-                    })}
-                  {loading ? (
-                    <ChatItem isUser={false}>
-                      <ThreeDotsBlink />
+        <Box
+          height={`100%`}
+          width={`100%`}
+          display='flex'
+          flexDirection='column'
+          justifyContent={`end`}
+          gap={4}
+        >
+          {/* ================== SECTION CHAT CONVERSATION*/}
+          {messages?.length > 0 && (
+            <ChatWrapper {...{ messages, loading }}>
+              {messages
+                ?.sort((a, b) => moment(a.createdAt)?.diff(moment(b.createdAt)))
+                ?.map((item: any, index: any) => {
+                  return (
+                    <ChatItem isUser={!isEmpty(item?.userId)} key={index}>
+                      {isEmpty(item?.userId)
+                        ? item.message
+                        : extractFilename(item.message) ?? "No response found"}
                     </ChatItem>
-                  ) : (
-                    <></>
-                  )}
-                  {/* <ChatItem isUser={false}>
+                  );
+                })}
+
+              {loading ? (
+                <ChatItem isUser={false}>
+                  <ThreeDotsBlink />
+                </ChatItem>
+              ) : (
+                <></>
+              )}
+
+              {/* <ChatItem isUser={false}>
                   <BarChart />
                   <PlotlyComponent />
                 </ChatItem> */}
-                </div>
-              )}
-              {/* ================== SECTION CHAT INPUT*/}
+            </ChatWrapper>
+          )}
+          {/* ================== SECTION CHAT INPUT*/}
 
-              <InputGroup
-                size='lg'
-                sx={{ backgroundColor: "transparent", zIndex: 100 }}
+          <InputGroup
+            size='lg'
+            sx={{ backgroundColor: "transparent", zIndex: 100 }}
+          >
+            <MessageComponent
+              hasMentions={true}
+              value={prompt}
+              onChange={(value: any) => setPrompt(value)}
+              onEnter={() => {
+                submitPrompt();
+                setPrompt("");
+              }}
+            />
+            <Tooltip
+              label='Drag Window'
+              aria-label='Drag Window'
+              placement='top'
+            >
+              <InputRightElement
+                children={
+                  <DragHandleIcon
+                    sx={{ position: "relative", top: 2.5, right: 2 }}
+                    cursor='grab'
+                    color='blackAlpha.600'
+                    data-tauri-drag-region
+                  />
+                }
+              />
+            </Tooltip>
+          </InputGroup>
+          {/* ================== SECTION ICONS BELOW INPUT*/}
+          <HStack width='100%' justify='space-between' className='pt-2 pr-2'>
+            <HStack className='bottomButtons'>
+              <Tooltip
+                placement='top'
+                label='Settings'
+                aria-label='Settings'
+                hasArrow
               >
-                <MessageComponent
-                  hasMentions={true}
-                  value={prompt}
-                  onChange={(value: any) => setPrompt(value)}
-                  onEnter={() => {
-                    submitPrompt();
+                <IconButton
+                  size='sm'
+                  aria-label='Settings'
+                  bg='primary.1'
+                  _hover={{ bg: "primary.3" }}
+                  color='white'
+                  icon={<SettingsIcon />}
+                  type='button'
+                  onClick={() => {
+                    setPage("settings");
+                  }}
+                />
+              </Tooltip>
+              <Tooltip
+                placement='top'
+                label={`Info`}
+                aria-label='Info'
+                hasArrow
+              >
+                <IconButton
+                  size='sm'
+                  aria-label='Info'
+                  bg='primary.1'
+                  _hover={{ bg: "primary.3" }}
+                  color='white'
+                  icon={<InfoIcon />}
+                  type='button'
+                  onClick={() => {
+                    onOpenInfo();
+                  }}
+                />
+              </Tooltip>
+              <Tooltip
+                placement='top'
+                label='New Chat'
+                aria-label='New Chat'
+                hasArrow
+              >
+                <IconButton
+                  size='sm'
+                  aria-label='New Chat'
+                  bg='primary.1'
+                  _hover={{ bg: "primary.3" }}
+                  color='white'
+                  icon={<PlusSquareIcon fontSize={18} />}
+                  type='button'
+                  onClick={() => {
+                    localStorage.removeItem("local_conversationId");
+                    dispatch(setConversationId(""));
+                    setMessages([]);
                     setPrompt("");
                   }}
                 />
-                <Tooltip
-                  label='Drag Window'
-                  aria-label='Drag Window'
-                  placement='top'
-                >
-                  <InputRightElement
-                    children={
-                      <DragHandleIcon
-                        sx={{ position: "relative", top: 2.5, right: 2 }}
-                        cursor='grab'
-                        color='blackAlpha.600'
-                        data-tauri-drag-region
-                      />
-                    }
-                  />
-                </Tooltip>
-              </InputGroup>
-              {/* ================== SECTION ICONS BELOW INPUT*/}
-              <HStack
-                width='100%'
-                justify='space-between'
-                className='pt-2 pr-2'
+              </Tooltip>
+              <Button
+                size='sm'
+                bg='primary.1'
+                _hover={{ bg: "primary.3" }}
+                color='white'
+                aria-label='Profile'
               >
-                <HStack className='bottomButtons'>
-                  <Tooltip
-                    placement='top'
-                    label='Settings'
-                    aria-label='Settings'
-                    hasArrow
-                  >
-                    <IconButton
-                      size='sm'
-                      aria-label='Settings'
-                      bg='primary.1'
-                      _hover={{ bg: "primary.3" }}
-                      color='white'
-                      icon={<SettingsIcon />}
-                      type='button'
-                      onClick={() => {
-                        setPage("settings");
-                      }}
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    placement='top'
-                    label={`Info`}
-                    aria-label='Info'
-                    hasArrow
-                  >
-                    <IconButton
-                      size='sm'
-                      aria-label='Info'
-                      bg='primary.1'
-                      _hover={{ bg: "primary.3" }}
-                      color='white'
-                      icon={<InfoIcon />}
-                      type='button'
-                      onClick={() => {
-                        onOpenInfo();
-                      }}
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    placement='top'
-                    label='New Chat'
-                    aria-label='New Chat'
-                    hasArrow
-                  >
-                    <IconButton
-                      size='sm'
-                      aria-label='New Chat'
-                      bg='primary.1'
-                      _hover={{ bg: "primary.3" }}
-                      color='white'
-                      icon={<PlusSquareIcon fontSize={18} />}
-                      type='button'
-                      onClick={() => {
-                        localStorage.removeItem("local_conversationId");
-                        dispatch(setConversationId(""));
-                      }}
-                    />
-                  </Tooltip>
-                  <Button
-                    size='sm'
-                    bg='primary.1'
-                    _hover={{ bg: "primary.3" }}
-                    color='white'
-                    aria-label='Profile'
-                  >
-                    {contextValue?.user?.name ?? "-"}
-                  </Button>
-                  {/* </Tooltip> */}
-                </HStack>
+                {contextValue?.user?.name ?? "-"}
+              </Button>
+              {/* </Tooltip> */}
+            </HStack>
 
-                <Logo width='80px' />
-              </HStack>
-            </Box>
-          </GridItem>
-        </Grid>
+            <Logo width='80px' />
+          </HStack>
+        </Box>
       </motion.div>
     </AnimatePresence>
   );

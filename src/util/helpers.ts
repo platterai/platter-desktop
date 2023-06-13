@@ -81,3 +81,26 @@ export const cleanChartData = (_data: IBarchart) => {
 
   return result;
 };
+
+export const extractFilename = (input: string | null) => {
+  // function untuk hilangin #() dan juga ID dari files
+  if (input === null) return;
+
+  let modifiedString = input;
+  let startIndex = modifiedString.indexOf("#(");
+
+  while (startIndex !== -1) {
+    const endIndex = modifiedString.indexOf(")", startIndex);
+
+    if (endIndex !== -1) {
+      const textToReplace = modifiedString.substring(startIndex, endIndex + 1);
+      const replacedText =
+        "%%%" + textToReplace.substring(2, textToReplace.length - 1) + "%%%";
+      modifiedString = modifiedString.replace(textToReplace, replacedText);
+    }
+
+    startIndex = modifiedString.indexOf("#(", endIndex);
+  }
+
+  return modifiedString.replaceAll(/\[[^\]]+\]/g, "").replaceAll("%%%", "");
+};

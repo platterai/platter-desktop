@@ -17,7 +17,7 @@ export default function ChatItem({ isUser, children }: ChatItemProps) {
   const imgComponent = (path: string, position: string, border: string) => {
     return (
       <img
-        className={`w-10 h-10 rounded-xl bg-primary-1 absolute z-100 border-4 border-solid ${border} ${position}`}
+        className={`w-10 h-10 rounded-xl bg-primary-1 absolute z-100 border-2 border-solid ${border} ${position}`}
         src={path}
         alt='avatar'
       />
@@ -40,11 +40,11 @@ export default function ChatItem({ isUser, children }: ChatItemProps) {
   const userChat = () => {
     return (
       <div className='relative ml-44'>
-        {messageWrapper("bg-white")}
+        {messageWrapper("border-2 border-solid border-n-3")}
         {imgComponent(
           "/images/avatars/avatar13.png",
           "neg-bottom-6 right-4",
-          "border-white"
+          "border-n-3"
         )}
       </div>
     );
