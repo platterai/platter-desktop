@@ -239,9 +239,16 @@ export default function PromptComponent({}: PromptComponentProps) {
                       isUser={!isEmpty(item?.userId)}
                       key={index}
                     >
-                      {isEmpty(item?.userId)
-                        ? item.message
-                        : extractFilename(item.message) ?? "No response found"}
+                      {isEmpty(item?.userId) && isEmpty(item?.message) ? (
+                        <p>
+                          Unable to retrieve information, please try a different
+                          prompt.
+                        </p>
+                      ) : isEmpty(item?.userId) ? (
+                        item.message
+                      ) : (
+                        extractFilename(item.message)
+                      )}
                     </ChatItem>
                   );
                 })}
