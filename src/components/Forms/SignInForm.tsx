@@ -3,7 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import PageContext from "../../context/PageContext";
 import UserContext from "../../context/UserContext";
 import { requestPost } from "../../services/baseService";
-import { anchorLink, checkCookie, setCookie } from "../../util/helpers";
+import {
+  anchorLink,
+  checkCookie,
+  setCookie,
+  setLocalStorageItem,
+} from "../../util/helpers";
 import Button from "../CustomUI/Button";
 import Field from "../CustomUI/Field";
 import Flex from "../CustomUI/Flex";
@@ -20,8 +25,8 @@ export default function SignInForm({}: SignInFormProps) {
   const handleSaveToken = (value: any) => {
     const token = value?.accessToken;
     const refreshToken = value?.refreshToken;
-    setCookie("token", token, 86400);
-    setCookie("refreshToken", refreshToken, 259200);
+    setLocalStorageItem("token", token, 86400);
+    setLocalStorageItem("refreshToken", refreshToken, 259200);
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {

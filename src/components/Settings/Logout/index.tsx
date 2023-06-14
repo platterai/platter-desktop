@@ -14,6 +14,8 @@ const Logout = ({}: LogoutProps) => {
     Cookies.remove("token");
     Cookies.remove("refreshToken");
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
     setUser({});
     toast.success("Logout success, redirecting...");
   };

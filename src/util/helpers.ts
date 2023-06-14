@@ -27,6 +27,17 @@ export const checkCookie = (cookieName: string) => {
   return false;
 };
 
+export const checkLocalStorageItem = (itemName: string) => {
+  const localStorageItem = localStorage.getItem(itemName);
+  if (localStorageItem !== null) {
+    console.log(`${itemName} localStorage item found!`);
+    return true;
+  }
+
+  console.log(`${itemName} localStorage item not found!`);
+  return false;
+};
+
 export function getCookieByName(name: string) {
   const cookieString = document.cookie;
   const cookies = cookieString.split(";");
@@ -47,6 +58,36 @@ export function setCookie(name: string, value: string, maxAge: number = 86400) {
   const cookieString = `${name}=${value}; ${_maxAge}`;
   document.cookie = cookieString;
   console.log(`${name} cookie set!`);
+}
+
+export function setLocalStorageItem(
+  name: string,
+  value: string,
+  maxAge: number = 86400
+) {
+  const expiryTime = new Date().getTime() + maxAge * 1000;
+  const item = {
+    value: value,
+    expiryTime: expiryTime,
+  };
+  localStorage.setItem(name, JSON.stringify(value));
+  console.log(`${name} item set in localStorage!`);
+}
+
+export function getLocalStorageItem(name: string) {
+  const itemString = localStorage.getItem(name);
+  if (itemString) {
+    const item = JSON.parse(itemString);
+    console.log(`${name} item retrieved from localStorage.`);
+    return item;
+  }
+  console.log(`${name} item not found in localStorage.`);
+  return null;
+}
+
+export function deleteLocalStorageItem(name: string) {
+  localStorage.removeItem(name);
+  console.log(`${name} item deleted from localStorage.`);
 }
 
 export const setWindowSize = (w: number, h: number) => {

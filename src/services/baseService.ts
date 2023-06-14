@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { NEXT_PUBLIC_API_URL } from "../constants/env";
-import { getCookieByName } from "../util/helpers";
+import { getCookieByName, getLocalStorageItem } from "../util/helpers";
 
 import { refreshToken } from "./refreshToken";
 
@@ -14,7 +14,8 @@ export const requestGet = async <T>(
   url: string,
   { withAuth = true, params, token }: requestGetProps<T>
 ): Promise<T> => {
-  const _token = await getCookieByName("token");
+  const _token = getLocalStorageItem("token");
+  console.log(`_token`, { _token });
   const GET_response = async (bT: string): Promise<AxiosResponse<T>> =>
     axios.get(`${NEXT_PUBLIC_API_URL}${url}`, {
       params,
@@ -48,7 +49,7 @@ export const requestPost = async <T>(
   url: string,
   { withAuth = true, data, token }: requestPostProps<T>
 ): Promise<T> => {
-  const _token = await getCookieByName("token");
+  const _token = getLocalStorageItem("token");
   const POST_response = async (bT: string): Promise<AxiosResponse<T>> =>
     axios.post(`${NEXT_PUBLIC_API_URL}${url}`, data, {
       headers: {
@@ -82,7 +83,7 @@ export const requestPatch = async <T>(
   url: string,
   { withAuth = true, data, token }: requestPatchProps<T>
 ): Promise<T> => {
-  const _token = await getCookieByName("token");
+  const _token = getLocalStorageItem("token");
   const PATCH_response = async (bT: string): Promise<AxiosResponse<T>> =>
     axios.patch(`${NEXT_PUBLIC_API_URL}${url}`, data, {
       headers: {

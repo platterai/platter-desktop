@@ -5,7 +5,11 @@ import { Provider } from "react-redux";
 import { PageProvider, Pages } from "../context/PageContext";
 import { UserProvider } from "../context/UserContext";
 import { store } from "../redux/store/store";
-import { checkCookie, getCookieByName } from "../util/helpers";
+import {
+  checkCookie,
+  checkLocalStorageItem,
+  getCookieByName,
+} from "../util/helpers";
 import ChatPage from "./Chat";
 import HelpPage from "./Help";
 import SettingsPage from "./Settings";
@@ -20,7 +24,7 @@ export default function StartPage() {
   }, [page]);
 
   useEffect(() => {
-    if (checkCookie("token")) {
+    if (checkLocalStorageItem("token")) {
       const user = localStorage.getItem("user");
       if (user) {
         setUser(JSON.parse(user));
