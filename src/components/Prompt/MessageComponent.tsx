@@ -1,7 +1,8 @@
 import { merge } from "lodash";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ChangeEventHandler } from "react";
 import { Mention, MentionsInput } from "react-mentions";
+import UserContext from "../../context/UserContext";
 import { requestGet } from "../../services/baseService";
 import defaultMentionStyle from "../../styles/defaultMentionStyle";
 import defaultStyle from "../../styles/defaultStyle";
@@ -24,6 +25,7 @@ const MessageComponent = ({
   hasMentions = true,
 }: MessageComponentProps) => {
   let container;
+  const contextValue = useContext(UserContext);
   const [documents, setDocuments] = useState<Array<any>>([]);
   const [mention, setMention] = useState<string>("");
 
@@ -60,6 +62,7 @@ const MessageComponent = ({
         take: 6,
         skip: 1,
         search: search ?? "",
+        userId: contextValue?.user?.id,
       };
       const responseData = await requestGet<any>("/v1/documents", {
         params,

@@ -185,7 +185,7 @@ export default function PLotlyChart({ title, chartData }: PLotlyChartProps) {
         </GridItem>
       </Grid>
       <Box sx={{ borderRadius: "16px", overflow: "hidden" }}>
-        <div id={`thePlotlyDiv`} />
+        <div style={{ height: "300px" }} id={`thePlotlyDiv`} />
       </Box>
     </Box>
   );

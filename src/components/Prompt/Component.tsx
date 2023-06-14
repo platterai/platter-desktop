@@ -178,6 +178,7 @@ export default function PromptComponent({}: PromptComponentProps) {
   }, []);
 
   useEffect(() => {
+    console.log(`conversationId state changes`, { conversationId });
     if (conversationId) {
       fetchMessages();
     }
