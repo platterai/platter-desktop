@@ -17,11 +17,10 @@ export default function ChatItem({
   children,
 }: ChatItemProps) {
   const docsList = item?.metadata?.docs;
-  console.log(`item di ChatItem`, { docsList });
   const messageWrapper = (bg: string) => {
     return (
       <div className={`${bg} rounded-2xl px-6 py-6 w-full`}>
-        <p className='text-n-6'>{children}</p>
+        <div className='text-n-6'>{children}</div>
 
         {docsList?.length && docsList?.length > 0 && (
           <p className='text-xs mt-5 mb-2 text-n-5'>Sources: </p>

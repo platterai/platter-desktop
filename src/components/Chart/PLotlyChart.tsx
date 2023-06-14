@@ -5,17 +5,17 @@ import { chartLayout } from "../../@data/chartLayout";
 import { assign } from "lodash";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import ChartControlButton from "../CustomUI/ChartControlButton";
-import { RepeatClockIcon } from "@chakra-ui/icons";
-import { BarChart2, Move, ZoomIn } from "lucide-react";
+import { BarChart2, Move, RotateCcw, ZoomIn } from "lucide-react";
+import { deepPurple } from "../../constants/muiColors";
 
 type ChartDataProps = {
   data: any[];
   layout: any;
 };
 
-type PLotlyChartProps = { chartData: ChartDataProps };
+type PLotlyChartProps = { title: string; chartData: ChartDataProps };
 
-export default function PLotlyChart({ chartData }: PLotlyChartProps) {
+export default function PLotlyChart({ title, chartData }: PLotlyChartProps) {
   // ==== UNTUK CONTROL BUTTON
   const [resetOn, setResetOn] = useState<boolean>(false);
   const [panOn, setPanOn] = useState<boolean>(false);
@@ -40,14 +40,21 @@ export default function PLotlyChart({ chartData }: PLotlyChartProps) {
       ],
     };
 
-    Plotly.newPlot(
-      `myPlotlyDiv`,
-      chartData.data,
-      assign({}, chartData?.layout, chartLayout),
-      config
-    );
+    const plotlyDivId = "thePlotlyDiv";
+    const plotlyDiv = document.getElementById(plotlyDivId);
+
+    if (plotlyDiv) {
+      Plotly.newPlot(
+        `thePlotlyDiv`,
+        chartData.data,
+        assign({}, chartData?.layout, chartLayout),
+        config
+      );
+    } else {
+      console.log("No Plotly Div detected");
+    }
     return () => {
-      Plotly.purge(`myPlotlyDiv`);
+      Plotly.purge(`thePlotlyDiv`);
     };
   }, []);
 
@@ -89,37 +96,29 @@ export default function PLotlyChart({ chartData }: PLotlyChartProps) {
   return (
     <Box
       sx={{
-        bgcolor: "white",
+        backgroundColor: "white",
         position: "relative",
-        borderRadius: 4,
+        borderRadius: "16px",
         border: "1px solid",
-        borderColor: "purple",
+        borderColor: deepPurple[50],
       }}
     >
-      <Grid
-        sx={{
-          width: "100%",
-          padding: 4,
-          gap: 2,
-          flexWrap: { xs: "wrap", md: "nowrap" },
-          overflow: "hidden",
-        }}
-      >
-        <GridItem colSpan={6}>
+      <Grid gap={4} templateColumns='repeat(12, 1fr)' className='w-full p-8'>
+        <GridItem colSpan={{ base: 12, md: 6 }}>
           <Box
             sx={{
               display: "flex",
               flexDirection: "row",
-              gap: 2,
+              gap: "12px",
               alignItems: "center",
             }}
           >
             <Box
               sx={{
-                borderRadius: 2,
+                borderRadius: "8px",
                 display: "grid",
                 placeItems: "center",
-                padding: 2,
+                padding: "8px",
                 background:
                   "linear-gradient(to bottom right, #ff6361, #bc5090)",
               }}
@@ -137,34 +136,25 @@ export default function PLotlyChart({ chartData }: PLotlyChartProps) {
                 "-webkit-text-fill-color": "transparent",
               }}
             >
-              {chartData?.layout?.title?.text}
+              {title}
             </Text>
           </Box>
         </GridItem>
         <GridItem
-          colSpan={6}
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: { xs: "center", md: "end" },
-          }}
+          colSpan={{ base: 12, md: 6 }}
+          className='flex flex-row'
+          justifyContent={{ base: "center", md: "end" }}
         >
           <Box
-            sx={{
-              bgcolor: "#F5F5F5",
-              display: "flex",
-              flexDirection: "row",
-              gap: 1,
-              padding: "10px 12px",
-              borderRadius: 2,
-            }}
+            className='center-row gap-2 py-2 px-3 rounded-lg'
+            sx={{ backgroundColor: "#F5F5F5" }}
           >
             <ChartControlButton toggle={resetOn} handleClick={handleReset}>
-              <RepeatClockIcon
-                sx={{
-                  color: resetOn ? "white" : "purple",
-                  fontSize: 16,
-                  marginRight: 1,
+              <RotateCcw
+                size={16}
+                style={{
+                  color: resetOn ? "white" : deepPurple[200],
+                  marginRight: "6px",
                 }}
               />
               reset
@@ -172,10 +162,10 @@ export default function PLotlyChart({ chartData }: PLotlyChartProps) {
 
             <ChartControlButton toggle={panOn} handleClick={handlePanOn}>
               <Move
+                size={16}
                 style={{
-                  color: panOn ? "white" : "purple",
-                  fontSize: 16,
-                  marginRight: 1,
+                  color: panOn ? "white" : deepPurple[200],
+                  marginRight: "6px",
                 }}
               />
               pan
@@ -183,10 +173,10 @@ export default function PLotlyChart({ chartData }: PLotlyChartProps) {
 
             <ChartControlButton toggle={zoomOn} handleClick={handleZoomOn}>
               <ZoomIn
+                size={16}
                 style={{
-                  color: zoomOn ? "white" : "purple",
-                  fontSize: 16,
-                  marginRight: 1,
+                  color: zoomOn ? "white" : deepPurple[200],
+                  marginRight: "6px",
                 }}
               />
               zoom
@@ -194,8 +184,8 @@ export default function PLotlyChart({ chartData }: PLotlyChartProps) {
           </Box>
         </GridItem>
       </Grid>
-      <Box sx={{ borderRadius: 4, overflow: "hidden" }}>
-        <div id={`myPlotlyDiv`} />
+      <Box sx={{ borderRadius: "16px", overflow: "hidden" }}>
+        <div id={`thePlotlyDiv`} />
       </Box>
     </Box>
   );

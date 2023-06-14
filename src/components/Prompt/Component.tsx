@@ -38,18 +38,24 @@ import { AnimatePresence, motion } from "framer-motion";
 import io from "socket.io-client";
 // ---------- HELPERS ----------
 import { requestGet, requestPost } from "../../services/baseService";
-import { extractFilename, setWindowSize } from "../../util/helpers";
+import {
+  cleanChartData,
+  extractFilename,
+  setWindowSize,
+} from "../../util/helpers";
 import { NEXT_PUBLIC_API_SOCKET } from "../../constants/env";
 import {
   chatWindowCollapse,
   chatWindowExpand,
 } from "../../constants/windowSizes";
-import { IMessage } from "../../types/app";
+import { IBarchart, IMessage } from "../../types/app";
 import { toast } from "react-hot-toast";
 import ModalInfo from "../Modal/ModalInfo";
 import { text300 } from "../../@data/texts";
 import ChatWrapper from "./ChatWrapper";
 import DataTable from "../Table/DataTable";
+import PLotlyChart from "../Chart/PLotlyChart";
+import { barchart } from "../../@data/chartSamples";
 
 type PromptComponentProps = {};
 
@@ -227,6 +233,7 @@ export default function PromptComponent({}: PromptComponentProps) {
           {...{ isOpen: isOpenInfo, onOpen: onOpenInfo, onClose: onCloseInfo }}
         />
         <Box
+          resize='both'
           height={`100%`}
           width={`100%`}
           display='flex'
@@ -312,13 +319,14 @@ export default function PromptComponent({}: PromptComponentProps) {
                                   />
                                 )}
                                 {/* >>>>>>>> IF THE CHART EXISTS */}
-                                {/* {!isEmpty(item.metadata.chart_json) && (
-                                  <Plotly
-                                    plotlyProps={cleanChartData(
+                                {!isEmpty(item.metadata.chart_json) && (
+                                  <PLotlyChart
+                                    title={item.metadata?.title ?? ""}
+                                    chartData={cleanChartData(
                                       item.metadata.chart_json as IBarchart
                                     )}
                                   />
-                                )} */}
+                                )}
                               </>
                             )}
                           </ChatItem>
@@ -346,9 +354,8 @@ export default function PromptComponent({}: PromptComponentProps) {
               )}
 
               {/* <ChatItem isUser={false}>
-                  <BarChart />
-                  <PlotlyComponent />
-                </ChatItem> */}
+                <PLotlyChart title='Tester Title' chartData={barchart} />
+              </ChatItem> */}
             </ChatWrapper>
           )}
           {/* ================== SECTION CHAT INPUT*/}
@@ -384,6 +391,7 @@ export default function PromptComponent({}: PromptComponentProps) {
             </Tooltip>
           </InputGroup>
           {/* ================== SECTION ICONS BELOW INPUT*/}
+
           <HStack width='100%' justify='space-between' className='pr-2'>
             <HStack className='bottomButtons'>
               <Tooltip
