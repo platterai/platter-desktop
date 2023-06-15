@@ -25,8 +25,13 @@ export default function SignInForm({}: SignInFormProps) {
   const handleSaveToken = (value: any) => {
     const token = value?.accessToken;
     const refreshToken = value?.refreshToken;
-    setLocalStorageItem("token", token, 86400);
-    setLocalStorageItem("refreshToken", refreshToken, 259200);
+    const tokenExp = new Date().getTime() + 86400 * 1000;
+    const refreshTokenExp = new Date().getTime() + 259200 * 1000;
+
+    setLocalStorageItem("token", token);
+    setLocalStorageItem("tokenExp", `${tokenExp}`); // 1 day
+    setLocalStorageItem("refreshToken", refreshToken);
+    setLocalStorageItem("refreshTokenExp", `${refreshTokenExp}`); // 3 days
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {

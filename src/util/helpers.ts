@@ -38,7 +38,7 @@ export const checkLocalStorageItem = (itemName: string) => {
   return false;
 };
 
-export function getCookieByName(name: string) {
+export const getCookieByName = (name: string) => {
   const cookieString = document.cookie;
   const cookies = cookieString.split(";");
 
@@ -51,30 +51,25 @@ export function getCookieByName(name: string) {
   }
 
   return null;
-}
+};
 
-export function setCookie(name: string, value: string, maxAge: number = 86400) {
+export const setCookie = (
+  name: string,
+  value: string,
+  maxAge: number = 86400
+) => {
   const _maxAge = `max-age=${maxAge}`;
   const cookieString = `${name}=${value}; ${_maxAge}`;
   document.cookie = cookieString;
   console.log(`${name} cookie set!`);
-}
+};
 
-export function setLocalStorageItem(
-  name: string,
-  value: string,
-  maxAge: number = 86400
-) {
-  const expiryTime = new Date().getTime() + maxAge * 1000;
-  const item = {
-    value: value,
-    expiryTime: expiryTime,
-  };
+export const setLocalStorageItem = (name: string, value: string) => {
   localStorage.setItem(name, JSON.stringify(value));
   console.log(`${name} item set in localStorage!`);
-}
+};
 
-export function getLocalStorageItem(name: string) {
+export const getLocalStorageItem = (name: string) => {
   const itemString = localStorage.getItem(name);
   if (itemString) {
     const item = JSON.parse(itemString);
@@ -83,12 +78,12 @@ export function getLocalStorageItem(name: string) {
   }
   console.log(`${name} item not found in localStorage.`);
   return null;
-}
+};
 
-export function deleteLocalStorageItem(name: string) {
+export const deleteLocalStorageItem = (name: string) => {
   localStorage.removeItem(name);
   console.log(`${name} item deleted from localStorage.`);
-}
+};
 
 export const setWindowSize = (w: number, h: number) => {
   appWindow.setSize(new LogicalSize(w, h));
@@ -146,7 +141,7 @@ export const extractFilename = (input: string | null) => {
   return modifiedString.replaceAll(/\[[^\]]+\]/g, "").replaceAll("%%%", "");
 };
 
-export function truncateFileName(fileName: string, maxLength: number = 20) {
+export const truncateFileName = (fileName: string, maxLength: number = 20) => {
   if (fileName.length <= maxLength) {
     return fileName;
   }
@@ -160,4 +155,4 @@ export function truncateFileName(fileName: string, maxLength: number = 20) {
     return fileName;
   }
   // return fileName;
-}
+};
