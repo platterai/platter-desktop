@@ -16,6 +16,7 @@ export default function SettingsPage() {
 
   return (
     <div className='bg-white w-full py-10 px-12 flex flex-col rounded-lg'>
+      <div style={{ height: "0px" }} id={`thePlotlyDiv`} />
       <div className='flex flex-row items-center gap-3 mb-4 ml-3 text-2xl font-bold text-n-6'>
         <ArrowBackIcon
           className='cursor-pointer'
