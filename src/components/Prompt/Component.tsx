@@ -224,27 +224,33 @@ export default function PromptComponent({}: PromptComponentProps) {
   // <--------------------- RENDER COMPONENT --------------------->
 
   return (
-    <AnimatePresence>
-      <motion.div
-        className='h-full'
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+    // <AnimatePresence>
+    // <motion.div
+    //   className='h-full'
+    //   initial={{ opacity: 0, y: -20 }}
+    //   animate={{ opacity: 1, y: 0 }}
+    // >
+
+    <div className='h-full'>
+      <ModalInfo
+        {...{ isOpen: isOpenInfo, onOpen: onOpenInfo, onClose: onCloseInfo }}
+      />
+      <Box
+        resize='both'
+        height={`100%`}
+        width={`100%`}
+        display='flex'
+        flexDirection='column'
+        justifyContent={`end`}
+        gap={4}
       >
-        <ModalInfo
-          {...{ isOpen: isOpenInfo, onOpen: onOpenInfo, onClose: onCloseInfo }}
-        />
-        <Box
-          resize='both'
-          height={`100%`}
-          width={`100%`}
-          display='flex'
-          flexDirection='column'
-          justifyContent={`end`}
-          gap={4}
+        {/* ================== SECTION CHAT CONVERSATION*/}
+        <ChatWrapper
+          {...{ messages, loading, hasContent: messages?.length > 0 }}
         >
-          {/* ================== SECTION CHAT CONVERSATION*/}
-          {messages?.length > 0 && (
-            <ChatWrapper {...{ messages, loading }}>
+          {messages?.length > 0 ? (
+            <>
+              {" "}
               {!isEmpty(messages) ? (
                 messages
                   ?.sort((a, b) =>
@@ -345,7 +351,6 @@ export default function PromptComponent({}: PromptComponentProps) {
               ) : (
                 <></>
               )}
-
               {loading ? (
                 <ChatItem isUser={false}>
                   <ThreeDotsBlink />
@@ -353,124 +358,122 @@ export default function PromptComponent({}: PromptComponentProps) {
               ) : (
                 <></>
               )}
-
-              {/* <ChatItem isUser={false}>
-                <PLotlyChart title='Tester Title' chartData={barchart} />
-              </ChatItem> */}
-            </ChatWrapper>
+            </>
+          ) : (
+            <div className='grid place-items-center w-full h-full'>
+              <p className='text-n-8 text-sm'>
+                Ask the Head Chef everything and he will serve you what's on the
+                fridge
+              </p>
+            </div>
           )}
-          {/* ================== SECTION CHAT INPUT*/}
+        </ChatWrapper>
 
-          <InputGroup
-            size='lg'
-            sx={{ backgroundColor: "transparent", zIndex: 100 }}
-          >
-            <MessageComponent
-              hasMentions={true}
-              value={prompt}
-              onChange={(value: any) => setPrompt(value)}
-              onEnter={() => {
-                submitPrompt();
-                setPrompt("");
-              }}
+        {/* ================== SECTION CHAT INPUT*/}
+
+        <InputGroup
+          size='lg'
+          sx={{ backgroundColor: "transparent", zIndex: 100 }}
+        >
+          <MessageComponent
+            hasMentions={true}
+            value={prompt}
+            onChange={(value: any) => setPrompt(value)}
+            onEnter={() => {
+              submitPrompt();
+              setPrompt("");
+            }}
+          />
+          <Tooltip label='Drag Window' aria-label='Drag Window' placement='top'>
+            <InputRightElement
+              children={
+                <DragHandleIcon
+                  sx={{ position: "relative", top: 2.5, right: 2 }}
+                  cursor='grab'
+                  color='blackAlpha.600'
+                  data-tauri-drag-region
+                />
+              }
             />
-            <Tooltip
-              label='Drag Window'
-              aria-label='Drag Window'
-              placement='top'
-            >
-              <InputRightElement
-                children={
-                  <DragHandleIcon
-                    sx={{ position: "relative", top: 2.5, right: 2 }}
-                    cursor='grab'
-                    color='blackAlpha.600'
-                    data-tauri-drag-region
-                  />
-                }
-              />
-            </Tooltip>
-          </InputGroup>
-          {/* ================== SECTION ICONS BELOW INPUT*/}
+          </Tooltip>
+        </InputGroup>
+        {/* ================== SECTION ICONS BELOW INPUT*/}
 
-          <HStack width='100%' justify='space-between' className='pr-2'>
-            <HStack className='bottomButtons'>
-              <Tooltip
-                placement='top'
-                label='Settings'
-                aria-label='Settings'
-                hasArrow
-              >
-                <IconButton
-                  size='sm'
-                  aria-label='Settings'
-                  bg='primary.1'
-                  _hover={{ bg: "primary.3" }}
-                  color='white'
-                  icon={<SettingsIcon />}
-                  type='button'
-                  onClick={() => {
-                    setPage("settings");
-                  }}
-                />
-              </Tooltip>
-              <Tooltip
-                placement='top'
-                label={`Info`}
-                aria-label='Info'
-                hasArrow
-              >
-                <IconButton
-                  size='sm'
-                  aria-label='Info'
-                  bg='primary.1'
-                  _hover={{ bg: "primary.3" }}
-                  color='white'
-                  icon={<InfoIcon />}
-                  type='button'
-                  onClick={() => {
-                    onOpenInfo();
-                  }}
-                />
-              </Tooltip>
-              <Tooltip
-                placement='top'
-                label='New Chat'
-                aria-label='New Chat'
-                hasArrow
-              >
-                <IconButton
-                  size='sm'
-                  aria-label='New Chat'
-                  bg='primary.1'
-                  _hover={{ bg: "primary.3" }}
-                  color='white'
-                  icon={<PlusSquareIcon fontSize={18} />}
-                  type='button'
-                  onClick={() => {
-                    localStorage.removeItem("local_conversationId");
-                    dispatch(setConversationId(""));
-                    setMessages([]);
-                    setPrompt("");
-                  }}
-                />
-              </Tooltip>
-              <Button
+        <HStack width='100%' justify='space-between' className='pr-2'>
+          <HStack className='bottomButtons'>
+            <Tooltip
+              placement='top'
+              label='Settings'
+              aria-label='Settings'
+              hasArrow
+            >
+              <IconButton
                 size='sm'
+                aria-label='Settings'
                 bg='primary.1'
                 _hover={{ bg: "primary.3" }}
                 color='white'
-                aria-label='Profile'
-              >
-                {contextValue?.user?.name ?? "-"}
-              </Button>
-              {/* </Tooltip> */}
-            </HStack>
-
-            <Logo width='80px' />
+                icon={<SettingsIcon />}
+                type='button'
+                onClick={() => {
+                  setPage("settings");
+                }}
+              />
+            </Tooltip>
+            <Tooltip placement='top' label={`Info`} aria-label='Info' hasArrow>
+              <IconButton
+                size='sm'
+                aria-label='Info'
+                bg='primary.1'
+                _hover={{ bg: "primary.3" }}
+                color='white'
+                icon={<InfoIcon />}
+                type='button'
+                onClick={() => {
+                  onOpenInfo();
+                }}
+              />
+            </Tooltip>
+            <Tooltip
+              placement='top'
+              label='New Chat'
+              aria-label='New Chat'
+              hasArrow
+            >
+              <IconButton
+                size='sm'
+                aria-label='New Chat'
+                bg='primary.1'
+                _hover={{ bg: "primary.3" }}
+                color='white'
+                icon={<PlusSquareIcon fontSize={18} />}
+                type='button'
+                onClick={() => {
+                  localStorage.removeItem("local_conversationId");
+                  dispatch(setConversationId(""));
+                  setMessages([]);
+                  setPrompt("");
+                }}
+              />
+            </Tooltip>
+            <Button
+              size='sm'
+              bg='primary.1'
+              _hover={{ bg: "primary.3" }}
+              color='white'
+              aria-label='Profile'
+            >
+              {contextValue?.user?.name ?? "-"}
+            </Button>
+            {/* </Tooltip> */}
           </HStack>
-        </Box>
-      </motion.div>
-    </AnimatePresence>
+
+          <Logo width='80px' />
+        </HStack>
+      </Box>
+    </div>
+
+    // </motion.div>
+    // </AnimatePresence>
   );
 }

@@ -104,7 +104,7 @@ export default function PLotlyChart({ title, chartData }: PLotlyChartProps) {
       }}
     >
       <Grid gap={4} templateColumns='repeat(12, 1fr)' className='w-full p-8'>
-        <GridItem colSpan={{ base: 12, md: 6 }}>
+        <GridItem colSpan={{ base: 12, lg: 6 }}>
           <Box
             sx={{
               display: "flex",
@@ -127,9 +127,12 @@ export default function PLotlyChart({ title, chartData }: PLotlyChartProps) {
             </Box>
 
             <Text
-              fontSize='xl'
-              fontWeight={600}
+              fontSize='lg'
+              fontWeight={400}
               sx={{
+                fontFamily: "Rubik",
+                lineHeight: 1.2,
+
                 background:
                   "linear-gradient(to bottom right, #ff6361, #bc5090)",
                 "-webkit-background-clip": "text",
@@ -141,9 +144,9 @@ export default function PLotlyChart({ title, chartData }: PLotlyChartProps) {
           </Box>
         </GridItem>
         <GridItem
-          colSpan={{ base: 12, md: 6 }}
+          colSpan={{ base: 12, lg: 6 }}
           className='flex flex-row'
-          justifyContent={{ base: "center", md: "end" }}
+          justifyContent={{ base: "start", lg: "end" }}
         >
           <Box
             className='center-row gap-2 py-2 px-3 rounded-lg'

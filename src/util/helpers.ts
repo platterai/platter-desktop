@@ -88,7 +88,8 @@ export const deleteLocalStorageItem = (name: string) => {
 export const setWindowSize = (w: number, h: number) => {
   appWindow.setSize(new LogicalSize(w, h));
   appWindow.setMaxSize(new LogicalSize(w + 200, h + 200));
-  appWindow.setMinSize(new LogicalSize(w - 200, h - 200));
+  // appWindow.setMinSize(new LogicalSize(w - 200, h - 200));
+  appWindow.setMinSize(new LogicalSize(w, h));
 };
 
 export const setWindowCenter = () => {

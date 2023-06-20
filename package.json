@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.10.6",
     "@fontsource/inter": "^5.0.1",
     "@fontsource/manrope": "^4.5.13",
+    "@fontsource/rubik": "^5.0.3",
     "@headlessui/react": "^1.7.14",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@reduxjs/toolkit": "^1.9.5",

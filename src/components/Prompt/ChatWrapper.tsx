@@ -3,12 +3,14 @@ import { AnimatePresence, motion } from "framer-motion";
 type ChatWrapperProps = {
   messages?: any;
   loading?: boolean;
+  hasContent?: boolean;
   children: React.ReactNode;
 };
 
 export default function ChatWrapper({
   messages,
   loading,
+  hasContent = true,
   children,
 }: ChatWrapperProps) {
   const chatContainerRef = useRef(null);
@@ -37,7 +39,7 @@ export default function ChatWrapper({
           height: "100%",
           width: "100%",
           overflowY: "scroll",
-          paddingBottom: "60px",
+          paddingBottom: hasContent ? "60px" : "0px",
         }}
         className='flex flex-col gap-8 no-scrollbar'
         ref={chatContainerRef}

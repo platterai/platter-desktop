@@ -1283,6 +1283,11 @@
   resolved "https://registry.yarnpkg.com/@fontsource/manrope/-/manrope-4.5.13.tgz#c78c3141c506baace10a6ae304f2d56bc2f5217a"
   integrity sha512-UFN5DMGBp8nFpwhPQXfpSbsEm4OVISqUKQy+rA+pb1zYGoH+OGN1woKEND8VLx+pC7rY3nrPRCJvSuuOaNdW7Q==
 
+"@fontsource/rubik@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@fontsource/rubik/-/rubik-5.0.3.tgz#e5ad50b4f220484c87f04660c96d0e7e2824633b"
+  integrity sha512-mOGQSeyFVYXCaVMnOSYWV+czvRVYKxwo+W1/aH63RQdzWlsyCt/zmIfElcl4LKRgIXok1EaUTSszynR253FcdA==
+
 "@headlessui/react@^1.7.14":
   version "1.7.14"
   resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.14.tgz#75f19552c535113640fe8a3a40e71474f49e89c9"
