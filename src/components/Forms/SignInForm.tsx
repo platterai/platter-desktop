@@ -94,7 +94,7 @@ export default function SignInForm({}: SignInFormProps) {
           variant='text'
           size='0'
           onClick={() => {
-            anchorLink("https://app.platter.id/sign-in", true);
+            anchorLink("https://app.platter.id/reset/password", true);
           }}
         >
           Forgot password?
