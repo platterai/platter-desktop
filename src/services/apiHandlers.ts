@@ -8,7 +8,10 @@ export const handleGoogleOauth = async (
   e.preventDefault();
 
   try {
-    const responseData = await requestGet<any>("/v1/google/auth", {});
+    const responseData = await requestGet<any>(
+      `/v1/google/auth?redirect=platter://`,
+      {}
+    );
     console.log({ responseData });
     if (responseData?.statusCode === 200) {
       anchorLink(responseData?.data?.url, true);
