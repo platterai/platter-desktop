@@ -121,35 +121,42 @@ export default function PromptComponent({}: PromptComponentProps) {
     }
   }, [conversationId]);
 
-  const submitPrompt = async () => {
+  const submitPrompt = async (_convId: string | undefined) => {
     setTimeout(() => {
       setLoading(true);
     }, 1500);
-
+    console.log(`_convId`, { _convId });
     const newData = {
       name: currentDate,
       message: prompt.replaceAll("^&&", "[").replaceAll("&&^", "]"),
     };
 
     const data = {
-      conversationId,
+      conversationId: _convId,
       message: prompt.replaceAll("^&&", "[").replaceAll("&&^", "]"),
     };
 
     try {
       const responseData = await requestPost<any>("/v1/messages", {
-        data: isEmpty(conversationId) ? newData : data,
+        data: isEmpty(_convId) || _convId === undefined ? newData : data,
       });
-
-      if (isEmpty(conversationId)) {
+      console.error("responseData ====>", { responseData });
+      if (isEmpty(_convId)) {
         const newConversationId = responseData.data.conversationId;
         localStorage.setItem("local_conversationId", newConversationId);
         dispatch(setConversationId(newConversationId));
       }
+      if (responseData?.statusCode === 500) {
+        submitPrompt(undefined);
+      }
       setFetchCount(0);
       fetchMessages();
-    } catch (error) {
+    } catch (error: any) {
       console.error("submitPrompt ====>", { error });
+      if (error?.response?.data?.statusCode === 500) {
+        toast.error("Conversation ID not found, creating a new chat...");
+        submitPrompt(undefined);
+      }
     }
   };
 
@@ -379,7 +386,7 @@ export default function PromptComponent({}: PromptComponentProps) {
             value={prompt}
             onChange={(value: any) => setPrompt(value)}
             onEnter={() => {
-              submitPrompt();
+              submitPrompt(conversationId);
               setPrompt("");
             }}
           />
