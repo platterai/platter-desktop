@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { IMessage } from "../../types/app";
 import ChatActions from "./ChatActions";
 import SourceFile from "./SourceFile";
@@ -17,10 +18,15 @@ export default function ChatItem({
   children,
 }: ChatItemProps) {
   const docsList = item?.metadata?.docs;
+
+  const colormode = useSelector((state: any) => state?.colormode?.colormode);
+
   const messageWrapper = (bg: string) => {
     return (
       <div className={`${bg} rounded-2xl px-6 py-6 w-full`}>
-        <div className='text-n-6'>{children}</div>
+        <div className={`${colormode === "dark" ? "text-n-1" : "text-n-7"}`}>
+          {children}
+        </div>
 
         {docsList?.length && docsList?.length > 0 && (
           <p className='text-xs mt-5 mb-2 text-n-5'>Sources: </p>
@@ -62,9 +68,9 @@ export default function ChatItem({
         {imgComponent(
           "/images/logo/platter-logo-inverted-large.png",
           "neg-bottom-6 left-4",
-          "border-g-1"
+          colormode === "dark" ? "border-n-7" : "border-g-1"
         )}
-        {messageWrapper("bg-g-1")}
+        {messageWrapper(colormode === "dark" ? "bg-n-7" : "bg-g-1")}
         <div className='absolute w-full mt-1 flex flex-row justify-end'>
           <ChatActions item={item} />
         </div>
@@ -75,11 +81,13 @@ export default function ChatItem({
   const userChat = () => {
     return (
       <div className='relative ml-44 my-2'>
-        {messageWrapper("border-2 border-solid border-n-3")}
+        {messageWrapper(
+          colormode === "dark" ? "bg-n-5b" : "border-2 border-solid border-n-3"
+        )}
         {imgComponent(
           "/images/avatars/avatar13.png",
           "neg-bottom-6 right-4",
-          "border-n-3"
+          colormode === "dark" ? "border-n-5b" : "border-n-3"
         )}
       </div>
     );

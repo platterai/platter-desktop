@@ -51,8 +51,8 @@ export default {
   //   },
   // },
   suggestions: {
+    backgroundColor: "transparent",
     list: {
-      backgroundColor: "white",
       borderRadius: 8,
       fontSize: 18,
     },

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSelector } from "react-redux";
 type ChatWrapperProps = {
   messages?: any;
   loading?: boolean;
@@ -21,13 +22,16 @@ export default function ChatWrapper({
     chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
   }, [messages, loading]);
 
+  const colormode = useSelector((state: any) => state?.colormode?.colormode);
+
   return (
     <motion.div
-      className='h-full'
+      className={`h-full ${
+        colormode === "dark" ? "bg-n-6 text-n-1" : "bg-white text-n-7"
+      }`}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       style={{
-        backgroundColor: "white",
         borderRadius: "8px",
         overflowY: "hidden",
         padding: "20px",

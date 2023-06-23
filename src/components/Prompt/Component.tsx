@@ -191,7 +191,7 @@ export default function PromptComponent({}: PromptComponentProps) {
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
-
+  const colormode = useSelector((state: any) => state?.colormode?.colormode);
   useEffect(() => {
     if (messages?.length === 0) {
       setWindowSize(chatWindowCollapse.w, chatWindowCollapse.h);
@@ -285,7 +285,11 @@ export default function PromptComponent({}: PromptComponentProps) {
                             key={index}
                             time={time}
                           >
-                            <p>
+                            <p
+                              className={`${
+                                colormode === "dark" ? "text-n-1" : "text-n-7"
+                              }`}
+                            >
                               Unable to retrieve information, please try a
                               different prompt.
                             </p>
@@ -312,7 +316,13 @@ export default function PromptComponent({}: PromptComponentProps) {
                           >
                             {(item?.message || item?.text) &&
                             isEmpty(item.metadata.chart_json) ? (
-                              <p>{item?.text ?? item.message}</p>
+                              <p
+                                className={`${
+                                  colormode === "dark" ? "text-n-1" : "text-n-7"
+                                }`}
+                              >
+                                {item?.text ?? item.message}
+                              </p>
                             ) : (
                               <></>
                             )}
@@ -349,7 +359,13 @@ export default function PromptComponent({}: PromptComponentProps) {
                       // >>>>>>>> IF THE MESSAGE IS FROM USER
                       return (
                         <ChatItem key={index} isUser={true} time={time}>
-                          <p>{extractFilename(item?.message)}</p>
+                          <p
+                            className={`${
+                              colormode === "dark" ? "text-n-1" : "text-n-7"
+                            }`}
+                          >
+                            {extractFilename(item?.message)}
+                          </p>
                         </ChatItem>
                       );
                     }
@@ -367,7 +383,11 @@ export default function PromptComponent({}: PromptComponentProps) {
             </>
           ) : (
             <div className='grid place-items-center w-full h-full'>
-              <p className='text-n-8 text-sm'>
+              <p
+                className={`text-n-8 text-sm ${
+                  colormode === "dark" ? "text-n-1" : "text-n-7"
+                }`}
+              >
                 Ask the Head Chef everything and he will serve you what's on the
                 fridge
               </p>

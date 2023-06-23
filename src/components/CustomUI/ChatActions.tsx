@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { IMessage } from "../../types/app";
 
 type ChatActionsProps = {
@@ -18,17 +19,25 @@ const ChatActions = ({ item }: ChatActionsProps) => {
     toast.success("Content Copied!");
   };
 
-  const styleButton: string =
-    "h-6 ml-3 px-2 bg-n-3 rounded-md caption1 text-n-6 transition-colors hover:text-primary-1 dark:bg-n-7";
+  const colormode = useSelector((state: any) => state?.colormode?.colormode);
+  const styleButton: string = `${
+    colormode === "dark" ? "bg-n-7 text-n-1" : "bg-n-3 text-n-7"
+  } h-6 ml-3 px-2 rounded-md caption1 transition-colors text-primary-1_hover`;
 
   return (
     <>
       <CopyToClipboard text={item?.message ?? "..."} onCopy={onCopy}>
-        <button className={`${styleButton} md:hidden`}>Copy</button>
+        <button
+          className={`${styleButton} ${
+            colormode === "dark" ? "" : ""
+          } md:hidden`}
+        >
+          Copy
+        </button>
       </CopyToClipboard>
       {/* <button className={styleButton}>Regenerate response</button> */}
       {/* {!share && !archive && (
-                <div className="flex ml-3 px-1 space-x-1 bg-n-3 rounded-md md:hidden dark:bg-n-7">
+                <div className="flex ml-3 px-1 space-x-1 bg-n-3 rounded-md md:hidden">
                     <button className="" onClick={() => setShare(true)}>
                         <Image
                             src="/images/smile-heart-eyes.png"

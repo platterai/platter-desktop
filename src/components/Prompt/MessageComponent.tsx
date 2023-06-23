@@ -2,6 +2,7 @@ import { merge } from "lodash";
 import { useContext, useEffect, useState } from "react";
 import { ChangeEventHandler } from "react";
 import { Mention, MentionsInput } from "react-mentions";
+import { useSelector } from "react-redux";
 import UserContext from "../../context/UserContext";
 import { requestGet } from "../../services/baseService";
 import defaultMentionStyle from "../../styles/defaultMentionStyle";
@@ -30,6 +31,9 @@ const MessageComponent = ({
   const [mention, setMention] = useState<string>("");
 
   let style = merge({}, defaultStyle, {
+    control: {
+      backgroundColor: "#fff",
+    },
     input: {
       color: "black",
       overflow: "auto",
@@ -39,6 +43,33 @@ const MessageComponent = ({
       boxSizing: "border-box",
       overflow: "hidden",
       height: 70,
+    },
+  });
+
+  let styleDark = merge({}, defaultStyle, {
+    control: {
+      backgroundColor: "#141718",
+    },
+    input: {
+      color: "white",
+      overflow: "auto",
+      height: 70,
+    },
+    highlighter: {
+      boxSizing: "border-box",
+      overflow: "hidden",
+      height: 70,
+    },
+    suggestions: {
+      list: {
+        backgroundColor: "white",
+      },
+      item: {
+        "&focused": {
+          color: "pink",
+          backgroundColor: "#6c7275",
+        },
+      },
     },
   });
 
@@ -90,6 +121,8 @@ const MessageComponent = ({
     return () => {};
   }, [mention]);
 
+  const colormode = useSelector((state: any) => state?.colormode?.colormode);
+
   return (
     <div
       ref={(el) => {
@@ -125,7 +158,7 @@ const MessageComponent = ({
       <MentionsInput
         value={value}
         onChange={onChangeMention}
-        style={style}
+        style={colormode === "dark" ? styleDark : style}
         placeholder='Type your prompt'
         forceSuggestionsAboveCursor={true}
         suggestionsPortalHost={container}
