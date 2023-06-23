@@ -905,6 +905,14 @@ textarea:disabled {
   z-index: 1;
 }
 
+.suggestItemDark > span {
+  color: var(--n-1);
+}
+
+.suggestItemLight > span {
+  color: var(--n-7);
+}
+
 /* ** For Settings Page */
 .settingsWrapper {
   padding: 12px;

@@ -62,7 +62,7 @@ const MessageComponent = ({
     },
     suggestions: {
       list: {
-        backgroundColor: "white",
+        backgroundColor: "#2b2f30",
       },
       item: {
         "&focused": {
@@ -176,10 +176,18 @@ const MessageComponent = ({
           trigger='//'
           data={documents}
           renderSuggestion={(suggestion, search, highlightedDisplay) => (
-            <div className='user'>{highlightedDisplay}</div>
+            <div
+              className={`${
+                colormode === "dark" ? "suggestItemDark" : "suggestItemLight"
+              } `}
+            >
+              {highlightedDisplay}
+            </div>
           )}
           displayTransform={(id, display) => `${display}`}
-          style={defaultMentionStyle}
+          style={{
+            backgroundColor: colormode === "dark" ? "#2b2f30" : "#e1effc",
+          }}
         />
       </MentionsInput>
     </div>
