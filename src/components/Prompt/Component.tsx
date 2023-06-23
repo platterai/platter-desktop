@@ -91,9 +91,8 @@ export default function PromptComponent({}: PromptComponentProps) {
   const fetchMessages = useCallback(async () => {
     if (isEmpty(conversationId)) return;
     const params = {
-      limit: 100,
-      page: 1,
-      createdAt: "desc",
+      take: 100,
+      skip: 1,
       conversationId,
     };
     try {
