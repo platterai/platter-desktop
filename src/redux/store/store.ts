@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import showWelcomeReducer from "../slices/showWelcomeSlice";
 import conversationIdReducer from "../slices/conversationIdSlice";
+import colormodeReducer from "../slices/colormodeSlice";
 
 export function makeStore() {
   return configureStore({
     reducer: {
       showWelcome: showWelcomeReducer,
       conversationId: conversationIdReducer,
+      colormode: colormodeReducer,
     },
   });
 }
