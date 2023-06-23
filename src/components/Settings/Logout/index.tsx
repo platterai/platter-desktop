@@ -22,7 +22,9 @@ const Logout = ({}: LogoutProps) => {
 
   return (
     <div>
-      <div className='mb-8 h5'>Are you sure you want to logout?</div>
+      <div className='mb-8 text-2xl font-bold'>
+        Are you sure you want to logout?
+      </div>
       <button
         className='btn-red w-full m-0'
         onClick={() => {
