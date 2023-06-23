@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 import { PageProvider, Pages } from "../context/PageContext";
 import { UserProvider } from "../context/UserContext";
+import ColorModeWrapper from "../layouts/ColorModeWrapper";
 import { store } from "../redux/store/store";
 import {
   checkCookie,
@@ -40,14 +41,14 @@ export default function StartPage() {
     <Provider store={store}>
       <PageProvider page={page} setPage={setPage}>
         <UserProvider user={user} setUser={setUser}>
-          <div style={{ height: "100vh" }}>
+          <ColorModeWrapper>
             {page === "" && <></>}
             {page === "login" && <SignInPage />}
             {page === "chat" && <ChatPage />}
             {page === "help" && <HelpPage />}
             {page === "settings" && <SettingsPage />}
             <Toaster position='top-center' />
-          </div>
+          </ColorModeWrapper>
         </UserProvider>
       </PageProvider>
     </Provider>

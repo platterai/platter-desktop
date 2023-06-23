@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import useLocalStorage from "../../../hooks/useLocalStorage";
+import { setColormode } from "../../../redux/slices/colormodeSlice";
 import { setShowWelcome } from "../../../redux/slices/showWelcomeSlice";
 
 type PreferencesProps = {};
@@ -15,20 +16,16 @@ const Preferences = ({}: PreferencesProps) => {
     (state: any) => state.showWelcome.showWelcome
   );
 
-  const [colormode, setColormode, deleteColormode] =
-    useLocalStorage<string>("colormode");
-
-  useEffect(() => {
-    console.log({ colormode });
-    return () => {};
-  }, [colormode]);
+  const colormode = useSelector((state: any) => state?.colormode?.colormode);
 
   return (
-    <div>
+    <div className={`${colormode === "dark" ? "text-n-1" : "text-n-7"}`}>
       <Grid templateColumns='repeat(4, 1fr)' gap={6} alignItems='center'>
         {/* ============== Show welcome and hint */}
         <GridItem w='100%' colSpan={3}>
-          <p>Show welcome and hint</p>
+          <p className={`${colormode === "dark" ? "text-n-1" : "text-n-7"}`}>
+            Show welcome and hint
+          </p>
         </GridItem>
         <GridItem w='100%' colSpan={1}>
           <Select
@@ -67,7 +64,9 @@ const Preferences = ({}: PreferencesProps) => {
 
         {/* ============== Appearance */}
         <GridItem w='100%' colSpan={3}>
-          <p>Appearance</p>
+          <p className={`${colormode === "dark" ? "text-n-1" : "text-n-7"}`}>
+            Appearance
+          </p>
         </GridItem>
         <GridItem w='100%' colSpan={1}>
           <Select
@@ -85,7 +84,7 @@ const Preferences = ({}: PreferencesProps) => {
             }}
             onChange={(e) => {
               console.log(`e.target.value`, { value: e.target.value });
-              setColormode(e.target.value);
+              dispatch(setColormode(e.target.value));
             }}
           >
             <option value='light'>Light</option>

@@ -93,7 +93,7 @@ export const setWindowSize = (w: number, h: number) => {
 };
 
 export const setWindowCenter = () => {
-  appWindow.center();
+  // appWindow.center();
 };
 
 export const saveConversationID = () => {

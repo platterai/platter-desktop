@@ -15,7 +15,7 @@ const Menu = ({ buttons, value, setValue }: MenuProps) => {
     <div className='mb-1' key={index}>
       <button
         className={`flex items-center w-full px-3 py-1 rounded-full border-2 border-transparent base2 font-semibold transition-colors bg-n-2_hover tap-highlight-color text-n-4 ${
-          value === button && "border-primary-1 text-n-7 bg-n-1"
+          value === button && "border-primary-1 text-n-7 bg-n-3"
         }`}
         onClick={() => {
           if (button?.id === "integrations") {
