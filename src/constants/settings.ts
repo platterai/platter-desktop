@@ -14,11 +14,11 @@ export const settings = [
   //   title: "Team",
   //   icon: "users-plus",
   // },
-  {
-    id: "preferences",
-    title: "Preferences",
-    icon: "settings",
-  },
+  // {
+  //   id: "preferences",
+  //   title: "Preferences",
+  //   icon: "settings",
+  // },
   {
     id: "integrations",
     title: "Integrations",

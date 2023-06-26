@@ -13,9 +13,17 @@ type ChartDataProps = {
   layout: any;
 };
 
-type PLotlyChartProps = { title: string; chartData: ChartDataProps };
+type PLotlyChartProps = {
+  title: string;
+  chartData: ChartDataProps;
+  id: string;
+};
 
-export default function PLotlyChart({ title, chartData }: PLotlyChartProps) {
+export default function PLotlyChart({
+  title,
+  id,
+  chartData,
+}: PLotlyChartProps) {
   // ==== UNTUK CONTROL BUTTON
   const [resetOn, setResetOn] = useState<boolean>(false);
   const [panOn, setPanOn] = useState<boolean>(false);
@@ -40,12 +48,12 @@ export default function PLotlyChart({ title, chartData }: PLotlyChartProps) {
       ],
     };
 
-    const plotlyDivId = "thePlotlyDiv";
+    const plotlyDivId = `thePlotlyDiv-${id}`;
     const plotlyDiv = document.getElementById(plotlyDivId);
 
     if (plotlyDiv) {
       Plotly.newPlot(
-        `thePlotlyDiv`,
+        `thePlotlyDiv-${id}`,
         chartData.data,
         assign({}, chartData?.layout, chartLayout),
         config
@@ -54,7 +62,7 @@ export default function PLotlyChart({ title, chartData }: PLotlyChartProps) {
       console.log("No Plotly Div detected");
     }
     return () => {
-      Plotly.purge(`thePlotlyDiv`);
+      Plotly.purge(`thePlotlyDiv-${id}`);
     };
   }, []);
 
@@ -188,7 +196,7 @@ export default function PLotlyChart({ title, chartData }: PLotlyChartProps) {
         </GridItem>
       </Grid>
       <Box sx={{ borderRadius: "16px", overflow: "hidden" }}>
-        <div style={{ height: "300px" }} id={`thePlotlyDiv`} />
+        <div style={{ height: "300px" }} id={`thePlotlyDiv-${id}`} />
       </Box>
     </Box>
   );

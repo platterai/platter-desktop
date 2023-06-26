@@ -24,7 +24,7 @@ export default function Settings({ items, activeItem }: SettingsProps) {
           <Menu value={active} setValue={setActive} buttons={items} />
         </div>
         <div className='settingsContentWrapper no-scrollbar'>
-          {active.id === "preferences" && <Preferences />}
+          {/* {active.id === "preferences" && <Preferences />} */}
           {active.id === "logout" && <Logout />}
         </div>
       </div>

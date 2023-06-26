@@ -1,6 +1,7 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { numberArray } from "../@data/numbersArray";
 import Settings from "../components/Settings";
 import { settings } from "../constants/settings";
 import PageContext from "../context/PageContext";
@@ -23,7 +24,9 @@ export default function SettingsPage() {
         colormode === "dark" ? "bg-n-7 text-n-7" : "bg-white text-n-7"
       } w-full py-10 px-12 flex flex-col rounded-lg`}
     >
-      <div style={{ height: "0px" }} id={`thePlotlyDiv`} />
+      {numberArray?.map((item) => (
+        <div style={{ height: "0px" }} id={`thePlotlyDiv-${item}`} />
+      ))}
       <div
         className={`flex flex-row items-center gap-3 mb-4 ml-3 text-2xl font-bold`}
       >

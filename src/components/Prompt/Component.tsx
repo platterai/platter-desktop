@@ -93,6 +93,7 @@ export default function PromptComponent({}: PromptComponentProps) {
     const params = {
       take: 100,
       skip: 1,
+      orderBy: "createdAt:desc",
       conversationId,
     };
     try {
@@ -344,6 +345,7 @@ export default function PromptComponent({}: PromptComponentProps) {
                                 {/* >>>>>>>> IF THE CHART EXISTS */}
                                 {!isEmpty(item.metadata.chart_json) && (
                                   <PLotlyChart
+                                    id={index.toString()}
                                     title={item.metadata?.title ?? ""}
                                     chartData={cleanChartData(
                                       item.metadata.chart_json as IBarchart
