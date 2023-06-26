@@ -44,6 +44,11 @@ const MessageComponent = ({
       overflow: "hidden",
       height: 70,
     },
+    suggestions: {
+      list: {
+        backgroundColor: "white",
+      },
+    },
   });
 
   let styleDark = merge({}, defaultStyle, {
