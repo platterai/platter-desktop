@@ -11,6 +11,7 @@ export const Theme: ITheme = {
   fonts: {
     heading: `'Manrope', sans-serif`,
     body: `'Manrope', sans-serif`,
+    button: `'Manrope', sans-serif`,
   },
   styles: {
     global: {
