@@ -1,18 +1,13 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { NEXT_PUBLIC_API_URL } from "../constants/env";
-
-import {
-  getCookieByName,
-  getLocalStorageItem,
-  setCookie,
-  setLocalStorageItem,
-} from "../util/helpers";
+import { getLocalStorageItem, setLocalStorageItem } from "../util/helpers";
+import { getEnv } from "./getEnv";
 
 export const refreshToken = async () => {
   try {
     const _refreshToken = getLocalStorageItem("refreshToken");
-    let response = await axios.post(`${NEXT_PUBLIC_API_URL}/v1/auth/refresh`, {
+    const _env = await getEnv();
+    let response = await axios.post(`${_env.VITE_API_URL}/v1/auth/refresh`, {
       refreshToken: _refreshToken,
     });
 

@@ -53,6 +53,15 @@ fn show_window(window: &tauri::Window) {
     window.set_focus().unwrap();
 }
 
+// ini untuk get env
+#[tauri::command]
+async fn get_env(env: String) -> Result<String, String> {
+    match std::env::var(&env) {
+        Ok(env) => Ok(env),
+        Err(_) => Err(format!("Sorry, the {} wasn't found :(", env)),
+    }
+}
+
 #[tauri::command(async)]
 fn open_settings(app: tauri::AppHandle) {
     handle_popup(&app, SETTINGS_WINDOW);
@@ -122,7 +131,7 @@ fn main() {
         
         Ok(())
         })
-        .invoke_handler(tauri::generate_handler![open_settings])
+        .invoke_handler(tauri::generate_handler![open_settings,get_env])
         .on_system_tray_event(|app, event| match event {
             tauri::SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 "toggle_show" => handle_show_hide(app),

@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import { NEXT_PUBLIC_API_URL } from "../constants/env";
 import { getCookieByName, getLocalStorageItem } from "../util/helpers";
-
+import { getEnv } from "./getEnv";
 import { refreshToken } from "./refreshToken";
 
 interface requestGetProps<T> {
@@ -15,9 +14,9 @@ export const requestGet = async <T>(
   { withAuth = true, params, token }: requestGetProps<T>
 ): Promise<T> => {
   const _token = getLocalStorageItem("token");
-  console.log(`_token`, { _token });
+  const _env = await getEnv();
   const GET_response = async (bT: string): Promise<AxiosResponse<T>> =>
-    axios.get(`${NEXT_PUBLIC_API_URL}${url}`, {
+    axios.get(`${_env.VITE_API_URL}${url}`, {
       params,
       headers: {
         ...(withAuth && {
@@ -50,8 +49,9 @@ export const requestPost = async <T>(
   { withAuth = true, data, token }: requestPostProps<T>
 ): Promise<T> => {
   const _token = getLocalStorageItem("token");
+  const _env = await getEnv();
   const POST_response = async (bT: string): Promise<AxiosResponse<T>> =>
-    axios.post(`${NEXT_PUBLIC_API_URL}${url}`, data, {
+    axios.post(`${_env.VITE_API_URL}${url}`, data, {
       headers: {
         ...(withAuth && {
           Authorization: `Bearer ${bT}`,
@@ -84,8 +84,9 @@ export const requestPatch = async <T>(
   { withAuth = true, data, token }: requestPatchProps<T>
 ): Promise<T> => {
   const _token = getLocalStorageItem("token");
+  const _env = await getEnv();
   const PATCH_response = async (bT: string): Promise<AxiosResponse<T>> =>
-    axios.patch(`${NEXT_PUBLIC_API_URL}${url}`, data, {
+    axios.patch(`${_env.VITE_API_URL}${url}`, data, {
       headers: {
         ...(withAuth && {
           Authorization: `Bearer ${bT}`,

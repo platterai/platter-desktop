@@ -43,7 +43,6 @@ import {
   extractFilename,
   setWindowSize,
 } from "../../util/helpers";
-import { NEXT_PUBLIC_API_SOCKET } from "../../constants/env";
 import {
   chatWindowCollapse,
   chatWindowExpand,
@@ -56,6 +55,7 @@ import ChatWrapper from "./ChatWrapper";
 import DataTable from "../Table/DataTable";
 import PLotlyChart from "../Chart/PLotlyChart";
 import { barchart } from "../../@data/chartSamples";
+import { getEnv } from "../../services/getEnv";
 
 type PromptComponentProps = {};
 
@@ -66,7 +66,6 @@ type IResponseData = {
 
 export default function PromptComponent({}: PromptComponentProps) {
   // ---------- VARIABLES/IMPORTS ----------
-  const socket = io(NEXT_PUBLIC_API_SOCKET);
   const currentDate = moment().format("YYYY-MM-DD HH:mm:ss");
   // ** REDUX
   const dispatch = useDispatch();
@@ -161,7 +160,10 @@ export default function PromptComponent({}: PromptComponentProps) {
     }
   };
 
-  const socketInit = useCallback(() => {
+  const socketInit = useCallback(async () => {
+    const _env = await getEnv();
+    const socket = io(_env.VITE_API_SOCKET);
+
     console.log("Socket.io is initializing");
     socket.on(conversationId, async () => {
       console.log("Socket.io is triggered");
