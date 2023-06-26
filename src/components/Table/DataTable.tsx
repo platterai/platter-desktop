@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { CodepenIcon } from "lucide-react";
 import { isEmpty } from "lodash";
+import { useSelector } from "react-redux";
 
 interface TableData {
   [key: string]: string[];
@@ -37,7 +38,7 @@ type DataTableProps = {
 export default function DataTable({ data, title }: DataTableProps) {
   const headers = Object.keys(data);
   const rows = createData(headers, data);
-
+  const colormode = useSelector((state: any) => state?.colormode?.colormode);
   return (
     <Box
       className='flex flex-col gap-8 bg-white px-8 py-6 rounded-3xl'
@@ -82,7 +83,13 @@ export default function DataTable({ data, title }: DataTableProps) {
           {rows.map((row, index) => (
             <Tr key={index}>
               {headers.map((header, indexh) => (
-                <Td key={header} textAlign='left'>
+                <Td
+                  key={header}
+                  textAlign='left'
+                  className={`${
+                    colormode === "dark" ? "text-n-7" : "text-n-7"
+                  }`}
+                >
                   {row[header][0]}
                 </Td>
               ))}
